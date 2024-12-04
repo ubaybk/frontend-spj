@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const LandingPages = () => {
   return (
     <>
-      <div className="w-screen h-screen flex md:items-center md:justify-center bg-[#00ffff] py-5">
+      <div className="w-screen h-screen flex items-center justify-center bg-[#00ffff]">
         <div className=" flex flex-col items-center md:flex-row">
           <div className="font-semibold flex flex-col items-end ">
             <div className="flex justify-center items-center gap-2">
@@ -24,7 +24,7 @@ const LandingPages = () => {
           />
           {/* MOBILE */}
           <Link to={'/login'}>
-          <button className="bg-[#1090CB] hover:bg-green-400 text-white py-3 px-16 mt-5  rounded-md  md:hidden">Get Started</button>
+          <button className="bg-[#1090CB] hover:bg-green-400 text-white py-3 px-16  rounded-md  md:hidden">Get Started</button>
           </Link>
         </div>
       </div>
