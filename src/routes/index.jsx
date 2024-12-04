@@ -2,10 +2,10 @@
 import LandingPages from "../pages/LandingPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import AddRuk from "../pages/AddRUK";
 import ProtectedRoute from "./protectedRoute";
 import Ruk from "../pages/Ruk";
 import Dashboard from "../pages/Dashboard";
+import AddRuk from "../pages/AddRuk";
 
 export const routes = [
   {
