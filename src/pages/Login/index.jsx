@@ -30,7 +30,7 @@ const Login = () => {
           <h1 className="text-black font-semibold text-[26px]">APLIKASI SPJ</h1>
         </div>
         <div className="w-full border rounded-lg flex flex-col items-center md:w-96 mt-20 bg-white px-4">
-          <h1 className="text-[32px] font-bold text-center">Login</h1>
+          <h1 className="text-[32px] font-bold text-center">Login test</h1>
           <div className="w-full px-2">
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-600">
