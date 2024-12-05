@@ -44,7 +44,13 @@ const Ruk = () => {
 
         // Ambil semua data RUK dari Firestore untuk pengguna ini
         try {
-          const rukQuery = query(collection(db, "ruk_data"), where("userId", "==", user.uid));
+          let rukQuery;
+          if (email === "admin@gmail.com"){
+            rukQuery = collection(db,"ruk_data")
+          } else{
+            
+             rukQuery = query(collection(db, "ruk_data"), where("userId", "==", user.uid));
+          }
           const rukSnapshot = await getDocs(rukQuery);
 
           const rukList = rukSnapshot.docs.map((doc) => ({
