@@ -14,6 +14,7 @@ import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
+import Verifikator from "../Verifikator";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
@@ -186,7 +187,7 @@ const Ruk = () => {
                 rukData.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 p-4 rounded shadow mb-4"
+                    className="bg-gray-100 p-4 h-[600px] rounded shadow mb-4"
                   >
                     {editingId === item.id ? (
                       <div>
@@ -430,11 +431,10 @@ const Ruk = () => {
               )}
             </div>
             <div className=" w-[30%]">
-              <h2 className="text-xl font-semibold mt-4">
-                Verifikator :
-                <button>YA</button>
-                <button>TIDAK</button>
-              </h2>
+             
+              <h1 className="text-2xl font-bold mt-4">Verifikator</h1>
+            
+               <Verifikator/>
              
             </div>
 
