@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 
-const AddRuk = () => {
+const UpdateRuk = () => {
   const [tempatTugas, setTempatTugas] = useState("");
   const [pokja, setPokja] = useState("");
   const [kegiatan, setKegiatan] = useState("");
@@ -25,9 +25,14 @@ const AddRuk = () => {
   const [kebutuhanDalamTahun, setKebutuhanDalamTahun] = useState(0);
   const [hargaSatuan, setHargaSatuan] = useState(0);
   const [total, setTotal] = useState(0);
-  const [indikatorKinerja, setIndikatorKinerja] = useState("")
-  const [sumberPembiayaan, setSumberPembiayaan] = useState("")
-  const [namaPenginput, setNamaPenginput] = useState("")
+  const [indikatorKinerja, setIndikatorKinerja] = useState("");
+  const [sumberPembiayaan, setSumberPembiayaan] = useState("");
+  const [namaPenginput, setNamaPenginput] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+  const { id } = useParams(); // Get the document ID from the URL
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const optionsTugas = [
     "Puskesmas Cilandak",
@@ -54,13 +59,13 @@ const AddRuk = () => {
     "kinerja 1",
     "kinerja 2",
     "kinerja 3",
-  ]
+  ];
 
   const optionSumberPembiayaan = [
     "APBN",
     "APBD",
     "Bantuan Luar Negeri",
-  ]
+  ];
 
   // Hitung Total secara otomatis ketika input terkait berubah
   useEffect(() => {
@@ -72,6 +77,79 @@ const AddRuk = () => {
     calculateTotal();
   }, [kebutuhanDalamOrang, kebutuhanDalamX, kebutuhanDalamTahun, hargaSatuan]);
 
+  useEffect(() => {
+    // Check if we're editing an existing document
+    const fetchRukData = async () => {
+      if (id) {
+        try {
+          // First, check if data was passed via navigation state
+          const navigationState = location.state;
+          
+          if (navigationState) {
+            // Populate form with passed data
+            setTempatTugas(navigationState.tempatTugas);
+            setPokja(navigationState.pokja);
+            setKegiatan(navigationState.kegiatan);
+            setSubKegiatan(navigationState.subKegiatan);
+            setAktivitas(navigationState.aktivitas);
+            setTujuan(navigationState.tujuan);
+            setSasaran(navigationState.sasaran);
+            setTargetSasaran(navigationState.targetSasaran);
+            setPj(navigationState.pj);
+            setKebutuhanSumberDaya(navigationState.kebutuhanSumberDaya);
+            setMitraKerja(navigationState.mitraKerja);
+            setWaktuPelaksanaan(navigationState.waktuPelaksanaan);
+            setKomponen(navigationState.komponen);
+            setKebutuhanDalamOrang(navigationState.kebutuhanDalamOrang || 0);
+            setKebutuhanDalamX(navigationState.kebutuhanDalamX || 0);
+            setKebutuhanDalamTahun(navigationState.kebutuhanDalamTahun || 0);
+            setHargaSatuan(navigationState.hargaSatuan || 0);
+            setIndikatorKinerja(navigationState.indikatorKinerja);
+            setSumberPembiayaan(navigationState.sumberPembiayaan);
+            setNamaPenginput(navigationState.namaPenginput);
+            
+            setIsEditing(true);
+          } else {
+            // If no data in navigation state, fetch from Firestore
+            const docRef = doc(db, "ruk_data", id);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              // Populate form with fetched data
+              setTempatTugas(data.tempatTugas);
+              setPokja(data.pokja);
+              setKegiatan(data.kegiatan);
+              setSubKegiatan(data.subKegiatan);
+              setAktivitas(data.aktivitas);
+              setTujuan(data.tujuan);
+              setSasaran(data.sasaran);
+              setTargetSasaran(data.targetSasaran);
+              setPj(data.pj);
+              setKebutuhanSumberDaya(data.kebutuhanSumberDaya);
+              setMitraKerja(data.mitraKerja);
+              setWaktuPelaksanaan(data.waktuPelaksanaan);
+              setKomponen(data.komponen);
+              setKebutuhanDalamOrang(data.kebutuhanDalamOrang || 0);
+              setKebutuhanDalamX(data.kebutuhanDalamX || 0);
+              setKebutuhanDalamTahun(data.kebutuhanDalamTahun || 0);
+              setHargaSatuan(data.hargaSatuan || 0);
+              setIndikatorKinerja(data.indikatorKinerja);
+              setSumberPembiayaan(data.sumberPembiayaan);
+              setNamaPenginput(data.namaPenginput);
+              
+              setIsEditing(true);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching RUK data: ", error);
+        }
+      }
+    };
+
+    fetchRukData();
+  }, [id, location.state]);
+
   const handleSubmit = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -82,70 +160,109 @@ const AddRuk = () => {
     }
 
     try {
-      await addDoc(collection(db, "ruk_data"), {
-        tempatTugas,
-        pokja,
-        kegiatan,
-        subKegiatan,
-        aktivitas,
-        tujuan,
-        sasaran,
-        targetSasaran,
-        pj,
-        kebutuhanSumberDaya,
-        mitraKerja,
-        waktuPelaksanaan,
-        komponen,
-        kebutuhanDalamOrang,
-        kebutuhanDalamX,
-        kebutuhanDalamTahun,
-        hargaSatuan,
-        total,
-        indikatorKinerja,
-        sumberPembiayaan,
-        namaPenginput,
-        createdBy: user.email,
-        createdAt: serverTimestamp(),
-        userId: user.uid,
-      });
+      if (isEditing) {
+        // Update existing document
+        const docRef = doc(db, "ruk_data", id);
+        await updateDoc(docRef, {
+          tempatTugas,
+          pokja,
+          kegiatan,
+          subKegiatan,
+          aktivitas,
+          tujuan,
+          sasaran,
+          targetSasaran,
+          pj,
+          kebutuhanSumberDaya,
+          mitraKerja,
+          waktuPelaksanaan,
+          komponen,
+          kebutuhanDalamOrang,
+          kebutuhanDalamX,
+          kebutuhanDalamTahun,
+          hargaSatuan,
+          total,
+          indikatorKinerja,
+          sumberPembiayaan,
+          namaPenginput,
+          // Note: Don't update createdBy, createdAt, and userId
+        });
+        alert("Data berhasil diperbarui!");
+      } else {
+        // Add new document
+        await addDoc(collection(db, "ruk_data"), {
+          tempatTugas,
+          pokja,
+          kegiatan,
+          subKegiatan,
+          aktivitas,
+          tujuan,
+          sasaran,
+          targetSasaran,
+          pj,
+          kebutuhanSumberDaya,
+          mitraKerja,
+          waktuPelaksanaan,
+          komponen,
+          kebutuhanDalamOrang,
+          kebutuhanDalamX,
+          kebutuhanDalamTahun,
+          hargaSatuan,
+          total,
+          indikatorKinerja,
+          sumberPembiayaan,
+          namaPenginput,
+          createdBy: user.email,
+          createdAt: serverTimestamp(),
+          userId: user.uid,
+        });
+        alert("Data berhasil ditambahkan!");
+      }
 
-      alert("Data berhasil ditambahkan!");
-      // Reset input fields
-      setTempatTugas("");
-      setPokja("");
-      setKegiatan("");
-      setSubKegiatan("");
-      setAktivitas("");
-      setTujuan("");
-      setSasaran("");
-      setTargetSasaran("");
-      setPj("");
-      setKebutuhanSumberDaya("");
-      setMitraKerja("");
-      setWaktuPelaksanaan("");
-      setKomponen("");
-      setKebutuhanDalamOrang(0);
-      setKebutuhanDalamX(0);
-      setKebutuhanDalamTahun(0);
-      setHargaSatuan(0);
-      setIndikatorKinerja("")
-      setSumberPembiayaan("");
-      setNamaPenginput("");
+      // Navigate back to RUK page
+      navigate("/ruk");
     } catch (error) {
-      console.error("Error adding document: ", error);
-      alert("Gagal menambahkan data.");
+      console.error("Error saving document: ", error);
+      alert("Gagal menyimpan data.");
     }
   };
+
+  // Reset form function
+  const resetForm = () => {
+    setTempatTugas("");
+    setPokja("");
+    setKegiatan("");
+    setSubKegiatan("");
+    setAktivitas("");
+    setTujuan("");
+    setSasaran("");
+    setTargetSasaran("");
+    setPj("");
+    setKebutuhanSumberDaya("");
+    setMitraKerja("");
+    setWaktuPelaksanaan("");
+    setKomponen("");
+    setKebutuhanDalamOrang(0);
+    setKebutuhanDalamX(0);
+    setKebutuhanDalamTahun(0);
+    setHargaSatuan(0);
+    setIndikatorKinerja("");
+    setSumberPembiayaan("");
+    setNamaPenginput("");
+  };
+
+  // Update button text based on editing state
+  const submitButtonText = isEditing ? "Perbarui" : "Simpan";
 
   return (
     <>
       <div className="flex">
         <Header />
-        <div className="p-4">
+        <div className="p-4 w-full">
           <Link to={"/ruk"}>
-            <div className=" flex items-center cursor-pointer hover:underline">
+            <div className="flex items-center cursor-pointer hover:underline">
               <IoIosAddCircle className="text-[25px]" />
-              <h1>Tambah Data Perencanaan</h1>
+              <h1>{isEditing ? "Edit Data Perencanaan" : "Tambah Data Perencanaan"}</h1>
             </div>
           </Link>
           <div className="grid grid-cols-3 gap-5 border p-2">
@@ -183,6 +300,7 @@ const AddRuk = () => {
                 ))}
               </select>
             </div>
+            {/* ... (sisa kode select dan input tetap sama seperti sebelumnya) ... */}
             <div>
               <h1>Kegiatan</h1>
               <select
@@ -402,17 +520,26 @@ const AddRuk = () => {
                 placeholder="Masukkan Mitra Kerja"
               />
             </div>
+            {/* Tambahkan tombol Reset di bawah tombol Simpan/Perbarui */}
+            <div className="col-span-3 flex gap-4">
+              <button
+                onClick={handleSubmit}
+                className="mt-4 bg-blue-500 text-white p-2 rounded"
+              >
+                {submitButtonText}
+              </button>
+              <button
+                onClick={resetForm}
+                className="mt-4 bg-gray-500 text-white p-2 rounded"
+              >
+                Reset
+              </button>
+            </div>
           </div>
-          <button
-            onClick={handleSubmit}
-            className="mt-4 bg-blue-500 text-white p-2 rounded"
-          >
-            Simpan
-          </button>
         </div>
       </div>
     </>
   );
 };
 
-export default AddRuk;
+export default UpdateRuk;

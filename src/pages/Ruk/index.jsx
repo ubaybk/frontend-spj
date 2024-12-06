@@ -13,7 +13,7 @@ import {
 import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
@@ -86,23 +86,26 @@ const Ruk = () => {
     return () => unsubscribe();
   }, []);
 
+  const navigate = useNavigate ()
+
   const handleEdit = (id, currentData) => {
-    setEditingId(id);
-    setEditForm({
-      tempatTugas: currentData.tempatTugas,
-      pokja: currentData.pokja,
-      kegiatan: currentData.kegiatan,
-      subKegiatan: currentData.subKegiatan,
-      aktivitas: currentData.aktivitas,
-      tujuan: currentData.tujuan,
-      sasaran: currentData.sasaran,
-      targetSasaran: currentData.targetSasaran,
-      pj: currentData.pj,
-      kebutuhanSumberDaya: currentData.kebutuhanSumberDaya,
-      mitraKerja: currentData.mitraKerja,
-      waktuPelaksanaan: currentData.waktuPelaksanaan,
-      komponen: currentData.komponen,
-    });
+    navigate(`/updateruk/${id}`), {state: currentData}
+    // setEditingId(id);
+    // setEditForm({
+    //   tempatTugas: currentData.tempatTugas,
+    //   pokja: currentData.pokja,
+    //   kegiatan: currentData.kegiatan,
+    //   subKegiatan: currentData.subKegiatan,
+    //   aktivitas: currentData.aktivitas,
+    //   tujuan: currentData.tujuan,
+    //   sasaran: currentData.sasaran,
+    //   targetSasaran: currentData.targetSasaran,
+    //   pj: currentData.pj,
+    //   kebutuhanSumberDaya: currentData.kebutuhanSumberDaya,
+    //   mitraKerja: currentData.mitraKerja,
+    //   waktuPelaksanaan: currentData.waktuPelaksanaan,
+    //   komponen: currentData.komponen,
+    // });
   };
 
   const handleUpdate = async (id) => {
@@ -391,6 +394,10 @@ const Ruk = () => {
                         <p>
                           <strong>Komponen:</strong> {item.komponen}
                         </p>
+                        <div>
+                          <strong>Kebutuhan Anggaran:</strong> 
+                          <p>{item.kebutuhanDalamOrang}</p>
+                        </div>
                         <p>
                           <strong>Dibuat Oleh:</strong> {item.createdBy}
                         </p>
@@ -425,6 +432,8 @@ const Ruk = () => {
             <div className=" w-[30%]">
               <h2 className="text-xl font-semibold mt-4">
                 Verifikator :
+                <button>YA</button>
+                <button>TIDAK</button>
               </h2>
              
             </div>
