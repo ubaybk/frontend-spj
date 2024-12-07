@@ -7,6 +7,8 @@ import Ruk from "../pages/Ruk";
 import Dashboard from "../pages/Dashboard";
 import AddRuk from "../pages/AddRuk";
 import UpdateRuk from "../pages/UpdateRuk";
+import Pengadaan from "../pages/Pengadaan";
+import Verifikator from "../pages/Verifikator";
 
 
 export const routes = [
@@ -53,13 +55,21 @@ export const routes = [
         <UpdateRuk />
       </ProtectedRoute>
     ),
-  }
-  // {
-  //   path: "/verifikator",
-  //   element: (
-  //     <ProtectedRoute>
-  //       <Verifikator />
-  //     </ProtectedRoute>
-  //   ),
-  // },
+  },
+  {
+    path: "/pengadaan",
+    element: (
+      <ProtectedRoute>
+        <Pengadaan />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/verifikator",
+    element: (
+      <ProtectedRoute>
+        <Verifikator />
+      </ProtectedRoute>
+    ),
+  },
 ];

@@ -14,6 +14,7 @@ import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
+import Pengadaan from "../Pengadaan";
 import Verifikator from "../Verifikator";
 
 const Ruk = () => {
@@ -429,6 +430,13 @@ const Ruk = () => {
               ) : (
                 <p>Data RUK tidak tersedia.</p>
               )}
+            </div>
+            <div className=" w-[30%]">
+             
+              <h1 className="text-2xl font-bold mt-4">Pengadaan</h1>
+            
+               <Pengadaan/>
+             
             </div>
             <div className=" w-[30%]">
              

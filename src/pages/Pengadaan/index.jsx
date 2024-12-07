@@ -3,12 +3,12 @@ import { auth, db } from "../../../firebaseConfig"; // Pastikan Anda sudah mengi
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, query, where, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
 
-const Verifikator = () => {
+const Pengadaan = () => {
   const [userEmail, setUserEmail] = useState(null);
   const [userName, setUserName] = useState(null);
   const [rukData, setRukData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [keteranganVerifikator, setKeteranganVerikator] = useState("");
+  const [keterangan, setKeterangan] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -74,8 +74,8 @@ const Verifikator = () => {
 
       // Update field di Firestore
       await updateDoc(rukDocRef, {
-        keteranganVerifikator,
-        waktuUpdateVerifikator: timestamp,
+        keterangan,
+        waktuUpdatePengadaan: timestamp,
       });
 
       console.log("Field berhasil diperbarui.");
@@ -86,21 +86,21 @@ const Verifikator = () => {
           ruk.id === id
             ? {
                 ...ruk,
-                keteranganVerifikator,
-                waktuUpdateVerifikator: timestamp.toLocaleString(),
+                keterangan,
+                waktuUpdatePengadaan: timestamp.toLocaleString(),
               }
             : ruk
         )
       );
 
       setEditingId(null); // Selesai editing
-      setKeteranganVerikator(""); // Reset field input
+      setKeterangan(""); // Reset field input
     } catch (error) {
       console.error("Error updating document: ", error);
     }
   };
 
-  const handleStatusChange = async (id, newStatusVerifikator) => {
+  const handleStatusChange = async (id, newStatus) => {
     if (!isAdmin) return; // Jika bukan admin, jangan lakukan aksi apa-apa
 
     try {
@@ -109,11 +109,11 @@ const Verifikator = () => {
 
       // Perbarui status dan waktu perubahan di Firestore
       await updateDoc(rukDocRef, {
-        statusVerifikator: newStatusVerifikator,
-        waktuUpdateVerifikator: timestamp,
+        status: newStatus,
+        waktuUpdatePengadaan: timestamp,
       });
 
-      console.log(`Status berhasil diperbarui ke ${newStatusVerifikator}.`);
+      console.log(`Status berhasil diperbarui ke ${newStatus}.`);
 
       // Perbarui data di state tanpa refresh
       setRukData((prevData) =>
@@ -121,8 +121,8 @@ const Verifikator = () => {
           ruk.id === id
             ? {
                 ...ruk,
-                statusVerifikator: newStatusVerifikator,
-                waktuUpdateVerifikator: timestamp.toLocaleString(),
+                status: newStatus,
+                waktuUpdatePengadaan: timestamp.toLocaleString(),
               }
             : ruk
         )
@@ -143,9 +143,9 @@ const Verifikator = () => {
               <div
                 key={ruk.id}
                 className={`p-4 border h-[603px] rounded mb-3 ${
-                  ruk.statusVerifikator === "Tolak Verifikator"
+                  ruk.status === "Tolak Pengadaan"
                     ? "bg-red-100"
-                    : ruk.statusVerifikator === "Terima Verifikator"
+                    : ruk.status === "Terima Pengadaan"
                     ? "bg-green-100"
                     : "bg-gray-100"
                 }`}
@@ -160,30 +160,29 @@ const Verifikator = () => {
                 <div className="mt-2">
                   {isAdmin ? (
                     <select
-                      value={ruk.statusVerifikator || ""}
+                      value={ruk.status || ""}
                       onChange={(e) => handleStatusChange(ruk.id, e.target.value)}
                       className="border p-2 rounded w-full"
-                      disabled={!ruk.status || ruk.status == "Tolak Pengadaan"}
                     >
                       <option value="" disabled>
                         Pilih Aksi
                       </option>
-                      <option value="Terima Verifikator">Terima Verifikator</option>
-                      <option value="Tolak Verifikator">Tolak Verifikator</option>
+                      <option value="Terima Pengadaan">Terima Pengadaan</option>
+                      <option value="Tolak Pengadaan">Tolak Pengadaan</option>
                     </select>
                   ) : (
-                    <p>Status Verifikator: {ruk.statusVerifikator}</p> // Hanya tampilkan status jika bukan admin
+                    <p>Status: {ruk.status}</p> // Hanya tampilkan status jika bukan admin
                   )}
                 </div>
 
                 <p>
-                  <strong>Keterangan Verikator: </strong> {ruk.keteranganVerifikator || "Belum diisi"}
+                  <strong>Keterangan: </strong> {ruk.keterangan || "Belum diisi"}
                 </p>
 
-                {ruk.waktuUpdateVerifikator && (
+                {ruk.waktuUpdatePengadaan && (
                   <p>
-                    <strong>Waktu Update Verifikator:</strong>{" "}
-                    {new Date(ruk.waktuUpdateVerifikator.seconds * 1000).toLocaleString()}
+                    <strong>Waktu Update Pengadaan:</strong>{" "}
+                    {new Date(ruk.waktuUpdatePengadaan.seconds * 1000).toLocaleString()}
                   </p>
                 )}
 
@@ -191,16 +190,14 @@ const Verifikator = () => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      value={keteranganVerifikator}
-                      onChange={(e) => setKeteranganVerikator(e.target.value)}
+                      value={keterangan}
+                      onChange={(e) => setKeterangan(e.target.value)}
                       className="border p-2 rounded w-full"
                       placeholder="Masukkan isian baru"
-                      disabled={!ruk.status || ruk.status == "Tolak Pengadaan"}
                     />
                     <button
                       onClick={() => handleSave(ruk.id)}
                       className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
-                      disabled={!ruk.status || ruk.status == "Tolak Pengadaan"}
                     >
                       Simpan
                     </button>
@@ -209,7 +206,6 @@ const Verifikator = () => {
                   <button
                     onClick={() => setEditingId(ruk.id)}
                     className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
-                    disabled={!ruk.status || ruk.status == "Tolak Pengadaan"}
                   >
                     Tambah/Perbarui Isian
                   </button>
@@ -225,4 +221,4 @@ const Verifikator = () => {
   );
 };
 
-export default Verifikator;
+export default Pengadaan;
