@@ -16,6 +16,9 @@ import { IoIosAddCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import Pengadaan from "../Pengadaan";
 import Verifikator from "../Verifikator";
+import KapusKaTu from "../KapusKaTu";
+import Scann from "../Scann";
+import Bendahara from "../Bendahara";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
@@ -181,8 +184,8 @@ const Ruk = () => {
 
           <div className="flex  gap-3">
             <div className=" w-[30%]">
-              <h2 className="text-xl font-semibold mt-4">
-                Data Perencanaan (RUK):
+              <h2 className="font-semibold mt-4">
+                Data Perencanaan RUK:
               </h2>
               {rukData && rukData.length > 0 ? (
                 rukData.map((item) => (
@@ -443,6 +446,27 @@ const Ruk = () => {
               <h1 className="text-2xl font-bold mt-4">Verifikator</h1>
             
                <Verifikator/>
+             
+            </div>
+            <div className=" w-[30%]">
+             
+              <h1 className="text-2xl font-bold mt-4">ACC Kapus & KaTu</h1>
+            
+               <KapusKaTu/>
+             
+            </div>
+            <div className=" w-[30%]">
+             
+              <h1 className="text-2xl font-bold mt-4">Scann Dokumen</h1>
+            
+               <Scann/>
+             
+            </div>
+            <div className=" w-[30%]">
+             
+              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
+            
+               <Bendahara/>
              
             </div>
 

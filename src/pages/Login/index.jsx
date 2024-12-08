@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -6,6 +6,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const emailToken = localStorage.getItem("Email")
+
+  useEffect(()=> {
+    if(emailToken) {
+      navigate("/dashboard")
+    }
+  })
 
   const handleLogin = async () => {
     const auth = getAuth();
