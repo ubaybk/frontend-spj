@@ -21,7 +21,8 @@ import Scann from "../Scann";
 import Bendahara from "../Bendahara";
 import SPJDone from "../SPJDone";
 
-const Ruk = () => {
+
+const RukView = () => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [rukData, setRukData] = useState([]);
@@ -94,25 +95,10 @@ const Ruk = () => {
 
   const navigate = useNavigate();
 
-  const handleEdit = (id, currentData) => {
-    navigate(`/updateruk/${id}`), { state: currentData };
-    // setEditingId(id);
-    // setEditForm({
-    //   tempatTugas: currentData.tempatTugas,
-    //   pokja: currentData.pokja,
-    //   kegiatan: currentData.kegiatan,
-    //   subKegiatan: currentData.subKegiatan,
-    //   aktivitas: currentData.aktivitas,
-    //   tujuan: currentData.tujuan,
-    //   sasaran: currentData.sasaran,
-    //   targetSasaran: currentData.targetSasaran,
-    //   pj: currentData.pj,
-    //   kebutuhanSumberDaya: currentData.kebutuhanSumberDaya,
-    //   mitraKerja: currentData.mitraKerja,
-    //   waktuPelaksanaan: currentData.waktuPelaksanaan,
-    //   komponen: currentData.komponen,
-    // });
-  };
+//   const handleEdit = (id, currentData) => {
+//     navigate(`/updateruk/${id}`), { state: currentData };
+  
+//   };
 
   const handleUpdate = async (id) => {
     try {
@@ -156,38 +142,16 @@ const Ruk = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("ini ruk data", rukData);
-
   return (
     <>
-      <div className="flex">
-        <Header />
-        <div className="p-4 w-full">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Dashboard</h1>
-              <Link to={"/addruk"}>
-                <div className=" flex items-center cursor-pointer hover:underline bg-blue-400 rounded-xl p-2 text-white">
-                  <IoIosAddCircle className="text-[25px]" />
-                  <h1>Tambah Data Perencanaan</h1>
-                </div>
-              </Link>
-            </div>
-            <div className="text-blue-500">
-              {userName ? (
-                <>
-                  <p>Selamat datang, {userName}!</p>
-                  <p>Email Anda: {userEmail}</p>
-                </>
-              ) : (
-                <p>Data pengguna tidak tersedia.</p>
-              )}
-            </div>
-          </div>
+      
+       
+        <div className="">
+          
 
-          <div className="flex  gap-3">
-            <div className=" w-[30%]">
-              <h2 className="font-semibold mt-4">Data Perencanaan RUK:</h2>
+          <div className="flex">
+            <div className="  flex flex-col">
+              
               {rukData && rukData.length > 0 ? (
                 rukData.map((item) => (
                   <div
@@ -435,68 +399,11 @@ const Ruk = () => {
                 <p>Data RUK tidak tersedia.</p>
               )}
             </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Pengadaan</h1>
-              {rukData.length > 0 ? (
-                rukData.map((item) => (
-                  <div key={item.id}>
-                    {" "}
-                    {/* Pastikan memberikan key unik di elemen root */}
-                    <h1>{item.kegiatan}</h1>
-                  </div>
-                ))
-              ) : (
-                <p>Tidak ada data RUK yang tersedia.</p>
-              )}
-
-              {/* <Pengadaan/> */}
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Pengadaan</h1>
-              {rukData.length > 0 ? (
-                rukData.map((item) => (
-                  <div key={item.id}>
-                    {" "}
-                    {/* Pastikan memberikan key unik di elemen root */}
-                    <h1>{item.kegiatan}</h1>
-                  </div>
-                ))
-              ) : (
-                <p>Tidak ada data RUK yang tersedia.</p>
-              )}
-
-              {/* <Pengadaan/> */}
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Verifikator</h1>
-
-              <Verifikator />
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">ACC Kapus & KaTu</h1>
-
-              <KapusKaTu />
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Scann Dokumen</h1>
-
-              <Scann />
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
-
-              <Bendahara />
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">BERHASIL</h1>
-
-              <SPJDone />
-            </div>
           </div>
         </div>
-      </div>
+      
     </>
   );
 };
 
-export default Ruk;
+export default RukView;

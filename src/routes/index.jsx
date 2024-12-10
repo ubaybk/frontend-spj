@@ -9,6 +9,7 @@ import AddRuk from "../pages/AddRuk";
 import UpdateRuk from "../pages/UpdateRuk";
 import Pengadaan from "../pages/Pengadaan";
 import Verifikator from "../pages/Verifikator";
+import RukView from "../pages/RukView";
 
 
 export const routes = [
@@ -69,6 +70,14 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <Verifikator />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/rukview",
+    element: (
+      <ProtectedRoute>
+        <RukView />
       </ProtectedRoute>
     ),
   },
