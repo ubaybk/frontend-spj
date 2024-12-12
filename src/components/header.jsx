@@ -18,7 +18,7 @@ const Header = () => {
     }
   };
   return (
-    <div className="bg-blue-500 flex flex-col justify-between text-white px-4 py-6  w-64">
+    <div className="bg-blue-500 flex flex-col justify-between text-white  px-4 py-6  w-64">
       {/* Header Sidebar */}
       <div>
         <h1 className="text-xl font-bold">SPJ</h1>

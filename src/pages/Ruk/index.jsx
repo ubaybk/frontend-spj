@@ -54,7 +54,7 @@ const Ruk = () => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3); // Number of items per page
+  const [itemsPerPage, setItemsPerPage] = useState(4); // Number of items per page
 
   useEffect(() => {
     const auth = getAuth();
@@ -129,7 +129,7 @@ const Ruk = () => {
 
   // Filter data berdasarkan search term
   const filteredData = rukData.filter((item) =>
-    item.kegiatan.toLowerCase().includes(searchTerm.toLowerCase())
+    item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination logic
@@ -220,7 +220,7 @@ const Ruk = () => {
           <div className="mt-4">
             <input
               type="text"
-              placeholder="Cari nama kegiatan..."
+              placeholder="Cari nama aktivitas..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -245,10 +245,16 @@ const Ruk = () => {
                         <strong>Tempat Tugas:</strong> {item.tempatTugas}
                       </p>
                       <p>
-                        <strong>Pokja:</strong> {item.pokja}
+                        <strong>Aktiviktas:</strong> {item.aktivitas}
                       </p>
                       <p>
-                        <strong>Kegiatan:</strong> {item.kegiatan}
+                        <strong>PJ:</strong> {item.pj}
+                      </p>
+                      <p>
+                        <strong>Waktu Pelaksanaan:</strong> {item.waktuPelaksanaan}
+                      </p>
+                      <p>
+                        <strong>Anggaran:</strong> {item.total}
                       </p>
                       <div>
                         <button

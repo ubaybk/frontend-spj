@@ -115,26 +115,57 @@ const Dashboard = () => {
 
   //BENDAHARA
   const sudahDibayarCount = rukData.filter(
-    (ruk) => ruk.statusBendahara === "Sudah Dibayar"
+    (ruk) => ruk.statusBendahara === "Sudah DiBayar"
   ).length;
 
   const belumDibayarCount = rukData.filter(
-    (ruk) => !ruk.statusBendahara || ruk.statusBendahara === "Belum Dibayar"
+    (ruk) => !ruk.statusBendahara || ruk.statusBendahara === "Belum DiBayar"
   ).length;
 
   //BENDAHARA
   const sudahSelesaiCount = rukData.filter(
-    (ruk) => ruk.statusBendahara === "Sudah Dibayar" && ruk.statusScann === "Sudah Scann" && ruk.status === "Terima Pengadaan" && ruk.statusVerifikator === "Terima Verifikator" && ruk.statusKapusKaTu === "Sudah TTD"
+    (ruk) => ruk.statusBendahara === "Sudah DiBayar" && ruk.statusScann === "Sudah Scann" && ruk.status === "Terima Pengadaan" && ruk.statusVerifikator === "Terima Verifikator" && ruk.statusKapusKaTu === "Sudah TTD"
   ).length;
 
   const belumSelesaiCount = rukData.length - sudahDibayarCount
 
+  //RPK ADMEN
+  const rpkAdmen = rukData.filter(
+    (ruk) => ruk.pokja === "Admen"
+  ).length
+  //RPK UKP
+  const rpkUkp = rukData.filter(
+    (ruk) => ruk.pokja === "UKP"
+  ).length
+  //RPK UKM
+  const rpkUkm = rukData.filter(
+    (ruk) => ruk.pokja === "UKM"
+  ).length
+
 
   return (
     <>
-      <div className="flex">
-        <Header />
+      <div className="flex h-screen">
+        
+        <Header  />
         <div className="p-4 w-full">
+
+        <div className="mb-4">
+            <p className="text-lg font-semibold">
+              RPK Admen: {rpkAdmen}
+            </p>
+          </div>
+        <div className="mb-4">
+            <p className="text-lg font-semibold">
+              RPK UKP: {rpkUkp}
+            </p>
+          </div>
+        <div className="mb-4">
+            <p className="text-lg font-semibold">
+              RPK UKM: {rpkUkm}
+            </p>
+          </div>
+
           <h1 className="text-2xl font-bold mb-4">Dashboard RUK</h1>
 
           {/* Tampilkan jumlah total data RUK */}
