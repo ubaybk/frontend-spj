@@ -18,12 +18,13 @@ import { Link, useNavigate } from "react-router-dom";
 // import Verifikator from "../Verifikator";
 // import KapusKaTu from "../KapusKaTu";
 // import Scann from "../Scann";
-// import Bendahara from "../Bendahara";
+import Bendahara from "../Bendahara";
 // import SPJDone from "../SPJDone";
 import useHandleStatusChange from "../../Hooks/Pengadaan/useHandleStatusChange";
 import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleStatusChangeVerifikator";
 import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
 import useHandleStatusTddKapus from "../../Hooks/KapusKaTu/useHandleStatusTddKapus";
+import useHandleStatusBendahara from "../../Hooks/Bendahara/useHandleStatusBendahara";
 
 
 const Ruk = () => {
@@ -34,6 +35,7 @@ const Ruk = () => {
   const [editingVerifikator, setEditingVerifikator] = useState(null);
   const [editingKapusKaTu, setEditingKapusKaTu] = useState(null);
   const [editingScann, setEditingScann] = useState(null);
+  const [editingBendahara, setEditingBendahara] = useState(null);
   const [keterangan, setKeterangan] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -41,10 +43,12 @@ const Ruk = () => {
   const [keteranganVerifikator, setKeteranganVerifikator] = useState("");
   const [keteranganKapusKaTu, setKeteranganKapusKaTu] = useState("");
   const [keteranganScann, setKeteranganScann] = useState("");
+  const [keteranganBendahara, setKeteranganBendahara] = useState("");
   const { handleStatusChange, handleSave } = useHandleStatusChange(setRukData, isAdmin, setEditingId, setKeterangan);
   const { handleStatusChangeVerifikator, handleSaveVerifikator } = useHandleStatusChangeVerifikator(setRukData, isAdmin, setEditingVerifikator, setKeteranganVerifikator);
   const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } = useHandleStatusTddKapus(setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu);
   const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(setRukData, isAdmin, setEditingScann, setKeteranganScann);
+  const { handleStatusChangeBendahara, handleSaveBendahara } = useHandleStatusBendahara(setRukData, isAdmin, setEditingBendahara, setKeteranganBendahara);
 
  
 
@@ -164,7 +168,23 @@ const Ruk = () => {
     handleStatusChangeScann(id, newStatusScann)
   const saveKeteranganScann = (id) => 
     handleSaveScann(id, keteranganScann);
+  
+  //BENDAHARA
+  const handleStatusChangeBen = (id, newStatusBendahara) => 
+    handleStatusChangeBendahara(id, newStatusBendahara)
+  const saveKeteranganBendahara = (id) => 
+    handleSaveBendahara(id, keteranganBendahara);
 
+  // Fungsi untuk mengecek apakah semua status sesuai kondisi
+  const isStatusComplete = (item) => {
+    return (
+      item.status === "Terima Pengadaan" &&
+      item.statusBendahara === "Sudah DiBayar" &&
+      item.statusKapusKaTu === "Sudah TTD" &&
+      item.statusScann === "Sudah Scann" &&
+      item.statusVerifikator === "Terima Verifikator"
+    );
+  };
 
   
 
@@ -593,11 +613,115 @@ const Ruk = () => {
               )}
             </div>
 
+            {/* Bendahara */}
+            <div className="">
+              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <div key={item.id}>
+                    <div
+                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                        item.statusBendahara === "Belum DiBayar"
+                          ? "bg-red-100"
+                          : item.statusBendahara === "Sudah DiBayar"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <h1>Nama Kegiatan : {item.kegiatan}</h1>
+                      <div className="mt-2">
+                        {isAdmin ? (
+                          <select
+                            value={item.statusBendahara || ""}
+                            onChange={(e) =>
+                              handleStatusChangeBen(item.id, e.target.value)
+                            }
+                            className="border p-2 rounded w-full"
+                      
+
+                          >
+                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="Sudah DiBayar">Sudah DiBayar</option>
+                            <option value="Belum DiBayar">Belum DiBayar</option>
+                          </select>
+                        ) : (
+                          <p>Status: {item.statusBendahara}</p>
+                        )}
+                      </div>
+                      <p>Keterangan : {item.keteranganBendahara || "Belum diisi"}</p>
+
+                      {item.waktuUpdateBendahara && (
+                        <p>
+                          <strong>Waktu Update Bendahara:</strong>{" "}
+                          {new Date(
+                            item.waktuUpdateBendahara.seconds * 1000
+                          ).toLocaleString()}
+                        </p>
+                      )}
+
+                      {isAdmin && editingBendahara === item.id ? (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={keteranganBendahara}
+                            onChange={(e) => setKeteranganBendahara(e.target.value)}
+                            className="border p-2 rounded w-full"
+                            placeholder="Masukkan isian baru"
+                          />
+                          <button
+                            onClick={() =>  saveKeteranganBendahara(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            Simpan
+                          </button>
+                        </div>
+                      ) : isAdmin ? (
+                        <button
+                          onClick={() => {setEditingBendahara(item.id)}}
+                          className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+                          
+                        >
+                          Tambah/Perbarui Isian
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Tidak ada data RUK yang tersedia.</p>
+              )}
+            </div>
+
+
+            {/* Done */}
+            <div className="">
+              <h1 className="text-2xl font-bold mt-4">SELESAI</h1>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <div 
+                  key={item.id} 
+                  className={`p-4 rounded-lg h-[300px] w-[300px] shadow-md mb-3 ${
+                    isStatusComplete(item) 
+                      ? 'bg-green-200 border-green-500' 
+                      : 'bg-red-200 border-red-500'
+                  } border`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="font-bold">{item.kegiatan}</h3>
+                    </div>
+                  </div>
+                </div>
+                ))
+              ) : (
+                <p>Tidak ada data RUK yang tersedia.</p>
+              )}
+            </div>
+
 
             {/* Commented out sections remain the same */}
             {/* <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">scann</h1>
-              <Scann />
+              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
+              <Bendahara />
             </div> */}
           
           </div>
