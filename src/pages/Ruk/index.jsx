@@ -708,6 +708,13 @@ const Ruk = () => {
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-bold">{item.kegiatan}</h3>
+                      <p className={`font-semibold mt-2 ${
+              isStatusComplete(item) 
+                ? 'text-green-800' 
+                : 'text-red-800'
+            }`}>
+              {isStatusComplete(item) ? 'SELESAI' : 'BELUM SELESAI'}
+            </p>
                     </div>
                   </div>
                 </div>
