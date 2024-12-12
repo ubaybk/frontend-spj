@@ -498,7 +498,7 @@ const Ruk = () => {
                         <p>
                           <strong>Waktu Update TTD Kapus KaTU:</strong>{" "}
                           {new Date(
-                            item.waktuUpdateKapusKatu.seconds * 1000
+                            item.waktuUpdateKapusKaTu.seconds * 1000
                           ).toLocaleString()}
                         </p>
                       )}
