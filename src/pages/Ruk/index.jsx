@@ -22,8 +22,8 @@ import Bendahara from "../Bendahara";
 import SPJDone from "../SPJDone";
 import useHandleStatusChange from "../../Hooks/Pengadaan/useHandleStatusChange";
 import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleStatusChangeVerifikator";
-import useHandleStatusTddKapusKaTu from "../../Hooks/TTDKapusKatu/useHandleStatusTddKapusKatu";
 import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
+import useHandleStatusTddKapusKaTu from "../../Hooks/TTDKapusKatu/useHandleStatusTddKapusKatu";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
