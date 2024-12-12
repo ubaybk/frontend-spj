@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 
-const useHandleStatusTddKapusKaTu = (setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu) => {
+const useHandleStatusTddKapusKatu = (setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu) => {
   // Fungsi untuk mengubah status
   const handleStatusChangeKapusKaTu = useCallback(async (id, newStatusKapusKaTu, statusField = 'statusKapusKaTu', updateTimeField = 'waktuUpdateKapusKaTu') => {
     if (!isAdmin) return;
@@ -82,4 +82,4 @@ const useHandleStatusTddKapusKaTu = (setRukData, isAdmin, setEditingKapusKaTu, s
   return { handleStatusChangeKapusKaTu, handleSaveKapusKaTu };
 };
 
-export default useHandleStatusTddKapusKaTu;
+export default useHandleStatusTddKapusKatu;

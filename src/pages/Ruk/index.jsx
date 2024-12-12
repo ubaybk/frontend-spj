@@ -23,7 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useHandleStatusChange from "../../Hooks/Pengadaan/useHandleStatusChange";
 import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleStatusChangeVerifikator";
 import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
-import useHandleStatusTddKapusKaTu from "../../Hooks/TTDKapusKatu";
+import useHandleStatusTddKapusKatu from "../../Hooks/TTDKapusKatu/useHandleStatusTddKapusKatu";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
@@ -42,7 +42,7 @@ const Ruk = () => {
   const [keteranganScann, setKeteranganScann] = useState("");
   const { handleStatusChange, handleSave } = useHandleStatusChange(setRukData, isAdmin, setEditingId, setKeterangan);
   const { handleStatusChangeVerifikator, handleSaveVerifikator } = useHandleStatusChangeVerifikator(setRukData, isAdmin, setEditingVerifikator, setKeteranganVerifikator);
-  const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } = useHandleStatusTddKapusKaTu(setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu);
+  const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } = useHandleStatusTddKapusKatu(setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu);
   const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(setRukData, isAdmin, setEditingScann, setKeteranganScann);
 
  
