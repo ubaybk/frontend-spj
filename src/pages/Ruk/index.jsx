@@ -20,28 +20,36 @@ import KapusKaTu from "../KapusKaTu";
 import Scann from "../Scann";
 import Bendahara from "../Bendahara";
 import SPJDone from "../SPJDone";
+import useHandleStatusChange from "../../Hooks/Pengadaan/useHandleStatusChange";
+import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleStatusChangeVerifikator";
+import useHandleStatusTddKapusKaTu from "../../Hooks/TTDKapusKatu/useHandleStatusTddKapusKatu";
+import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [rukData, setRukData] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({
-    tempatTugas: "",
-    pokja: "",
-    kegiatan: "",
-    subKegiatan: "",
-    aktivitas: "",
-    tujuan: "",
-    sasaran: "",
-    targetSasaran: "",
-    pj: "",
-    kebutuhanSumberDaya: "",
-    mitraKerja: "",
-    waktuPelaksanaan: "",
-    komponen: "",
-  });
+  const [editingVerifikator, setEditingVerifikator] = useState(null);
+  const [editingKapusKaTu, setEditingKapusKaTu] = useState(null);
+  const [editingScann, setEditingScann] = useState(null);
+  const [keterangan, setKeterangan] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [keteranganVerifikator, setKeteranganVerifikator] = useState("");
+  const [keteranganKapusKaTu, setKeteranganKapusKaTu] = useState("");
+  const [keteranganScann, setKeteranganScann] = useState("");
+  const { handleStatusChange, handleSave } = useHandleStatusChange(setRukData, isAdmin, setEditingId, setKeterangan);
+  const { handleStatusChangeVerifikator, handleSaveVerifikator } = useHandleStatusChangeVerifikator(setRukData, isAdmin, setEditingVerifikator, setKeteranganVerifikator);
+  const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } = useHandleStatusTddKapusKaTu(setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu);
+  const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(setRukData, isAdmin, setEditingScann, setKeteranganScann);
+
+ 
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3); // Number of items per page
 
   useEffect(() => {
     const auth = getAuth();
@@ -50,6 +58,8 @@ const Ruk = () => {
       if (user) {
         const email = user.email;
         setUserEmail(email);
+
+        setIsAdmin(email === "admin@gmail.com");
 
         // Ambil data pengguna dari Firestore
         const userDocRef = doc(db, "users", user.uid);
@@ -95,51 +105,7 @@ const Ruk = () => {
   const navigate = useNavigate();
 
   const handleEdit = (id, currentData) => {
-    navigate(`/updateruk/${id}`), { state: currentData };
-    // setEditingId(id);
-    // setEditForm({
-    //   tempatTugas: currentData.tempatTugas,
-    //   pokja: currentData.pokja,
-    //   kegiatan: currentData.kegiatan,
-    //   subKegiatan: currentData.subKegiatan,
-    //   aktivitas: currentData.aktivitas,
-    //   tujuan: currentData.tujuan,
-    //   sasaran: currentData.sasaran,
-    //   targetSasaran: currentData.targetSasaran,
-    //   pj: currentData.pj,
-    //   kebutuhanSumberDaya: currentData.kebutuhanSumberDaya,
-    //   mitraKerja: currentData.mitraKerja,
-    //   waktuPelaksanaan: currentData.waktuPelaksanaan,
-    //   komponen: currentData.komponen,
-    // });
-  };
-
-  const handleUpdate = async (id) => {
-    try {
-      const rukDocRef = doc(db, "ruk_data", id);
-      await updateDoc(rukDocRef, editForm);
-      setRukData((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, ...editForm } : item))
-      );
-      setEditingId(null);
-      setEditForm({
-        tempatTugas: "",
-        pokja: "",
-        kegiatan: "",
-        subKegiatan: "",
-        aktivitas: "",
-        tujuan: "",
-        sasaran: "",
-        targetSasaran: "",
-        pj: "",
-        kebutuhanSumberDaya: "",
-        mitraKerja: "",
-        waktuPelaksanaan: "",
-        komponen: "",
-      });
-    } catch (error) {
-      console.error("Error updating RUK data: ", error);
-    }
+    navigate(`/updateruk/${id}`, { state: currentData });
   };
 
   const handleDelete = async (id) => {
@@ -156,8 +122,52 @@ const Ruk = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("ini ruk data", rukData);
+  // Filter data berdasarkan search term
+  const filteredData = rukData.filter((item) =>
+    item.kegiatan.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Calculate total pages based on filtered data
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  // Untuk status pengadaan
+  const handleStatusChangePengadaan = (id, newStatus) => 
+    handleStatusChange(id, newStatus);
+
+  // Untuk menyimpan keterangan
+  const saveKeterangan = (id) => 
+    handleSave(id, keterangan);
+
+  //VERIFIKATOR
+  const handleStatusChangeVerif = (id, newStatusVerifikator) => 
+    handleStatusChangeVerifikator(id, newStatusVerifikator)
+  const saveKeteranganVerifikator = (id) => 
+    handleSaveVerifikator(id, keteranganVerifikator);
+ 
+  //KAPUS KATU
+  const handleStatusChangeTTD = (id, newStatusKapusKaTu) => 
+    handleStatusChangeKapusKaTu(id, newStatusKapusKaTu)
+  const saveKeteranganKapusKaTu = (id) => 
+    handleSaveKapusKaTu(id, keteranganKapusKaTu);
+
+  //SCANN
+  const handleStatusChangeScan = (id, newStatusScann) => 
+    handleStatusChangeScann(id, newStatusScann)
+  const saveKeteranganScann = (id) => 
+    handleSaveScann(id, keteranganScann);
+
+
+  
+
+ 
   return (
     <>
       <div className="flex">
@@ -185,236 +195,41 @@ const Ruk = () => {
             </div>
           </div>
 
-          <div className="flex  gap-3">
+          {/* Input Pencarian */}
+          <div className="mt-4">
+            <input
+              type="text"
+              placeholder="Cari nama kegiatan..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                // Reset halaman ke 1 saat melakukan pencarian
+                setCurrentPage(1);
+              }}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div className="flex gap-3">
             <div className=" w-[30%]">
               <h2 className="font-semibold mt-4">Data Perencanaan RUK:</h2>
-              {rukData && rukData.length > 0 ? (
-                rukData.map((item) => (
+              {currentItems && currentItems.length > 0 ? (
+                currentItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 p-4 h-[600px] rounded shadow mb-4"
+                    className="bg-gray-100 p-4 h-[300px] w-[300px] rounded shadow mb-4"
                   >
-                    {editingId === item.id ? (
+                    <div className="flex flex-col h-[300px] mb-4">
+                      <p>
+                        <strong>Tempat Tugas:</strong> {item.tempatTugas}
+                      </p>
+                      <p>
+                        <strong>Pokja:</strong> {item.pokja}
+                      </p>
+                      <p>
+                        <strong>Kegiatan:</strong> {item.kegiatan}
+                      </p>
                       <div>
-                        <input
-                          type="text"
-                          value={editForm.tempatTugas}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              tempatTugas: e.target.value,
-                            })
-                          }
-                          placeholder="Edit Tempat Tugas"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-
-                        <input
-                          type="text"
-                          value={editForm.pokja}
-                          onChange={(e) =>
-                            setEditForm({ ...editForm, pokja: e.target.value })
-                          }
-                          placeholder="Edit pokja"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.kegiatan}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              kegiatan: e.target.value,
-                            })
-                          }
-                          placeholder="Edit kegiatan"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.subKegiatan}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              subKegiatan: e.target.value,
-                            })
-                          }
-                          placeholder="Edit subKegiatan"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.aktivitas}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              aktivitas: e.target.value,
-                            })
-                          }
-                          placeholder="Edit aktivitas"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.tujuan}
-                          onChange={(e) =>
-                            setEditForm({ ...editForm, tujuan: e.target.value })
-                          }
-                          placeholder="Edit tujuan"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.sasaran}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              sasaran: e.target.value,
-                            })
-                          }
-                          placeholder="Edit sasaran"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.targetSasaran}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              targetSasaran: e.target.value,
-                            })
-                          }
-                          placeholder="Edit targetSasaran"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.pj}
-                          onChange={(e) =>
-                            setEditForm({ ...editForm, pj: e.target.value })
-                          }
-                          placeholder="Edit pj"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.kebutuhanSumberDaya}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              kebutuhanSumberDaya: e.target.value,
-                            })
-                          }
-                          placeholder="Edit kebutuhanSumberDaya"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.mitraKerja}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              mitraKerja: e.target.value,
-                            })
-                          }
-                          placeholder="Edit mitraKerja"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.waktuPelaksanaan}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              waktuPelaksanaan: e.target.value,
-                            })
-                          }
-                          placeholder="Edit waktuPelaksanaan"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={editForm.komponen}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              komponen: e.target.value,
-                            })
-                          }
-                          placeholder="Edit komponen"
-                          className="border p-2 rounded mb-2 w-full"
-                        />
-                        <button
-                          onClick={() => handleUpdate(item.id)}
-                          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => setEditingId(null)}
-                          className="bg-gray-500 text-white px-4 py-2 rounded"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <div>
-                        <p>
-                          <strong>Tempat Tugas:</strong> {item.tempatTugas}
-                        </p>
-                        <p>
-                          <strong>Pokja:</strong> {item.pokja}
-                        </p>
-                        <p>
-                          <strong>Kegiatan:</strong> {item.kegiatan}
-                        </p>
-                        <p>
-                          <strong>Sub Kegiatan:</strong> {item.subKegiatan}
-                        </p>
-                        <p>
-                          <strong>Aktivitas:</strong> {item.aktivitas}
-                        </p>
-                        <p>
-                          <strong>Tujuan:</strong> {item.tujuan}
-                        </p>
-                        <p>
-                          <strong>Sasaran:</strong> {item.sasaran}
-                        </p>
-                        <p>
-                          <strong>Target Sasaran:</strong> {item.targetSasaran}
-                        </p>
-                        <p>
-                          <strong>PJ:</strong> {item.pj}
-                        </p>
-                        <p>
-                          <strong>Kebutuhan Sumber Daya:</strong>{" "}
-                          {item.kebutuhanSumberDaya}
-                        </p>
-                        <p>
-                          <strong>Mitra Kerja:</strong> {item.mitraKerja}
-                        </p>
-                        <p>
-                          <strong>Waktu Pelaksanaan:</strong>{" "}
-                          {item.waktuPelaksanaan}
-                        </p>
-                        <p>
-                          <strong>Komponen:</strong> {item.komponen}
-                        </p>
-                        <div>
-                          <strong>Kebutuhan Anggaran:</strong>
-                          <p>{item.kebutuhanDalamOrang}</p>
-                        </div>
-                        <p>
-                          <strong>Dibuat Oleh:</strong> {item.createdBy}
-                        </p>
-                        <p>
-                          <strong>Dibuat Pada:</strong>{" "}
-                          {item.createdAt
-                            ? new Date(
-                                item.createdAt.seconds * 1000
-                              ).toLocaleString()
-                            : "N/A"}
-                        </p>
                         <button
                           onClick={() => handleEdit(item.id, item)}
                           className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
@@ -428,70 +243,362 @@ const Ruk = () => {
                           Delete
                         </button>
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))
               ) : (
-                <p>Data RUK tidak tersedia.</p>
+                <p>Tidak ada data RUK yang sesuai.</p>
               )}
+
+              {/* Pagination Controls */}
+              <div className="flex justify-center items-center mt-4">
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="mx-2 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                >
+                  Sebelumnya
+                </button>
+                <span className="mx-2">
+                  Halaman {currentPage} dari {totalPages}
+                </span>
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="mx-2 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                >
+                  Selanjutnya
+                </button>
+              </div>
             </div>
-            <div className=" w-[30%]">
+
+            {/* PENGADAAN */}
+            <div className="">
               <h1 className="text-2xl font-bold mt-4">Pengadaan</h1>
-              {rukData.length > 0 ? (
-                rukData.map((item) => (
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
                   <div key={item.id}>
-                    {" "}
-                    {/* Pastikan memberikan key unik di elemen root */}
-                    <h1>{item.kegiatan}</h1>
+                    <div
+                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                        item.status === "Tolak Pengadaan"
+                          ? "bg-red-100"
+                          : item.status === "Terima Pengadaan"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <p>
+                  <strong>ID:</strong> {item.id}
+                </p>
+                      <h1>Nama Kegiatan : {item.kegiatan}</h1>
+                      <div className="mt-2">
+                        {isAdmin ? (
+                          <select
+                            value={item.status || ""}
+                            onChange={(e) =>
+                              handleStatusChangePengadaan(item.id, e.target.value)
+                            }
+                            className="border p-2 rounded w-full"
+                          >
+                            <option value="" disabled>
+                              Pilih Aksi
+                            </option>
+                            <option value="Terima Pengadaan">
+                              Terima Pengadaan
+                            </option>
+                            <option value="Tolak Pengadaan">
+                              Tolak Pengadaan
+                            </option>
+                          </select>
+                        ) : (
+                          <p>Status: {item.status}</p>
+                        )}
+                      </div>
+                      <p>Keterangan : {item.keterangan || "Belum diisi"}</p>
+
+                      {item.waktuUpdatePengadaan && (
+                        <p>
+                          <strong>Waktu Update Pengadaan:</strong>{" "}
+                          {new Date(
+                            item.waktuUpdatePengadaan.seconds * 1000
+                          ).toLocaleString()}
+                        </p>
+                      )}
+
+                      {isAdmin && editingId === item.id ? (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={keterangan}
+                            onChange={(e) => setKeterangan(e.target.value)}
+                            className="border p-2 rounded w-full"
+                            placeholder="Masukkan isian baru"
+                          />
+                          <button
+                            onClick={() => saveKeterangan(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                          >
+                            Simpan
+                          </button>
+                        </div>
+                      ) : isAdmin ? (
+                        <button
+                          onClick={() => setEditingId(item.id)}
+                          className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+                        >
+                          Tambah/Perbarui Isian
+                        </button>
+                      ) : null}
+                    </div>
                   </div>
                 ))
               ) : (
                 <p>Tidak ada data RUK yang tersedia.</p>
               )}
-
-              {/* <Pengadaan/> */}
             </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Pengadaan</h1>
-              {rukData.length > 0 ? (
-                rukData.map((item) => (
-                  <div key={item.id}>
-                    {" "}
-                    {/* Pastikan memberikan key unik di elemen root */}
-                    <h1>{item.kegiatan}</h1>
-                  </div>
-                ))
-              ) : (
-                <p>Tidak ada data RUK yang tersedia.</p>
-              )}
 
-              {/* <Pengadaan/> */}
-            </div>
-            <div className=" w-[30%]">
+            {/* Verifikator */}
+            <div className="">
               <h1 className="text-2xl font-bold mt-4">Verifikator</h1>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <div key={item.id}>
+                    <div
+                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                        item.statusVerifikator === "Tolak Verifikator"
+                          ? "bg-red-100"
+                          : item.statusVerifikator === "Terima Verifikator"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <h1>Nama Kegiatan : {item.kegiatan}</h1>
+                      <div className="mt-2">
+                        {isAdmin ? (
+                          <select
+                            value={item.statusVerifikator || ""}
+                            onChange={(e) =>
+                              handleStatusChangeVerif(item.id, e.target.value)
+                            }
+                            className="border p-2 rounded w-full"
+                      disabled={!item.status || item.status === "Tolak Pengadaan"}
 
-              <Verifikator />
+                          >
+                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="Terima Verifikator">Terima Verifikator</option>
+                            <option value="Tolak Verifikator">Tolak Verifikator</option>
+                          </select>
+                        ) : (
+                          <p>Status: {item.statusVerifikator}</p>
+                        )}
+                      </div>
+                      <p>Keterangan : {item.keteranganVerifikator || "Belum diisi"}</p>
+
+                      {item.waktuUpdateVerifikator && (
+                        <p>
+                          <strong>Waktu Update Verifikator:</strong>{" "}
+                          {new Date(
+                            item.waktuUpdateVerifikator.seconds * 1000
+                          ).toLocaleString()}
+                        </p>
+                      )}
+
+                      {isAdmin && editingVerifikator === item.id ? (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={keteranganVerifikator}
+                            onChange={(e) => setKeteranganVerifikator(e.target.value)}
+                            className="border p-2 rounded w-full"
+                            placeholder="Masukkan isian baru"
+                          />
+                          <button
+                            onClick={() =>  saveKeteranganVerifikator(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            Simpan
+                          </button>
+                        </div>
+                      ) : isAdmin ? (
+                        <button
+                          onClick={() => {setEditingVerifikator(item.id)}}
+                          className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+                          disabled={!item.status || item.status === "Tolak Pengadaan"}
+                        >
+                          Tambah/Perbarui Isian
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Tidak ada data RUK yang tersedia.</p>
+              )}
             </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">ACC Kapus & KaTu</h1>
 
-              <KapusKaTu />
+
+            {/* ACC / TTD KaTu Kapus */}
+            <div className="">
+              <h1 className="text-2xl font-bold mt-4">ACC Kapus KaTu</h1>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <div key={item.id}>
+                    <div
+                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                        item.statusKapusKaTu === "Belum TTD"
+                          ? "bg-red-100"
+                          : item.statusKapusKaTu === "Sudah TTD"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <h1>Nama Kegiatan : {item.kegiatan}</h1>
+                      <div className="mt-2">
+                        {isAdmin ? (
+                          <select
+                            value={item.statusKapusKaTu || ""}
+                            onChange={(e) =>
+                              handleStatusChangeTTD(item.id, e.target.value)
+                            }
+                            className="border p-2 rounded w-full"
+                      disabled={!item.statusVerifikator || item.statusVerifikator === "Tolak Verifikator"}
+
+                          >
+                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="Sudah TTD">Sudah TTD</option>
+                            <option value="Belum TTD">Belum TTD</option>
+                          </select>
+                        ) : (
+                          <p>Status: {item.statusKapusKaTu}</p>
+                        )}
+                      </div>
+                      <p>Keterangan : {item.keteranganKapusKaTu || "Belum diisi"}</p>
+
+                      {item.waktuUpdateKapusKaTu && (
+                        <p>
+                          <strong>Waktu Update TTD Kapus KaTU:</strong>{" "}
+                          {new Date(
+                            item.waktuUpdateKapusKatu.seconds * 1000
+                          ).toLocaleString()}
+                        </p>
+                      )}
+
+                      {isAdmin && editingKapusKaTu === item.id ? (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={keteranganKapusKaTu}
+                            onChange={(e) => setKeteranganKapusKaTu(e.target.value)}
+                            className="border p-2 rounded w-full"
+                            placeholder="Masukkan isian baru"
+                          />
+                          <button
+                            onClick={() =>  saveKeteranganKapusKaTu(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            Simpan
+                          </button>
+                        </div>
+                      ) : isAdmin ? (
+                        <button
+                          onClick={() => {setEditingKapusKaTu(item.id)}}
+                          className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+                          disabled={!item.statusVerifikator || item.statusVerifikator === "Tolak Verifikator"}
+                        >
+                          Tambah/Perbarui Isian
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Tidak ada data RUK yang tersedia.</p>
+              )}
             </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Scann Dokumen</h1>
 
+            {/* SCANN */}
+            <div className="">
+              <h1 className="text-2xl font-bold mt-4">Scann</h1>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <div key={item.id}>
+                    <div
+                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                        item.statusScann === "Belum Scann"
+                          ? "bg-red-100"
+                          : item.statusScann === "Sudah Scann"
+                          ? "bg-green-100"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <h1>Nama Kegiatan : {item.kegiatan}</h1>
+                      <div className="mt-2">
+                        {isAdmin ? (
+                          <select
+                            value={item.statusScann || ""}
+                            onChange={(e) =>
+                              handleStatusChangeScan(item.id, e.target.value)
+                            }
+                            className="border p-2 rounded w-full"
+                      disabled={!item.statusKapusKaTu || item.statusKapusKaTu === "Belum TTD"}
+
+                          >
+                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="Sudah Scann">Sudah Scann</option>
+                            <option value="Belum Scann">Belum Scann</option>
+                          </select>
+                        ) : (
+                          <p>Status: {item.statusScann}</p>
+                        )}
+                      </div>
+                      <p>Keterangan : {item.keteranganScann || "Belum diisi"}</p>
+
+                      {item.waktuUpdateScann && (
+                        <p>
+                          <strong>Waktu Update Scann:</strong>{" "}
+                          {new Date(
+                            item.waktuUpdateScann.seconds * 1000
+                          ).toLocaleString()}
+                        </p>
+                      )}
+
+                      {isAdmin && editingScann === item.id ? (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={keteranganScann}
+                            onChange={(e) => setKeteranganScann(e.target.value)}
+                            className="border p-2 rounded w-full"
+                            placeholder="Masukkan isian baru"
+                          />
+                          <button
+                            onClick={() =>  saveKeteranganScann(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            Simpan
+                          </button>
+                        </div>
+                      ) : isAdmin ? (
+                        <button
+                          onClick={() => {setEditingScann(item.id)}}
+                          className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+                          disabled={!item.statusKapusKaTu || item.statusKapusKaTu === "Belum TTD"}
+                        >
+                          Tambah/Perbarui Isian
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Tidak ada data RUK yang tersedia.</p>
+              )}
+            </div>
+
+
+            {/* Commented out sections remain the same */}
+            {/* <div className=" w-[30%]">
+              <h1 className="text-2xl font-bold mt-4">scann</h1>
               <Scann />
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
-
-              <Bendahara />
-            </div>
-            <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">BERHASIL</h1>
-
-              <SPJDone />
-            </div>
+            </div> */}
+          
           </div>
         </div>
       </div>
