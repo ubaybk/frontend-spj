@@ -14,16 +14,16 @@ import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
-import Pengadaan from "../Pengadaan";
-import Verifikator from "../Verifikator";
-import KapusKaTu from "../KapusKaTu";
-import Scann from "../Scann";
-import Bendahara from "../Bendahara";
-import SPJDone from "../SPJDone";
+// import Pengadaan from "../Pengadaan";
+// import Verifikator from "../Verifikator";
+// import KapusKaTu from "../KapusKaTu";
+// import Scann from "../Scann";
+// import Bendahara from "../Bendahara";
+// import SPJDone from "../SPJDone";
 import useHandleStatusChange from "../../Hooks/Pengadaan/useHandleStatusChange";
 import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleStatusChangeVerifikator";
 import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
-import useHandleStatusTddKapusKaTu from "../../Hooks/TTDKapusKatu/useHandleStatusTddKapusKatu";
+import useHandleStatusTddKapusKaTu from "../../Hooks/TTDKapusKatu";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
