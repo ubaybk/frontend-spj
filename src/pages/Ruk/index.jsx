@@ -190,7 +190,7 @@ const Ruk = () => {
                   <p>Email Anda: {userEmail}</p>
                 </>
               ) : (
-                <p>Data pengguna tidak tersedia.</p>
+                <p>Data pengguna tidak tersedia..</p>
               )}
             </div>
           </div>
