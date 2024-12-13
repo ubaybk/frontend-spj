@@ -188,8 +188,6 @@ const Dashboard = () => {
       <div className="flex w-screen ">
         <Header />
         <div className="p-4 w-full">
-          
-
           <h1 className="text-2xl font-bold mb-4">Dashboard RUK</h1>
 
           <div className="flex flex-col  border  bg-slate-100 p-3 mb-10">
@@ -262,6 +260,7 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* PENGADAAN */}
           <div className="grid grid-cols-3 gap-10">
             <div className="w-full text-center h-96">
             <h1 className="font-bold text-xl mb-2">PENGADAAN</h1>

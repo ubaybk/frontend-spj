@@ -191,9 +191,9 @@ const Ruk = () => {
  
   return (
     <>
-      <div className="flex">
+      <div className="flex ">
         <Header />
-        <div className="p-4 w-full">
+        <div className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Dashboard</h1>
@@ -232,13 +232,13 @@ const Ruk = () => {
           </div>
 
           <div className="flex gap-3">
-            <div className=" w-[30%]">
+            <div className="">
               <h2 className="font-semibold mt-4">Data Perencanaan RUK:</h2>
               {currentItems && currentItems.length > 0 ? (
                 currentItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 p-4 h-[300px] w-[300px] rounded shadow mb-4"
+                    className="bg-gray-100 p-4 h-[300px]  rounded shadow mb-4"
                   >
                     <div className="flex flex-col h-[300px] mb-4">
                       <p>
