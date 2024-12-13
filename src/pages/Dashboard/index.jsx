@@ -166,19 +166,19 @@ const Dashboard = () => {
   const dataKapusKatu = [
     { status: "Sudah TTD", total: terimaKapusKaTuCount },
     { status: "Belum TTD", total: tolakKapusKaTuCount },
-    { status: "Perbaikan TTD", total: perbaikanKapusKaTu },
+    
   ];
 
   const dataScann = [
     { status: "Sudah Scann", total: terimaScannCount },
     { status: "Belum Scann", total: tolakScannCount },
-    { status: "Perbaikan Scann", total: perbaikanScann },
+  
   ];
 
   const dataBendahara = [
     { status: "Sudah DiBayar", total: sudahDibayarCount },
     { status: "Belum DiBayar", total: belumDibayarCount },
-    { status: "Perbaikan", total: 0 },
+    
   ];
 
   const COLORS = ["#118B50", "#FF6384", "#F9E400"];
@@ -186,7 +186,10 @@ const Dashboard = () => {
   return (
     <>
       <div className="flex w-screen ">
+        <div>
         <Header />
+
+        </div>
         <div className="p-4 w-full">
           <h1 className="text-2xl font-bold mb-4">Dashboard RUK</h1>
 

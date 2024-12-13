@@ -191,8 +191,11 @@ const Ruk = () => {
  
   return (
     <>
-      <div className="flex ">
+      <div className="flex">
+        <div className="">
+
         <Header />
+        </div>
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -238,7 +241,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 p-4 h-[300px]  rounded shadow mb-4"
+                    className="bg-gray-100 p-4 h-[350px]  rounded shadow mb-4 "
                   >
                     <div className="flex flex-col h-[300px] gap-2 mb-4">
                       <p>
@@ -252,6 +255,9 @@ const Ruk = () => {
                       </p>
                       <p>
                         <strong>Waktu Pelaksanaan:</strong> {item.waktuPelaksanaan}
+                      </p>
+                      <p>
+                        <strong>Komponen:</strong> {item.komponen}
                       </p>
                       <p>
                         <strong>Anggaran:</strong> {item.total}
@@ -270,7 +276,21 @@ const Ruk = () => {
                           Delete
                         </button>
                       </div>
+                      <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="font-bold">{item.kegiatan}</h3>
+                      <p className={`font-semibold mt-2 ${
+              isStatusComplete(item) 
+                ? 'text-green-800' 
+                : 'text-red-800'
+            }`}>
+              {isStatusComplete(item) ? 'SELESAI' : 'BELUM SELESAI'}
+            </p>
                     </div>
+                  </div>
+                    </div>
+
+                    
                   </div>
                 ))
               ) : (
@@ -306,7 +326,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.status === "Tolak Pengadaan"
                           ? "bg-red-100"
                           : item.status === "Terima Pengadaan"
@@ -391,7 +411,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusVerifikator === "Tolak Verifikator"
                           ? "bg-red-100"
                           : item.statusVerifikator === "Terima Verifikator"
@@ -470,7 +490,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusKapusKaTu === "Belum TTD"
                           ? "bg-red-100"
                           : item.statusKapusKaTu === "Sudah TTD"
@@ -548,7 +568,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusScann === "Belum Scann"
                           ? "bg-red-100"
                           : item.statusScann === "Sudah Scann"
@@ -626,7 +646,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[300px] w-[300px] rounded mb-3 ${
+                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusBendahara === "Belum DiBayar"
                           ? "bg-red-100"
                           : item.statusBendahara === "Sudah DiBayar"
@@ -705,14 +725,14 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div 
                   key={item.id} 
-                  className={`p-4 rounded-lg h-[300px] w-[300px] shadow-md mb-3 ${
+                  className={`p-4 rounded-lg h-[350px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
                     isStatusComplete(item) 
                       ? 'bg-green-200 border-green-500' 
                       : 'bg-red-200 border-red-500'
                   } border`}
                 >
-                  <div className="flex justify-between items-center">
-                    <div>
+                  <div className="flex flex-col my-auto items-center">
+                    
                       <h3 className="font-bold">{item.kegiatan}</h3>
                       <p className={`font-semibold mt-2 ${
               isStatusComplete(item) 
@@ -721,7 +741,7 @@ const Ruk = () => {
             }`}>
               {isStatusComplete(item) ? 'SELESAI' : 'BELUM SELESAI'}
             </p>
-                    </div>
+                    
                   </div>
                 </div>
                 ))
