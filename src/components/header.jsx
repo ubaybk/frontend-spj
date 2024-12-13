@@ -21,10 +21,11 @@ const Header = () => {
     <div className="bg-blue-500 flex flex-col justify-between text-white  px-4 py-6  w-64">
       {/* Header Sidebar */}
       <div>
+        <div className="mb-16">
         <h1 className="text-xl font-bold">SPJ</h1>
         <h1 className="text-lg">Welcome, {email}</h1>
-      </div>
 
+        </div>
       {/* Konten Utama */}
       <div className="flex flex-col gap-3">
       <Link to={"/dashboard"}>
@@ -43,6 +44,8 @@ const Header = () => {
           Logout
         </h1>
       </div>
+      </div>
+
 
       {/* Footer (Opsional) */}
       <div className="text-sm text-gray-200">
