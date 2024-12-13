@@ -152,36 +152,36 @@ const Dashboard = () => {
   const rpkUkm = rukData.filter((ruk) => ruk.pokja === "UKM").length;
 
   const dataPengadaan = [
-    { status: "Tolak ", total: tolakPengadaanCount },
     { status: "Terima", total: terimaPengadaanCount },
+    { status: "Tolak ", total: tolakPengadaanCount },
     { status: "Perbaikan", total: perbaikiPengadaan },
   ];
 
   const dataVerifikator = [
-    { status: "Tolak", total: tolakVerifikatorCount },
     { status: "Terima", total: terimaVerifikatorCount },
+    { status: "Tolak", total: tolakVerifikatorCount },
     { status: "Perbaikan", total: perbaikanVerifikator },
   ];
 
   const dataKapusKatu = [
-    { status: "Belum TTD", total: tolakKapusKaTuCount },
     { status: "Sudah TTD", total: terimaKapusKaTuCount },
+    { status: "Belum TTD", total: tolakKapusKaTuCount },
     { status: "Perbaikan TTD", total: perbaikanKapusKaTu },
   ];
 
   const dataScann = [
-    { status: "Belum Scann", total: tolakScannCount },
     { status: "Sudah Scann", total: terimaScannCount },
+    { status: "Belum Scann", total: tolakScannCount },
     { status: "Perbaikan Scann", total: perbaikanScann },
   ];
 
   const dataBendahara = [
-    { status: "Belum DiBayar", total: belumDibayarCount },
     { status: "Sudah DiBayar", total: sudahDibayarCount },
+    { status: "Belum DiBayar", total: belumDibayarCount },
     { status: "Perbaikan", total: 0 },
   ];
 
-  const COLORS = ["#FF6384", "#118B50"];
+  const COLORS = ["#118B50", "#FF6384", "#F9E400"];
 
   return (
     <>
