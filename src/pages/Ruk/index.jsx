@@ -240,7 +240,7 @@ const Ruk = () => {
                     key={item.id}
                     className="bg-gray-100 p-4 h-[300px]  rounded shadow mb-4"
                   >
-                    <div className="flex flex-col h-[300px] mb-4">
+                    <div className="flex flex-col h-[300px] gap-2 mb-4">
                       <p>
                         <strong>Tempat Tugas:</strong> {item.tempatTugas}
                       </p>
