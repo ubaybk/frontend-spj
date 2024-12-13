@@ -152,15 +152,15 @@ const Dashboard = () => {
   const rpkUkm = rukData.filter((ruk) => ruk.pokja === "UKM").length;
 
   const dataPengadaan = [
-    { status: "Tolak Pengadaan", total: tolakPengadaanCount },
-    { status: "Terima Pengadaan", total: terimaPengadaanCount },
-    { status: "Perbaikan Pengadaan", total: perbaikiPengadaan },
+    { status: "Tolak ", total: tolakPengadaanCount },
+    { status: "Terima", total: terimaPengadaanCount },
+    { status: "Perbaikan", total: perbaikiPengadaan },
   ];
 
   const dataVerifikator = [
-    { status: "tolak Verifikator", total: tolakVerifikatorCount },
-    { status: "Terima Verifikator", total: terimaVerifikatorCount },
-    { status: "Perbaikan Verifikator", total: perbaikanVerifikator },
+    { status: "Tolak", total: tolakVerifikatorCount },
+    { status: "Terima", total: terimaVerifikatorCount },
+    { status: "Perbaikan", total: perbaikanVerifikator },
   ];
 
   const dataKapusKatu = [
@@ -178,7 +178,7 @@ const Dashboard = () => {
   const dataBendahara = [
     { status: "Belum DiBayar", total: belumDibayarCount },
     { status: "Sudah DiBayar", total: sudahDibayarCount },
-    { status: "Perbaikan Bendahara", total: 0 },
+    { status: "Perbaikan", total: 0 },
   ];
 
   const COLORS = ["#FF6384", "#118B50"];
@@ -270,7 +270,7 @@ const Dashboard = () => {
                   <XAxis dataKey="status" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                 
                   <Bar dataKey="total" fill="#8884d8">
                     {dataPengadaan.map((entry, index) => (
                       <Cell
@@ -292,7 +292,7 @@ const Dashboard = () => {
                   <XAxis dataKey="status" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                  
                   <Bar dataKey="total" fill="#8884d8">
                     {dataVerifikator.map((entry, index) => (
                       <Cell
@@ -314,7 +314,7 @@ const Dashboard = () => {
                   <XAxis dataKey="status" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                  
                   <Bar dataKey="total" fill="#8884d8">
                     {dataKapusKatu.map((entry, index) => (
                       <Cell
@@ -336,7 +336,7 @@ const Dashboard = () => {
                   <XAxis dataKey="status" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                 
                   <Bar dataKey="total" fill="#8884d8">
                     {dataScann.map((entry, index) => (
                       <Cell
@@ -351,7 +351,7 @@ const Dashboard = () => {
 
 
             {/* BENDAHARA */}
-            <div className="w-full text-center h-96">
+            <div className="w-full text-center h-96 mb-32">
             <h1 className="font-bold text-xl mb-2">BENDAHARA</h1>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dataBendahara}>
@@ -359,7 +359,7 @@ const Dashboard = () => {
                   <XAxis dataKey="status" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                 
                   <Bar dataKey="total" fill="#8884d8">
                     {dataBendahara.map((entry, index) => (
                       <Cell
