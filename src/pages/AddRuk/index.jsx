@@ -139,8 +139,11 @@ const AddRuk = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex h-screen">
+        <div>
+
         <Header />
+        </div>
         <div className="p-4">
           <Link to={"/ruk"}>
             <div className=" flex items-center cursor-pointer hover:underline">
