@@ -110,12 +110,12 @@ const Ruk = () => {
           ) {
             rukQuery = query(
               collection(db, "ruk_data"),
-            orderBy('createdAt', 'desc') // Pastikan field 'createdAt' adalah Timestamp
+            // orderBy('createdAt', 'desc') // Pastikan field 'createdAt' adalah Timestamp
             )
           } else {
             rukQuery = query(
               collection(db, "ruk_data"),
-              orderBy('createdAt', 'desc'),
+              // orderBy('createdAt', 'desc'),
               where("userId", "==", user.uid)
             );
           }
