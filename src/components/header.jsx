@@ -25,7 +25,7 @@ const Header = () => {
       {/* Header Sidebar */}
       <div>
         <div className="mb-16">
-          <h1 className="text-xl font-bold">SPJ</h1>
+          <h1 className="text-xl font-bold">TRACKING SPJ</h1>
           <h1 className="text-lg">Welcome, {email}</h1>
         </div>
         {/* Konten Utama */}
@@ -36,7 +36,7 @@ const Header = () => {
           </Link>
           <Link to={"/ruk"} className="flex items-center gap-3 text-2xl">
             <BsClipboardDataFill />
-            <h1 className="hover:underline cursor-pointer">R U K</h1>
+            <h1 className="hover:underline cursor-pointer">S P J</h1>
           </Link>
           {/* <Link to={"/ruk"}>
           <h1 className="hover:underline cursor-pointer ">RUK</h1>

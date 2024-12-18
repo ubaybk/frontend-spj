@@ -5,6 +5,7 @@ import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { Timestamp } from "firebase/firestore";
 
 const AddRuk = () => {
   const [tempatTugas, setTempatTugas] = useState("");
@@ -20,6 +21,7 @@ const AddRuk = () => {
   const [mitraKerja, setMitraKerja] = useState("");
   const [waktuPelaksanaan, setWaktuPelaksanaan] = useState("");
   const [komponen, setKomponen] = useState("");
+  const [customKomponen, setCustomKomponen] = useState("")
   const [kebutuhanDalamOrang, setKebutuhanDalamOrang] = useState(0);
   const [kebutuhanDalamX, setKebutuhanDalamX] = useState(0);
   const [kebutuhanDalamTahun, setKebutuhanDalamTahun] = useState(0);
@@ -48,7 +50,7 @@ const AddRuk = () => {
 
   const optionSubKegiatan = ["Kegiatan 1", "Kegiatan 2", "Kegiatan 3"];
 
-  const optionKomponen = ["Makan", "Snack", "Transport"];
+  const optionKomponen = ["Makan", "Snack", "Transport", "Lainnya"];
   
   const optionIndikatorKinerja = [
     "kinerja 1",
@@ -57,9 +59,8 @@ const AddRuk = () => {
   ]
 
   const optionSumberPembiayaan = [
-    "APBN",
     "APBD",
-    "Bantuan Luar Negeri",
+    "BLUD"
   ]
 
   // Hitung Total secara otomatis ketika input terkait berubah
@@ -96,6 +97,7 @@ const AddRuk = () => {
         mitraKerja,
         waktuPelaksanaan,
         komponen,
+        customKomponen,
         kebutuhanDalamOrang,
         kebutuhanDalamX,
         kebutuhanDalamTahun,
@@ -124,6 +126,7 @@ const AddRuk = () => {
       setMitraKerja("");
       setWaktuPelaksanaan("");
       setKomponen("");
+      setCustomKomponen("");
       setKebutuhanDalamOrang(0);
       setKebutuhanDalamX(0);
       setKebutuhanDalamTahun(0);
@@ -221,7 +224,7 @@ const AddRuk = () => {
               </select>
             </div>
             <div>
-              <h1>Aktivitas</h1>
+              <h1>Aktivitas (Judul Sesuai DPA)</h1>
               <input
                 type="text"
                 value={aktivitas}
@@ -293,60 +296,90 @@ const AddRuk = () => {
             <div>
               <h1>Waktu Pelaksanaan</h1>
               <input
-                type="text"
-                value={waktuPelaksanaan}
-                onChange={(e) => setWaktuPelaksanaan(e.target.value)}
+                type="date"
+                value={
+                  waktuPelaksanaan
+                    ? waktuPelaksanaan.toDate().toISOString().split("T")[0]
+                    : ""
+                }
+                onChange={(e) => {
+                  const selectedDate = e.target.value; // Format 'YYYY-MM-DD'
+          const firebaseTimestamp = Timestamp.fromDate(new Date(selectedDate)); // Convert to Firebase Timestamp
+          setWaktuPelaksanaan(firebaseTimestamp);
+
+                } }
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Waktu Pelaksanaan"
               />
             </div>
             <div>
-              <h1>Komponen</h1>
-              <select
-                value={komponen}
-                onChange={(e) => setKomponen(e.target.value)}
-                className="border rounded p-2 w-full"
-              >
-                <option value="" disabled>
-                  Pilih Komponen
-                </option>
-                {optionKomponen.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+    <h1>Komponen</h1>
+    <select
+      value={komponen}
+      onChange={(e) => {
+        const value = e.target.value;
+        setKomponen(value);
+        if (value !== "Lainnya") {
+          setCustomKomponen(""); // Reset customKomponen jika bukan "Lainnya"
+        }
+      }}
+      className="border rounded p-2 w-full"
+    >
+      <option value="" disabled>
+        Pilih Komponen
+      </option>
+      {optionKomponen.map((option, index) => (
+        <option key={index} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+    {komponen === "Lainnya" && (
+      <div className="mt-4">
+        <label htmlFor="customKomponen" className="block mb-2">
+          Masukkan Komponen
+        </label>
+        <input
+          id="customKomponen"
+          type="text"
+          value={customKomponen}
+          onChange={(e) => setCustomKomponen(e.target.value)}
+          className="border rounded p-2 w-full"
+        />
+      </div>
+    )}
+   
+  </div>
             <div>
               <h1 className="flex justify-center">Kebutuhan Anggaran</h1>
               <div className="flex">
                 <input
                   type="number"
-                  value={kebutuhanDalamOrang}
+                  // value={kebutuhanDalamOrang}
                   onChange={(e) => setKebutuhanDalamOrang(e.target.value)}
                   className="border rounded p-2 w-full"
-                  placeholder="Masukkan Waktu Pelaksanaan"
+                  placeholder="Orang"
                 />
                 <input
                   type="number"
-                  value={kebutuhanDalamX}
+                  // value={kebutuhanDalamX}
                   onChange={(e) => setKebutuhanDalamX(e.target.value)}
                   className="border rounded p-2 w-full"
-                  placeholder="Masukkan BERAPA x"
+                  placeholder="Berapa X"
                 />
                 <input
                   type="number"
-                  value={kebutuhanDalamTahun}
+                  // value={kebutuhanDalamTahun}
                   onChange={(e) => setKebutuhanDalamTahun(e.target.value)}
                   className="border rounded p-2 w-full"
-                  placeholder="Masukkan Kebutuhan Dalam Tahun"
+                  placeholder="Tahun"
                 />
                 <input
                   type="number"
                   value={hargaSatuan}
                   onChange={(e) => setHargaSatuan(e.target.value)}
                   className="border rounded p-2 w-full"
-                  placeholder="harga satuan"
+                  placeholder="Harga Satuan"
                 />
               </div>
               <div>

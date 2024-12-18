@@ -6,6 +6,7 @@ import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 
+
 const UpdateRuk = () => {
   const [tempatTugas, setTempatTugas] = useState("");
   const [pokja, setPokja] = useState("");
@@ -29,10 +30,13 @@ const UpdateRuk = () => {
   const [sumberPembiayaan, setSumberPembiayaan] = useState("");
   const [namaPenginput, setNamaPenginput] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+ const [isAdmin, setIsAdmin] = useState(false)
 
   const { id } = useParams(); // Get the document ID from the URL
   const location = useLocation();
   const navigate = useNavigate();
+
+  
 
   const optionsTugas = [
     "Puskesmas Cilandak",
@@ -66,6 +70,11 @@ const UpdateRuk = () => {
     "APBD",
     "Bantuan Luar Negeri",
   ];
+
+  useEffect(()=> {
+    const email = localStorage.getItem("Email")
+    setIsAdmin(email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com")
+  },[])
 
   // Hitung Total secara otomatis ketika input terkait berubah
   useEffect(() => {
@@ -272,6 +281,7 @@ const UpdateRuk = () => {
                 value={tempatTugas}
                 onChange={(e) => setTempatTugas(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih tempat tugas
@@ -282,6 +292,7 @@ const UpdateRuk = () => {
                   </option>
                 ))}
               </select>
+              
             </div>
             <div>
               <h1>Pokja</h1>
@@ -289,6 +300,7 @@ const UpdateRuk = () => {
                 value={pokja}
                 onChange={(e) => setPokja(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih Pokja
@@ -307,6 +319,7 @@ const UpdateRuk = () => {
                 value={kegiatan}
                 onChange={(e) => setKegiatan(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih Kegiatan
@@ -324,6 +337,7 @@ const UpdateRuk = () => {
                 value={subKegiatan}
                 onChange={(e) => setSubKegiatan(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih Sub Kegiatan
@@ -343,6 +357,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setAktivitas(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan aktivitas"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -353,6 +368,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setTujuan(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan tujuan"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -363,6 +379,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setSasaran(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan sasaran"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -373,6 +390,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setTargetSasaran(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Target Sasaran"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -383,6 +401,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setPj(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Penanggung Jawab"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -393,6 +412,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setKebutuhanSumberDaya(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Kebutuhan Sumber Daya"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -403,6 +423,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setMitraKerja(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Mitra Kerja"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -413,6 +434,7 @@ const UpdateRuk = () => {
                 onChange={(e) => setWaktuPelaksanaan(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Waktu Pelaksanaan"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             <div>
@@ -421,6 +443,7 @@ const UpdateRuk = () => {
                 value={komponen}
                 onChange={(e) => setKomponen(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih Komponen
@@ -441,6 +464,7 @@ const UpdateRuk = () => {
                   onChange={(e) => setKebutuhanDalamOrang(e.target.value)}
                   className="border rounded p-2 w-full"
                   placeholder="Masukkan Waktu Pelaksanaan"
+                  disabled={!isAdmin} // Disable jika bukan admin
                 />
                 <input
                   type="number"
@@ -448,6 +472,7 @@ const UpdateRuk = () => {
                   onChange={(e) => setKebutuhanDalamX(e.target.value)}
                   className="border rounded p-2 w-full"
                   placeholder="Masukkan BERAPA x"
+                  disabled={!isAdmin} // Disable jika bukan admin
                 />
                 <input
                   type="number"
@@ -455,6 +480,7 @@ const UpdateRuk = () => {
                   onChange={(e) => setKebutuhanDalamTahun(e.target.value)}
                   className="border rounded p-2 w-full"
                   placeholder="Masukkan Kebutuhan Dalam Tahun"
+                  disabled={!isAdmin} // Disable jika bukan admin
                 />
                 <input
                   type="number"
@@ -462,6 +488,7 @@ const UpdateRuk = () => {
                   onChange={(e) => setHargaSatuan(e.target.value)}
                   className="border rounded p-2 w-full"
                   placeholder="harga satuan"
+                  disabled={!isAdmin} // Disable jika bukan admin
                 />
               </div>
               <div>
@@ -482,6 +509,7 @@ const UpdateRuk = () => {
                 value={indikatorKinerja}
                 onChange={(e) => setIndikatorKinerja(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih Indikator Kinerja
@@ -499,6 +527,7 @@ const UpdateRuk = () => {
                 value={sumberPembiayaan}
                 onChange={(e) => setSumberPembiayaan(e.target.value)}
                 className="border rounded p-2 w-full"
+                disabled={!isAdmin} // Disable jika bukan admin
               >
                 <option value="" disabled>
                   Pilih Sumber Pembiayaan
@@ -518,9 +547,11 @@ const UpdateRuk = () => {
                 onChange={(e) => setNamaPenginput(e.target.value)}
                 className="border rounded p-2 w-full"
                 placeholder="Masukkan Mitra Kerja"
+                disabled={!isAdmin} // Disable jika bukan admin
               />
             </div>
             {/* Tambahkan tombol Reset di bawah tombol Simpan/Perbarui */}
+            {isAdmin ? (
             <div className="col-span-3 flex gap-4">
               <button
                 onClick={handleSubmit}
@@ -535,6 +566,8 @@ const UpdateRuk = () => {
                 Reset
               </button>
             </div>
+
+            ): null}
           </div>
         </div>
       </div>

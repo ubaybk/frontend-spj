@@ -14,12 +14,6 @@ import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
-// import Pengadaan from "../Pengadaan";
-// import Verifikator from "../Verifikator";
-// import KapusKaTu from "../KapusKaTu";
-// import Scann from "../Scann";
-import Bendahara from "../Bendahara";
-// import SPJDone from "../SPJDone";
 import useHandleStatusChange from "../../Hooks/Pengadaan/useHandleStatusChange";
 import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleStatusChangeVerifikator";
 import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
@@ -49,7 +43,8 @@ const Ruk = () => {
   const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } = useHandleStatusTddKapus(setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu);
   const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(setRukData, isAdmin, setEditingScann, setKeteranganScann);
   const { handleStatusChangeBendahara, handleSaveBendahara } = useHandleStatusBendahara(setRukData, isAdmin, setEditingBendahara, setKeteranganBendahara);
-
+  const [selectedMonth, setSelectedMonth] = useState(""); // Bulan yang dipilih
+  const [selectedYear, setSelectedYear] = useState("");  // Tahun yang dipilih
  
 
   // Pagination state
@@ -64,7 +59,7 @@ const Ruk = () => {
         const email = user.email;
         setUserEmail(email);
 
-        setIsAdmin(email === "admin@gmail.com");
+        setIsAdmin(email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com");
 
         // Ambil data pengguna dari Firestore
         const userDocRef = doc(db, "users", user.uid);
@@ -79,7 +74,7 @@ const Ruk = () => {
         // Ambil semua data RUK dari Firestore untuk pengguna ini
         try {
           let rukQuery;
-          if (email === "admin@gmail.com") {
+          if (email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com") {
             rukQuery = collection(db, "ruk_data");
           } else {
             rukQuery = query(
@@ -127,9 +122,21 @@ const Ruk = () => {
     return <div>Loading...</div>;
   }
 
+   // Fungsi untuk memfilter berdasarkan bulan dan tahun
+   const filterByMonthAndYear = (item) => {
+    if (selectedMonth && selectedYear) {
+      const itemDate = item.createdAt.toDate(); // Assuming createdAt is a Firestore timestamp
+      const itemMonth = itemDate.getMonth() + 1; // Mendapatkan bulan (1-12)
+      const itemYear = itemDate.getFullYear(); // Mendapatkan tahun (YYYY)
+
+      return itemMonth === parseInt(selectedMonth) && itemYear === parseInt(selectedYear);
+    }
+    return true; // Jika tidak ada filter bulan dan tahun, tampilkan semua data
+  };
+
   // Filter data berdasarkan search term
   const filteredData = rukData.filter((item) =>
-    item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase())
+    item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase()) && filterByMonthAndYear(item)
   );
 
   // Pagination logic
@@ -186,14 +193,10 @@ const Ruk = () => {
     );
   };
 
-  
-
- 
   return (
     <>
       <div className="flex">
         <div className="">
-
         <Header />
         </div>
         <div className="p-4">
@@ -203,7 +206,7 @@ const Ruk = () => {
               <Link to={"/addruk"}>
                 <div className=" flex items-center cursor-pointer hover:underline bg-blue-400 rounded-xl p-2 text-white">
                   <IoIosAddCircle className="text-[25px]" />
-                  <h1>Tambah Data Perencanaan</h1>
+                  <h1>Tambah Data S P J</h1>
                 </div>
               </Link>
             </div>
@@ -234,16 +237,56 @@ const Ruk = () => {
             />
           </div>
 
+          <div className="filter-form">
+        <label>
+          Month:
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+          >
+            <option value="">Select Month</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </label>
+        <label>
+          Year:
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+          >
+            <option value="">Select Year</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            {/* Tambahkan tahun yang dibutuhkan */}
+          </select>
+        </label>
+      </div>
+
           <div className="flex gap-3">
             <div className="">
-              <h2 className="font-semibold mt-4">Data Perencanaan RUK:</h2>
+              <h2 className="font-semibold mt-4">Data SPJ:</h2>
               {currentItems && currentItems.length > 0 ? (
                 currentItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 p-4 h-[350px]  rounded shadow mb-4 "
+                    className="bg-gray-100 p-4 h-[400px]  rounded shadow mb-4 "
                   >
                     <div className="flex flex-col h-[300px] gap-2 mb-4">
+                    <p>
+                  <strong>ID:</strong> {item.id}
+                </p>
                       <p>
                         <strong>Tempat Tugas:</strong> {item.tempatTugas}
                       </p>
@@ -254,14 +297,29 @@ const Ruk = () => {
                         <strong>PJ:</strong> {item.pj}
                       </p>
                       <p>
-                        <strong>Waktu Pelaksanaan:</strong> {item.waktuPelaksanaan}
+                        <strong>Waktu Pelaksanaan:</strong> {item.waktuPelaksanaan
+  ? new Date(item.waktuPelaksanaan).toLocaleString("id-ID", {
+      weekday: "long", // Menampilkan hari dalam format lengkap
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true, // Menggunakan format 12 jam
+    })
+  : "Belum ditentukan"}
                       </p>
                       <p>
-                        <strong>Komponen:</strong> {item.komponen}
+                        <strong>Komponen:</strong> {item.komponen} 
+                        <p>
+                        {item.customKomponen}
+                          </p> 
                       </p>
                       <p>
                         <strong>Anggaran:</strong> {item.total}
                       </p>
+                      {isAdmin ? (
                       <div>
                         <button
                           onClick={() => handleEdit(item.id, item)}
@@ -276,6 +334,16 @@ const Ruk = () => {
                           Delete
                         </button>
                       </div>
+
+                      ): 
+                      <div>
+                        <button
+                          onClick={() => handleEdit(item.id, item)}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                        >
+                          Detail
+                        </button>
+                      </div> }
                       <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-bold">{item.kegiatan}</h3>
@@ -326,7 +394,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[400px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.status === "Tolak Pengadaan"
                           ? "bg-red-100"
                           : item.status === "Terima Pengadaan"
@@ -334,9 +402,7 @@ const Ruk = () => {
                           : "bg-gray-100"
                       }`}
                     >
-                      <p>
-                  <strong>ID:</strong> {item.id}
-                </p>
+                     
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
                         {isAdmin ? (
@@ -411,7 +477,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[400px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusVerifikator === "Tolak Verifikator"
                           ? "bg-red-100"
                           : item.statusVerifikator === "Terima Verifikator"
@@ -490,7 +556,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[400px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusKapusKaTu === "Belum TTD"
                           ? "bg-red-100"
                           : item.statusKapusKaTu === "Sudah TTD"
@@ -568,7 +634,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[400px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusScann === "Belum Scann"
                           ? "bg-red-100"
                           : item.statusScann === "Sudah Scann"
@@ -646,9 +712,9 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[350px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
-                        item.statusBendahara === "Belum DiBayar"
-                          ? "bg-red-100"
+                      className={`p-4 border h-[400px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                        item.statusBendahara === "Sudah Terima Dokumen"
+                          ? "bg-yellow-100"
                           : item.statusBendahara === "Sudah DiBayar"
                           ? "bg-green-100"
                           : "bg-gray-100"
@@ -663,12 +729,10 @@ const Ruk = () => {
                               handleStatusChangeBen(item.id, e.target.value)
                             }
                             className="border p-2 rounded w-full"
-                      
-
                           >
                             <option value="" disabled>Pilih Aksi</option>
                             <option value="Sudah DiBayar">Sudah DiBayar</option>
-                            <option value="Belum DiBayar">Belum DiBayar</option>
+                            <option value="Sudah Terima Dokumen">Sudah Terima Dokumen</option>
                           </select>
                         ) : (
                           <p>Status: {item.statusBendahara}</p>
@@ -725,7 +789,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div 
                   key={item.id} 
-                  className={`p-4 rounded-lg h-[350px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
+                  className={`p-4 rounded-lg h-[400px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
                     isStatusComplete(item) 
                       ? 'bg-green-200 border-green-500' 
                       : 'bg-red-200 border-red-500'
@@ -749,14 +813,6 @@ const Ruk = () => {
                 <p>Tidak ada data RUK yang tersedia.</p>
               )}
             </div>
-
-
-            {/* Commented out sections remain the same */}
-            {/* <div className=" w-[30%]">
-              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
-              <Bendahara />
-            </div> */}
-          
           </div>
         </div>
       </div>
