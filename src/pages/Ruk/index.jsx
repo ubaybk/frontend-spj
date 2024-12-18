@@ -9,6 +9,7 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  orderBy,
 } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 import Header from "../../components/header";
@@ -19,7 +20,7 @@ import useHandleStatusChangeVerifikator from "../../Hooks/Verifikator/useHandleS
 import useHandleStatusScann from "../../Hooks/Scann/useHandleStatusScann";
 import useHandleStatusTddKapus from "../../Hooks/KapusKaTu/useHandleStatusTddKapus";
 import useHandleStatusBendahara from "../../Hooks/Bendahara/useHandleStatusBendahara";
-
+import { Timestamp } from "firebase/firestore";
 
 const Ruk = () => {
   const [userName, setUserName] = useState("");
@@ -38,14 +39,41 @@ const Ruk = () => {
   const [keteranganKapusKaTu, setKeteranganKapusKaTu] = useState("");
   const [keteranganScann, setKeteranganScann] = useState("");
   const [keteranganBendahara, setKeteranganBendahara] = useState("");
-  const { handleStatusChange, handleSave } = useHandleStatusChange(setRukData, isAdmin, setEditingId, setKeterangan);
-  const { handleStatusChangeVerifikator, handleSaveVerifikator } = useHandleStatusChangeVerifikator(setRukData, isAdmin, setEditingVerifikator, setKeteranganVerifikator);
-  const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } = useHandleStatusTddKapus(setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu);
-  const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(setRukData, isAdmin, setEditingScann, setKeteranganScann);
-  const { handleStatusChangeBendahara, handleSaveBendahara } = useHandleStatusBendahara(setRukData, isAdmin, setEditingBendahara, setKeteranganBendahara);
+  const { handleStatusChange, handleSave } = useHandleStatusChange(
+    setRukData,
+    isAdmin,
+    setEditingId,
+    setKeterangan
+  );
+  const { handleStatusChangeVerifikator, handleSaveVerifikator } =
+    useHandleStatusChangeVerifikator(
+      setRukData,
+      isAdmin,
+      setEditingVerifikator,
+      setKeteranganVerifikator
+    );
+  const { handleStatusChangeKapusKaTu, handleSaveKapusKaTu } =
+    useHandleStatusTddKapus(
+      setRukData,
+      isAdmin,
+      setEditingKapusKaTu,
+      setKeteranganKapusKaTu
+    );
+  const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(
+    setRukData,
+    isAdmin,
+    setEditingScann,
+    setKeteranganScann
+  );
+  const { handleStatusChangeBendahara, handleSaveBendahara } =
+    useHandleStatusBendahara(
+      setRukData,
+      isAdmin,
+      setEditingBendahara,
+      setKeteranganBendahara
+    );
   const [selectedMonth, setSelectedMonth] = useState(""); // Bulan yang dipilih
-  const [selectedYear, setSelectedYear] = useState("");  // Tahun yang dipilih
- 
+  const [selectedYear, setSelectedYear] = useState(""); // Tahun yang dipilih
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +87,9 @@ const Ruk = () => {
         const email = user.email;
         setUserEmail(email);
 
-        setIsAdmin(email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com");
+        setIsAdmin(
+          email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com"
+        );
 
         // Ambil data pengguna dari Firestore
         const userDocRef = doc(db, "users", user.uid);
@@ -74,11 +104,18 @@ const Ruk = () => {
         // Ambil semua data RUK dari Firestore untuk pengguna ini
         try {
           let rukQuery;
-          if (email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com") {
-            rukQuery = collection(db, "ruk_data");
+          if (
+            email === "admin@gmail.com" ||
+            email === "pengadaancilandak@gmail.com"
+          ) {
+            rukQuery = query(
+              collection(db, "ruk_data"),
+            orderBy('createdAt', 'desc') // Pastikan field 'createdAt' adalah Timestamp
+            )
           } else {
             rukQuery = query(
               collection(db, "ruk_data"),
+              orderBy('createdAt', 'desc'),
               where("userId", "==", user.uid)
             );
           }
@@ -122,21 +159,26 @@ const Ruk = () => {
     return <div>Loading...</div>;
   }
 
-   // Fungsi untuk memfilter berdasarkan bulan dan tahun
-   const filterByMonthAndYear = (item) => {
+  // Fungsi untuk memfilter berdasarkan bulan dan tahun
+  const filterByMonthAndYear = (item) => {
     if (selectedMonth && selectedYear) {
       const itemDate = item.createdAt.toDate(); // Assuming createdAt is a Firestore timestamp
       const itemMonth = itemDate.getMonth() + 1; // Mendapatkan bulan (1-12)
       const itemYear = itemDate.getFullYear(); // Mendapatkan tahun (YYYY)
 
-      return itemMonth === parseInt(selectedMonth) && itemYear === parseInt(selectedYear);
+      return (
+        itemMonth === parseInt(selectedMonth) &&
+        itemYear === parseInt(selectedYear)
+      );
     }
     return true; // Jika tidak ada filter bulan dan tahun, tampilkan semua data
   };
 
   // Filter data berdasarkan search term
-  const filteredData = rukData.filter((item) =>
-    item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase()) && filterByMonthAndYear(item)
+  const filteredData = rukData.filter(
+    (item) =>
+      item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      filterByMonthAndYear(item)
   );
 
   // Pagination logic
@@ -151,35 +193,33 @@ const Ruk = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Untuk status pengadaan
-  const handleStatusChangePengadaan = (id, newStatus) => 
+  const handleStatusChangePengadaan = (id, newStatus) =>
     handleStatusChange(id, newStatus);
 
   // Untuk menyimpan keterangan
-  const saveKeterangan = (id) => 
-    handleSave(id, keterangan);
+  const saveKeterangan = (id) => handleSave(id, keterangan);
 
   //VERIFIKATOR
-  const handleStatusChangeVerif = (id, newStatusVerifikator) => 
-    handleStatusChangeVerifikator(id, newStatusVerifikator)
-  const saveKeteranganVerifikator = (id) => 
+  const handleStatusChangeVerif = (id, newStatusVerifikator) =>
+    handleStatusChangeVerifikator(id, newStatusVerifikator);
+  const saveKeteranganVerifikator = (id) =>
     handleSaveVerifikator(id, keteranganVerifikator);
- 
+
   //KAPUS KATU
-  const handleStatusChangeTTD = (id, newStatusKapusKaTu) => 
-    handleStatusChangeKapusKaTu(id, newStatusKapusKaTu)
-  const saveKeteranganKapusKaTu = (id) => 
+  const handleStatusChangeTTD = (id, newStatusKapusKaTu) =>
+    handleStatusChangeKapusKaTu(id, newStatusKapusKaTu);
+  const saveKeteranganKapusKaTu = (id) =>
     handleSaveKapusKaTu(id, keteranganKapusKaTu);
 
   //SCANN
-  const handleStatusChangeScan = (id, newStatusScann) => 
-    handleStatusChangeScann(id, newStatusScann)
-  const saveKeteranganScann = (id) => 
-    handleSaveScann(id, keteranganScann);
-  
+  const handleStatusChangeScan = (id, newStatusScann) =>
+    handleStatusChangeScann(id, newStatusScann);
+  const saveKeteranganScann = (id) => handleSaveScann(id, keteranganScann);
+
   //BENDAHARA
-  const handleStatusChangeBen = (id, newStatusBendahara) => 
-    handleStatusChangeBendahara(id, newStatusBendahara)
-  const saveKeteranganBendahara = (id) => 
+  const handleStatusChangeBen = (id, newStatusBendahara) =>
+    handleStatusChangeBendahara(id, newStatusBendahara);
+  const saveKeteranganBendahara = (id) =>
     handleSaveBendahara(id, keteranganBendahara);
 
   // Fungsi untuk mengecek apakah semua status sesuai kondisi
@@ -193,11 +233,17 @@ const Ruk = () => {
     );
   };
 
+
+
+  
+
+
+
   return (
     <>
       <div className="flex">
         <div className="">
-        <Header />
+          <Header />
         </div>
         <div className="p-4">
           <div className="flex items-center justify-between">
@@ -238,41 +284,41 @@ const Ruk = () => {
           </div>
 
           <div className="filter-form">
-        <label>
-          Month:
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-          >
-            <option value="">Select Month</option>
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </select>
-        </label>
-        <label>
-          Year:
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            <option value="">Select Year</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            {/* Tambahkan tahun yang dibutuhkan */}
-          </select>
-        </label>
-      </div>
+            <label>
+              Month:
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+              >
+                <option value="">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label>
+              Year:
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                <option value="">Select Year</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                {/* Tambahkan tahun yang dibutuhkan */}
+              </select>
+            </label>
+          </div>
 
           <div className="flex gap-3">
             <div className="">
@@ -284,9 +330,9 @@ const Ruk = () => {
                     className="bg-gray-100 p-4 h-[400px]  rounded shadow mb-4 "
                   >
                     <div className="flex flex-col h-[300px] gap-2 mb-4">
-                    <p>
-                  <strong>ID:</strong> {item.id}
-                </p>
+                      <p>
+                        <strong>ID:</strong> {item.id}
+                      </p>
                       <p>
                         <strong>Tempat Tugas:</strong> {item.tempatTugas}
                       </p>
@@ -297,68 +343,71 @@ const Ruk = () => {
                         <strong>PJ:</strong> {item.pj}
                       </p>
                       <p>
-                        <strong>Waktu Pelaksanaan:</strong> {item.waktuPelaksanaan
-  ? new Date(item.waktuPelaksanaan).toLocaleString("id-ID", {
-      weekday: "long", // Menampilkan hari dalam format lengkap
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true, // Menggunakan format 12 jam
-    })
-  : "Belum ditentukan"}
-                      </p>
+  <strong>Waktu Pelaksanaan:</strong>{" "}
+  {item.waktuPelaksanaan
+    ? new Date(item.waktuPelaksanaan.seconds * 1000).toLocaleString("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        // hour: "2-digit",
+        // minute: "2-digit",
+        // second: "2-digit",
+        // hour12: true,
+      })
+    : "Belum ditentukan"}
+</p>
+
+
                       <p>
-                        <strong>Komponen:</strong> {item.komponen} 
-                        <p>
-                        {item.customKomponen}
-                          </p> 
+                        <strong>Komponen:</strong> {item.komponen}
+                        <p>{item.customKomponen}</p>
                       </p>
                       <p>
                         <strong>Anggaran:</strong> {item.total}
                       </p>
                       {isAdmin ? (
-                      <div>
-                        <button
-                          onClick={() => handleEdit(item.id, item)}
-                          className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                          Delete
-                        </button>
-                      </div>
-
-                      ): 
-                      <div>
-                        <button
-                          onClick={() => handleEdit(item.id, item)}
-                          className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                          Detail
-                        </button>
-                      </div> }
+                        <div>
+                          <button
+                            onClick={() => handleEdit(item.id, item)}
+                            className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            className="bg-red-500 text-white px-4 py-2 rounded"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      ) : (
+                        <div>
+                          <button
+                            onClick={() => handleEdit(item.id, item)}
+                            className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                          >
+                            Detail
+                          </button>
+                        </div>
+                      )}
                       <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="font-bold">{item.kegiatan}</h3>
-                      <p className={`font-semibold mt-2 ${
-              isStatusComplete(item) 
-                ? 'text-green-800' 
-                : 'text-red-800'
-            }`}>
-              {isStatusComplete(item) ? 'SELESAI' : 'BELUM SELESAI'}
-            </p>
+                        <div>
+                          <h3 className="font-bold">{item.kegiatan}</h3>
+                          <p
+                            className={`font-semibold mt-2 ${
+                              isStatusComplete(item)
+                                ? "text-green-800"
+                                : "text-red-800"
+                            }`}
+                          >
+                            {isStatusComplete(item)
+                              ? "SELESAI"
+                              : "BELUM SELESAI"}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                    </div>
-
-                    
                   </div>
                 ))
               ) : (
@@ -402,14 +451,16 @@ const Ruk = () => {
                           : "bg-gray-100"
                       }`}
                     >
-                     
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
                         {isAdmin ? (
                           <select
                             value={item.status || ""}
                             onChange={(e) =>
-                              handleStatusChangePengadaan(item.id, e.target.value)
+                              handleStatusChangePengadaan(
+                                item.id,
+                                e.target.value
+                              )
                             }
                             className="border p-2 rounded w-full"
                           >
@@ -494,18 +545,28 @@ const Ruk = () => {
                               handleStatusChangeVerif(item.id, e.target.value)
                             }
                             className="border p-2 rounded w-full"
-                      disabled={!item.status || item.status === "Tolak Pengadaan"}
-
+                            disabled={
+                              !item.status || item.status === "Tolak Pengadaan"
+                            }
                           >
-                            <option value="" disabled>Pilih Aksi</option>
-                            <option value="Terima Verifikator">Terima Verifikator</option>
-                            <option value="Tolak Verifikator">Tolak Verifikator</option>
+                            <option value="" disabled>
+                              Pilih Aksi
+                            </option>
+                            <option value="Terima Verifikator">
+                              Terima Verifikator
+                            </option>
+                            <option value="Tolak Verifikator">
+                              Tolak Verifikator
+                            </option>
                           </select>
                         ) : (
                           <p>Status: {item.statusVerifikator}</p>
                         )}
                       </div>
-                      <p>Keterangan : {item.keteranganVerifikator || "Belum diisi"}</p>
+                      <p>
+                        Keterangan :{" "}
+                        {item.keteranganVerifikator || "Belum diisi"}
+                      </p>
 
                       {item.waktuUpdateVerifikator && (
                         <p>
@@ -521,21 +582,28 @@ const Ruk = () => {
                           <input
                             type="text"
                             value={keteranganVerifikator}
-                            onChange={(e) => setKeteranganVerifikator(e.target.value)}
+                            onChange={(e) =>
+                              setKeteranganVerifikator(e.target.value)
+                            }
                             className="border p-2 rounded w-full"
                             placeholder="Masukkan isian baru"
                           />
                           <button
-                            onClick={() =>  saveKeteranganVerifikator(item.id)}
-                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            onClick={() => saveKeteranganVerifikator(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                          >
                             Simpan
                           </button>
                         </div>
                       ) : isAdmin ? (
                         <button
-                          onClick={() => {setEditingVerifikator(item.id)}}
+                          onClick={() => {
+                            setEditingVerifikator(item.id);
+                          }}
                           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
-                          disabled={!item.status || item.status === "Tolak Pengadaan"}
+                          disabled={
+                            !item.status || item.status === "Tolak Pengadaan"
+                          }
                         >
                           Tambah/Perbarui Isian
                         </button>
@@ -547,7 +615,6 @@ const Ruk = () => {
                 <p>Tidak ada data RUK yang tersedia.</p>
               )}
             </div>
-
 
             {/* ACC / TTD KaTu Kapus */}
             <div className="">
@@ -573,10 +640,14 @@ const Ruk = () => {
                               handleStatusChangeTTD(item.id, e.target.value)
                             }
                             className="border p-2 rounded w-full"
-                      disabled={!item.statusVerifikator || item.statusVerifikator === "Tolak Verifikator"}
-
+                            disabled={
+                              !item.statusVerifikator ||
+                              item.statusVerifikator === "Tolak Verifikator"
+                            }
                           >
-                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="" disabled>
+                              Pilih Aksi
+                            </option>
                             <option value="Sudah TTD">Sudah TTD</option>
                             <option value="Belum TTD">Belum TTD</option>
                           </select>
@@ -584,7 +655,9 @@ const Ruk = () => {
                           <p>Status: {item.statusKapusKaTu}</p>
                         )}
                       </div>
-                      <p>Keterangan : {item.keteranganKapusKaTu || "Belum diisi"}</p>
+                      <p>
+                        Keterangan : {item.keteranganKapusKaTu || "Belum diisi"}
+                      </p>
 
                       {item.waktuUpdateKapusKaTu && (
                         <p>
@@ -600,21 +673,29 @@ const Ruk = () => {
                           <input
                             type="text"
                             value={keteranganKapusKaTu}
-                            onChange={(e) => setKeteranganKapusKaTu(e.target.value)}
+                            onChange={(e) =>
+                              setKeteranganKapusKaTu(e.target.value)
+                            }
                             className="border p-2 rounded w-full"
                             placeholder="Masukkan isian baru"
                           />
                           <button
-                            onClick={() =>  saveKeteranganKapusKaTu(item.id)}
-                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            onClick={() => saveKeteranganKapusKaTu(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                          >
                             Simpan
                           </button>
                         </div>
                       ) : isAdmin ? (
                         <button
-                          onClick={() => {setEditingKapusKaTu(item.id)}}
+                          onClick={() => {
+                            setEditingKapusKaTu(item.id);
+                          }}
                           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
-                          disabled={!item.statusVerifikator || item.statusVerifikator === "Tolak Verifikator"}
+                          disabled={
+                            !item.statusVerifikator ||
+                            item.statusVerifikator === "Tolak Verifikator"
+                          }
                         >
                           Tambah/Perbarui Isian
                         </button>
@@ -651,10 +732,14 @@ const Ruk = () => {
                               handleStatusChangeScan(item.id, e.target.value)
                             }
                             className="border p-2 rounded w-full"
-                      disabled={!item.statusKapusKaTu || item.statusKapusKaTu === "Belum TTD"}
-
+                            disabled={
+                              !item.statusKapusKaTu ||
+                              item.statusKapusKaTu === "Belum TTD"
+                            }
                           >
-                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="" disabled>
+                              Pilih Aksi
+                            </option>
                             <option value="Sudah Scann">Sudah Scann</option>
                             <option value="Belum Scann">Belum Scann</option>
                           </select>
@@ -662,7 +747,9 @@ const Ruk = () => {
                           <p>Status: {item.statusScann}</p>
                         )}
                       </div>
-                      <p>Keterangan : {item.keteranganScann || "Belum diisi"}</p>
+                      <p>
+                        Keterangan : {item.keteranganScann || "Belum diisi"}
+                      </p>
 
                       {item.waktuUpdateScann && (
                         <p>
@@ -683,16 +770,22 @@ const Ruk = () => {
                             placeholder="Masukkan isian baru"
                           />
                           <button
-                            onClick={() =>  saveKeteranganScann(item.id)}
-                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            onClick={() => saveKeteranganScann(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                          >
                             Simpan
                           </button>
                         </div>
                       ) : isAdmin ? (
                         <button
-                          onClick={() => {setEditingScann(item.id)}}
+                          onClick={() => {
+                            setEditingScann(item.id);
+                          }}
                           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
-                          disabled={!item.statusKapusKaTu || item.statusKapusKaTu === "Belum TTD"}
+                          disabled={
+                            !item.statusKapusKaTu ||
+                            item.statusKapusKaTu === "Belum TTD"
+                          }
                         >
                           Tambah/Perbarui Isian
                         </button>
@@ -730,15 +823,21 @@ const Ruk = () => {
                             }
                             className="border p-2 rounded w-full"
                           >
-                            <option value="" disabled>Pilih Aksi</option>
+                            <option value="" disabled>
+                              Pilih Aksi
+                            </option>
                             <option value="Sudah DiBayar">Sudah DiBayar</option>
-                            <option value="Sudah Terima Dokumen">Sudah Terima Dokumen</option>
+                            <option value="Sudah Terima Dokumen">
+                              Sudah Terima Dokumen
+                            </option>
                           </select>
                         ) : (
                           <p>Status: {item.statusBendahara}</p>
                         )}
                       </div>
-                      <p>Keterangan : {item.keteranganBendahara || "Belum diisi"}</p>
+                      <p>
+                        Keterangan : {item.keteranganBendahara || "Belum diisi"}
+                      </p>
 
                       {item.waktuUpdateBendahara && (
                         <p>
@@ -754,21 +853,25 @@ const Ruk = () => {
                           <input
                             type="text"
                             value={keteranganBendahara}
-                            onChange={(e) => setKeteranganBendahara(e.target.value)}
+                            onChange={(e) =>
+                              setKeteranganBendahara(e.target.value)
+                            }
                             className="border p-2 rounded w-full"
                             placeholder="Masukkan isian baru"
                           />
                           <button
-                            onClick={() =>  saveKeteranganBendahara(item.id)}
-                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+                            onClick={() => saveKeteranganBendahara(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                          >
                             Simpan
                           </button>
                         </div>
                       ) : isAdmin ? (
                         <button
-                          onClick={() => {setEditingBendahara(item.id)}}
+                          onClick={() => {
+                            setEditingBendahara(item.id);
+                          }}
                           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
-                          
                         >
                           Tambah/Perbarui Isian
                         </button>
@@ -781,33 +884,32 @@ const Ruk = () => {
               )}
             </div>
 
-
             {/* Done */}
             <div className="">
               <h1 className="text-2xl font-bold mt-4">SELESAI</h1>
               {currentItems.length > 0 ? (
                 currentItems.map((item) => (
-                  <div 
-                  key={item.id} 
-                  className={`p-4 rounded-lg h-[400px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
-                    isStatusComplete(item) 
-                      ? 'bg-green-200 border-green-500' 
-                      : 'bg-red-200 border-red-500'
-                  } border`}
-                >
-                  <div className="flex flex-col my-auto items-center">
-                    
+                  <div
+                    key={item.id}
+                    className={`p-4 rounded-lg h-[400px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
+                      isStatusComplete(item)
+                        ? "bg-green-200 border-green-500"
+                        : "bg-red-200 border-red-500"
+                    } border`}
+                  >
+                    <div className="flex flex-col my-auto items-center">
                       <h3 className="font-bold">{item.kegiatan}</h3>
-                      <p className={`font-semibold mt-2 ${
-              isStatusComplete(item) 
-                ? 'text-green-800' 
-                : 'text-red-800'
-            }`}>
-              {isStatusComplete(item) ? 'SELESAI' : 'BELUM SELESAI'}
-            </p>
-                    
+                      <p
+                        className={`font-semibold mt-2 ${
+                          isStatusComplete(item)
+                            ? "text-green-800"
+                            : "text-red-800"
+                        }`}
+                      >
+                        {isStatusComplete(item) ? "SELESAI" : "BELUM SELESAI"}
+                      </p>
+                    </div>
                   </div>
-                </div>
                 ))
               ) : (
                 <p>Tidak ada data RUK yang tersedia.</p>

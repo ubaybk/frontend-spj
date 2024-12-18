@@ -427,16 +427,27 @@ const UpdateRuk = () => {
               />
             </div>
             <div>
-              <h1>Waktu Pelaksanaan</h1>
-              <input
-                type="text"
-                value={waktuPelaksanaan}
-                onChange={(e) => setWaktuPelaksanaan(e.target.value)}
-                className="border rounded p-2 w-full"
-                placeholder="Masukkan Waktu Pelaksanaan"
-                disabled={!isAdmin} // Disable jika bukan admin
-              />
-            </div>
+  <h1>Waktu Pelaksanaan</h1>
+  <input
+    type="date"
+    value={
+      waktuPelaksanaan
+        ? new Date(waktuPelaksanaan.seconds * 1000)
+            .toISOString() // Mengonversi ke format ISO 8601 (YYYY-MM-DDTHH:mm:ss.sssZ)
+            .split("T")[0] // Mengambil bagian tanggalnya saja (YYYY-MM-DD)
+        : ""
+    }
+    onChange={(e) => {
+      const selectedDate = e.target.value; // Format 'YYYY-MM-DD'
+      const timestamp = new Date(selectedDate).getTime(); // Ubah ke timestamp
+      setWaktuPelaksanaan({ seconds: timestamp / 1000, nanoseconds: 0 });
+    }}
+    className="border rounded p-2 w-full"
+    placeholder="Masukkan Waktu Pelaksanaan"
+    disabled={!isAdmin} // Disable jika bukan admin
+  />
+</div>
+
             <div>
               <h1>Komponen</h1>
               <select

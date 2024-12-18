@@ -19,7 +19,7 @@ const AddRuk = () => {
   const [pj, setPj] = useState("");
   const [kebutuhanSumberDaya, setKebutuhanSumberDaya] = useState("");
   const [mitraKerja, setMitraKerja] = useState("");
-  const [waktuPelaksanaan, setWaktuPelaksanaan] = useState("");
+  const [waktuPelaksanaan, setWaktuPelaksanaan] = useState(null);
   const [komponen, setKomponen] = useState("");
   const [customKomponen, setCustomKomponen] = useState("")
   const [kebutuhanDalamOrang, setKebutuhanDalamOrang] = useState(0);
