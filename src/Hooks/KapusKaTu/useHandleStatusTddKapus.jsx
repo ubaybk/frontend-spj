@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 
-const useHandleStatusTddKapus = (setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu) => {
+const useHandleStatusTddKapus = (setRukData, isAdmin, isKapusKatuAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu) => {
   // Fungsi untuk mengubah status
   const handleStatusChangeKapusKaTu = useCallback(async (id, newStatusKapusKaTu, statusField = 'statusKapusKaTu', updateTimeField = 'waktuUpdateKapusKaTu') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isKapusKatuAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -37,11 +37,11 @@ const useHandleStatusTddKapus = (setRukData, isAdmin, setEditingKapusKaTu, setKe
       console.error(`Error updating ${statusField}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin]);
+  }, [setRukData, isAdmin, isKapusKatuAdmin]);
 
   // Fungsi untuk menyimpan keterangan
   const handleSaveKapusKaTu = useCallback(async (id, keteranganKapusKaTu, field = 'keteranganKapusKaTu', updateTimeField = 'waktuUpdateKapusKatu') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isKapusKatuAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -77,7 +77,7 @@ const useHandleStatusTddKapus = (setRukData, isAdmin, setEditingKapusKaTu, setKe
       console.error(`Error updating ${field}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu]);
+  }, [setRukData, isAdmin, isKapusKatuAdmin, setEditingKapusKaTu, setKeteranganKapusKaTu]);
 
   return { handleStatusChangeKapusKaTu, handleSaveKapusKaTu };
 };

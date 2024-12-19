@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 
-const useHandleStatusChangeVerifikator = (setRukData, isAdmin, setEditingVerifikator, setKeteranganVerifikator) => {
+const useHandleStatusChangeVerifikator = (setRukData, isAdmin, isVerifikatorAdmin, setEditingVerifikator, setKeteranganVerifikator) => {
   // Fungsi untuk mengubah status
   const handleStatusChangeVerifikator = useCallback(async (id, newStatusVerifikator, statusField = 'statusVerifikator', updateTimeField = 'waktuUpdateVerifikator') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isVerifikatorAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -37,11 +37,11 @@ const useHandleStatusChangeVerifikator = (setRukData, isAdmin, setEditingVerifik
       console.error(`Error updating ${statusField}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin]);
+  }, [setRukData, isAdmin, isVerifikatorAdmin]);
 
   // Fungsi untuk menyimpan keterangan
   const handleSaveVerifikator = useCallback(async (id, keteranganVerifikator, field = 'keteranganVerifikator', updateTimeField = 'waktuUpdateVerifikator') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isVerifikatorAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -77,7 +77,7 @@ const useHandleStatusChangeVerifikator = (setRukData, isAdmin, setEditingVerifik
       console.error(`Error updating ${field}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin, setEditingVerifikator, setKeteranganVerifikator]);
+  }, [setRukData, isAdmin, isVerifikatorAdmin, setEditingVerifikator, setKeteranganVerifikator]);
 
   return { handleStatusChangeVerifikator, handleSaveVerifikator };
 };

@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 
-const useHandleStatusBendahara = (setRukData, isAdmin, setEditingBendahara, setKeteranganBendahara) => {
+const useHandleStatusBendahara = (setRukData, isAdmin, isBendaharaAdmin, setEditingBendahara, setKeteranganBendahara) => {
   // Fungsi untuk mengubah status
   const handleStatusChangeBendahara = useCallback(async (id, newStatusBendahara, statusField = 'statusBendahara', updateTimeField = 'waktuUpdateBendahara') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isBendaharaAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -37,11 +37,11 @@ const useHandleStatusBendahara = (setRukData, isAdmin, setEditingBendahara, setK
       console.error(`Error updating ${statusField}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin]);
+  }, [setRukData, isAdmin, isBendaharaAdmin]);
 
   // Fungsi untuk menyimpan keterangan
   const handleSaveBendahara = useCallback(async (id, keteranganBendahara, field = 'keteranganBendahara', updateTimeField = 'waktuUpdateBendahara') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isBendaharaAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -77,7 +77,7 @@ const useHandleStatusBendahara = (setRukData, isAdmin, setEditingBendahara, setK
       console.error(`Error updating ${field}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin, setEditingBendahara, setKeteranganBendahara]);
+  }, [setRukData, isAdmin, isBendaharaAdmin, setEditingBendahara, setKeteranganBendahara]);
 
   return { handleStatusChangeBendahara, handleSaveBendahara };
 };

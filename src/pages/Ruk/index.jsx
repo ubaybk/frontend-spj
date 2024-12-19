@@ -33,6 +33,11 @@ const Ruk = () => {
   const [editingBendahara, setEditingBendahara] = useState(null);
   const [keterangan, setKeterangan] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isPengadaanAdmin, setIsPengadaanAdmin] = useState(false);
+  const [isVerifikatorAdmin, setIsVerifikatorAdmin] = useState(false);
+  const [isKapusKatuAdmin, setIsKapusKatuAdmin] = useState(false);
+  const [isScanAdmin, setIsScanAdmin] = useState(false);
+  const [isBendaharaAdmin, setIsBendaharaAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [keteranganVerifikator, setKeteranganVerifikator] = useState("");
@@ -42,6 +47,7 @@ const Ruk = () => {
   const { handleStatusChange, handleSave } = useHandleStatusChange(
     setRukData,
     isAdmin,
+    isPengadaanAdmin,
     setEditingId,
     setKeterangan
   );
@@ -49,6 +55,7 @@ const Ruk = () => {
     useHandleStatusChangeVerifikator(
       setRukData,
       isAdmin,
+      isVerifikatorAdmin,
       setEditingVerifikator,
       setKeteranganVerifikator
     );
@@ -56,12 +63,14 @@ const Ruk = () => {
     useHandleStatusTddKapus(
       setRukData,
       isAdmin,
+      isKapusKatuAdmin,
       setEditingKapusKaTu,
       setKeteranganKapusKaTu
     );
   const { handleStatusChangeScann, handleSaveScann } = useHandleStatusScann(
     setRukData,
     isAdmin,
+    isScanAdmin,
     setEditingScann,
     setKeteranganScann
   );
@@ -69,6 +78,7 @@ const Ruk = () => {
     useHandleStatusBendahara(
       setRukData,
       isAdmin,
+      isBendaharaAdmin,
       setEditingBendahara,
       setKeteranganBendahara
     );
@@ -87,9 +97,17 @@ const Ruk = () => {
         const email = user.email;
         setUserEmail(email);
 
-        setIsAdmin(
-          email === "admin@gmail.com" || email === "pengadaancilandak@gmail.com"
-        );
+        const isPengadaanAdmin = email === "pengadaancilandak@gmail.com"
+        const isVerifikatorAdmin = email === "verifikatorcilandak@gmail.com"
+        const isKapusKatuAdmin = email === "kapuskatucilandak@gmail.com"
+        const isScanAdmin = email === "scancilandak@gmail.com"
+        const isBendaharaAdmin = email === "bendaharacilandak@gmail.com"
+        setIsAdmin(email === "admin@gmail.com");
+        setIsPengadaanAdmin(isPengadaanAdmin)
+        setIsVerifikatorAdmin(isVerifikatorAdmin)
+        setIsKapusKatuAdmin(isKapusKatuAdmin)
+        setIsScanAdmin(isScanAdmin)
+        setIsBendaharaAdmin(isBendaharaAdmin)
 
         // Ambil data pengguna dari Firestore
         const userDocRef = doc(db, "users", user.uid);
@@ -106,7 +124,11 @@ const Ruk = () => {
           let rukQuery;
           if (
             email === "admin@gmail.com" ||
-            email === "pengadaancilandak@gmail.com"
+            email === "pengadaancilandak@gmail.com" ||
+            email === "verifikatorcilandak@gmail.com" ||
+            email === "kapuskatucilandak@gmail.com" ||
+            email === "scancilandak@gmail.com" ||
+            email === "bendaharacilandak@gmail.com"
           ) {
             rukQuery = query(
               collection(db, "ruk_data"),
@@ -453,7 +475,7 @@ const Ruk = () => {
                     >
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
-                        {isAdmin ? (
+                        {isPengadaanAdmin || isAdmin ? (
                           <select
                             value={item.status || ""}
                             onChange={(e) =>
@@ -489,7 +511,7 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {isAdmin && editingId === item.id ? (
+                      {(isAdmin || isPengadaanAdmin) && editingId === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -505,7 +527,7 @@ const Ruk = () => {
                             Simpan
                           </button>
                         </div>
-                      ) : isAdmin ? (
+                      ) : (isAdmin || isPengadaanAdmin) ? (
                         <button
                           onClick={() => setEditingId(item.id)}
                           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
@@ -538,7 +560,7 @@ const Ruk = () => {
                     >
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
-                        {isAdmin ? (
+                        {isAdmin || isVerifikatorAdmin ? (
                           <select
                             value={item.statusVerifikator || ""}
                             onChange={(e) =>
@@ -577,7 +599,7 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {isAdmin && editingVerifikator === item.id ? (
+                      {(isAdmin || isVerifikatorAdmin) && editingVerifikator === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -595,7 +617,7 @@ const Ruk = () => {
                             Simpan
                           </button>
                         </div>
-                      ) : isAdmin ? (
+                      ) : isAdmin || isVerifikatorAdmin ? (
                         <button
                           onClick={() => {
                             setEditingVerifikator(item.id);
@@ -633,7 +655,7 @@ const Ruk = () => {
                     >
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
-                        {isAdmin ? (
+                        {isAdmin || isKapusKatuAdmin ? (
                           <select
                             value={item.statusKapusKaTu || ""}
                             onChange={(e) =>
@@ -668,7 +690,7 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {isAdmin && editingKapusKaTu === item.id ? (
+                      {(isAdmin || isKapusKatuAdmin) && editingKapusKaTu === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -686,7 +708,7 @@ const Ruk = () => {
                             Simpan
                           </button>
                         </div>
-                      ) : isAdmin ? (
+                      ) : isAdmin || isKapusKatuAdmin ? (
                         <button
                           onClick={() => {
                             setEditingKapusKaTu(item.id);
@@ -710,7 +732,7 @@ const Ruk = () => {
 
             {/* SCANN */}
             <div className="">
-              <h1 className="text-2xl font-bold mt-4">Scann</h1>
+              <h1 className="text-2xl font-bold mt-4">Scan</h1>
               {currentItems.length > 0 ? (
                 currentItems.map((item) => (
                   <div key={item.id}>
@@ -725,7 +747,7 @@ const Ruk = () => {
                     >
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
-                        {isAdmin ? (
+                        {isAdmin || isScanAdmin ? (
                           <select
                             value={item.statusScann || ""}
                             onChange={(e) =>
@@ -760,7 +782,7 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {isAdmin && editingScann === item.id ? (
+                      {(isAdmin || isScanAdmin) && editingScann === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -776,7 +798,7 @@ const Ruk = () => {
                             Simpan
                           </button>
                         </div>
-                      ) : isAdmin ? (
+                      ) : isAdmin || isScanAdmin ? (
                         <button
                           onClick={() => {
                             setEditingScann(item.id);
@@ -815,7 +837,7 @@ const Ruk = () => {
                     >
                       <h1>Nama Kegiatan : {item.kegiatan}</h1>
                       <div className="mt-2">
-                        {isAdmin ? (
+                        {isAdmin || isBendaharaAdmin ? (
                           <select
                             value={item.statusBendahara || ""}
                             onChange={(e) =>
@@ -848,7 +870,7 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {isAdmin && editingBendahara === item.id ? (
+                      {(isAdmin || isBendaharaAdmin) && editingBendahara === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -866,7 +888,7 @@ const Ruk = () => {
                             Simpan
                           </button>
                         </div>
-                      ) : isAdmin ? (
+                      ) : isAdmin || isBendaharaAdmin ? (
                         <button
                           onClick={() => {
                             setEditingBendahara(item.id);

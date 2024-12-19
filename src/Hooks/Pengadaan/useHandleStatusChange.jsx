@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 
-const useHandleStatusChange = (setRukData, isAdmin, setEditingId, setKeterangan) => {
+const useHandleStatusChange = (setRukData, isAdmin,isPengadaanAdmin, setEditingId, setKeterangan) => {
   // Fungsi untuk mengubah status
   const handleStatusChange = useCallback(async (id, newStatus, statusField = 'status', updateTimeField = 'waktuUpdatePengadaan') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isPengadaanAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -37,11 +37,11 @@ const useHandleStatusChange = (setRukData, isAdmin, setEditingId, setKeterangan)
       console.error(`Error updating ${statusField}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin]);
+  }, [setRukData, isAdmin, isPengadaanAdmin]);
 
   // Fungsi untuk menyimpan keterangan
   const handleSave = useCallback(async (id, keterangan, field = 'keterangan', updateTimeField = 'waktuUpdatePengadaan') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isPengadaanAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -77,7 +77,7 @@ const useHandleStatusChange = (setRukData, isAdmin, setEditingId, setKeterangan)
       console.error(`Error updating ${field}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin, setEditingId, setKeterangan]);
+  }, [setRukData, isAdmin,isPengadaanAdmin, setEditingId, setKeterangan]);
 
   return { handleStatusChange, handleSave };
 };

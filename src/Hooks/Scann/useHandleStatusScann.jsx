@@ -2,10 +2,10 @@ import { useState, useCallback } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 
-const useHandleStatusScann = (setRukData, isAdmin, setEditingScann, setKeteranganScann) => {
+const useHandleStatusScann = (setRukData, isAdmin, isScanAdmin, setEditingScann, setKeteranganScann) => {
   // Fungsi untuk mengubah status
   const handleStatusChangeScann = useCallback(async (id, newStatusScann, statusField = 'statusScann', updateTimeField = 'waktuUpdateScann') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isScanAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -37,11 +37,11 @@ const useHandleStatusScann = (setRukData, isAdmin, setEditingScann, setKeteranga
       console.error(`Error updating ${statusField}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin]);
+  }, [setRukData, isAdmin, isScanAdmin]);
 
   // Fungsi untuk menyimpan keterangan
   const handleSaveScann = useCallback(async (id, keteranganScann, field = 'keteranganScann', updateTimeField = 'waktuUpdateScann') => {
-    if (!isAdmin) return;
+    if (!isAdmin && !isScanAdmin) return;
 
     try {
       const rukDocRef = doc(db, "ruk_data", id);
@@ -77,7 +77,7 @@ const useHandleStatusScann = (setRukData, isAdmin, setEditingScann, setKeteranga
       console.error(`Error updating ${field}: `, error);
       return false;
     }
-  }, [setRukData, isAdmin, setEditingScann, setKeteranganScann]);
+  }, [setRukData, isAdmin, isScanAdmin, setEditingScann, setKeteranganScann]);
 
   return { handleStatusChangeScann, handleSaveScann };
 };
