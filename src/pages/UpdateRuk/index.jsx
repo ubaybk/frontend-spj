@@ -21,6 +21,7 @@ const UpdateRuk = () => {
   const [mitraKerja, setMitraKerja] = useState("");
   const [waktuPelaksanaan, setWaktuPelaksanaan] = useState("");
   const [komponen, setKomponen] = useState("");
+  const [customKomponen, setCustomKomponen] = useState("")
   const [kebutuhanDalamOrang, setKebutuhanDalamOrang] = useState(0);
   const [kebutuhanDalamX, setKebutuhanDalamX] = useState(0);
   const [kebutuhanDalamTahun, setKebutuhanDalamTahun] = useState(0);
@@ -57,7 +58,7 @@ const UpdateRuk = () => {
 
   const optionSubKegiatan = ["Kegiatan 1", "Kegiatan 2", "Kegiatan 3"];
 
-  const optionKomponen = ["Makan", "Snack", "Transport"];
+  const optionKomponen = ["Makan", "Snack", "Transport", "Lainnya"];
   
   const optionIndikatorKinerja = [
     "kinerja 1",
@@ -67,8 +68,7 @@ const UpdateRuk = () => {
 
   const optionSumberPembiayaan = [
     "APBN",
-    "APBD",
-    "Bantuan Luar Negeri",
+    "BLUD",
   ];
 
   useEffect(()=> {
@@ -116,7 +116,7 @@ const UpdateRuk = () => {
             setIndikatorKinerja(navigationState.indikatorKinerja);
             setSumberPembiayaan(navigationState.sumberPembiayaan);
             setNamaPenginput(navigationState.namaPenginput);
-            
+            setCustomKomponen(navigationState.customKomponen)
             setIsEditing(true);
           } else {
             // If no data in navigation state, fetch from Firestore
@@ -146,7 +146,7 @@ const UpdateRuk = () => {
               setIndikatorKinerja(data.indikatorKinerja);
               setSumberPembiayaan(data.sumberPembiayaan);
               setNamaPenginput(data.namaPenginput);
-              
+              setCustomKomponen(data.customKomponen)
               setIsEditing(true);
             }
           }
@@ -186,6 +186,7 @@ const UpdateRuk = () => {
           mitraKerja,
           waktuPelaksanaan,
           komponen,
+          customKomponen,
           kebutuhanDalamOrang,
           kebutuhanDalamX,
           kebutuhanDalamTahun,
@@ -213,6 +214,7 @@ const UpdateRuk = () => {
           mitraKerja,
           waktuPelaksanaan,
           komponen,
+          customKomponen,
           kebutuhanDalamOrang,
           kebutuhanDalamX,
           kebutuhanDalamTahun,
@@ -251,6 +253,7 @@ const UpdateRuk = () => {
     setMitraKerja("");
     setWaktuPelaksanaan("");
     setKomponen("");
+    setCustomKomponen("")
     setKebutuhanDalamOrang(0);
     setKebutuhanDalamX(0);
     setKebutuhanDalamTahun(0);
@@ -448,24 +451,45 @@ const UpdateRuk = () => {
   />
 </div>
 
-            <div>
-              <h1>Komponen</h1>
-              <select
-                value={komponen}
-                onChange={(e) => setKomponen(e.target.value)}
-                className="border rounded p-2 w-full"
-                disabled={!isAdmin} // Disable jika bukan admin
-              >
-                <option value="" disabled>
-                  Pilih Komponen
-                </option>
-                {optionKomponen.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+<div>
+    <h1>Komponen</h1>
+    <select
+      value={komponen}
+      onChange={(e) => {
+        const value = e.target.value;
+        setKomponen(value);
+        if (value !== "Lainnya") {
+          setCustomKomponen(""); // Reset customKomponen jika bukan "Lainnya"
+        }
+      }}
+      className="border rounded p-2 w-full"
+    >
+      <option value="" disabled>
+        Pilih Komponen
+      </option>
+      {optionKomponen.map((option, index) => (
+        <option key={index} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+    {komponen === "Lainnya" && (
+      <div className="mt-4">
+        <label htmlFor="customKomponen" className="block mb-2">
+          Masukkan Komponen
+        </label>
+        <input
+          id="customKomponen"
+          type="text"
+          value={customKomponen}
+          onChange={(e) => setCustomKomponen(e.target.value)}
+          className="border rounded p-2 w-full"
+        />
+      </div>
+    )}
+   
+  </div>
+
             <div>
               <h1 className="flex justify-center">Kebutuhan Anggaran</h1>
               <div className="flex">
