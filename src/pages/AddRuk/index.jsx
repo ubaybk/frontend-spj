@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAuth } from "firebase/auth";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import db from "../../../firebaseConfig";
@@ -31,6 +31,15 @@ const AddRuk = () => {
   const [sumberPembiayaan, setSumberPembiayaan] = useState("")
   const [namaPenginput, setNamaPenginput] = useState("")
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
+  const dropdownRef = useRef(null);
+
+
+
+  
+
   const optionsTugas = [
     "Puskesmas Cilandak",
     "PUSTU Pondok Labu",
@@ -43,20 +52,88 @@ const AddRuk = () => {
   const optionPokja = ["Admen", "UKP", "UKM"];
 
   const optionKegiatan = [
-    "Pengumpulan Data",
-    "Pengumpulan Rizal",
-    "Pengumpulan Anggy",
+    "Peningkatan Pelayanan BLUD",
+    "Penyediaan Layanan Kesehatan untuk UKP Rujukan, UKM dan UKM Rujukan Tingkat Daerah Provinsi",
+    "Pengelolaan Pelayanan Kesehatan Dasar Melalui Pendekatan KeluargaPenyediaan Layanan Kesehatan untuk UKM dan UKP Rujukan Tingkat Daerah Kabupaten/Kota",
+    "Perencanaan Kebutuhan dan Pendayagunaan Sumber Daya Manusia Kesehatan untuk UKP dan UKM di Wilayah Kabupaten/Kota",
+    "Pengembangan dan Pelaksanaan Upaya Kesehatan Bersumber Daya Masyarakat (UKBM) Tingkat Daerah Kabupaten/Kota",
+  ];
+  const optionSubKegiatan = [
+    "Pelayanan dan Penunjang Pelayanan BLUD",
+    "Pembinaan Pelaksanaan Upaya Pelayanan Kesehatan",
+    "Pengelolaan Pelayanan Kesehatan Dasar Melalui Pendekatan Keluarga",
+    "Pengelolaan Pelayanan Kesehatan Ibu Hamil",
+    "Pengelolaan Pelayanan Kesehatan Ibu Bersalin",
+    "Pengelolaan Pelayanan Kesehatan Bayi Baru Lahir",
+    "Pengelolaan Pelayanan Kesehatan Balita",
+    "Pengelolaan Pelayanan Kesehatan pada Usia Pendidikan Dasar",
+    "Pengelolaan Pelayanan Kesehatan pada Usia Produktif",
+    "Pengelolaan Pelayanan Kesehatan pada Usia Lanjut",
+    "Pengelolaan Pelayanan Kesehatan Penderita Hipertensi",
+    "Pengelolaan Pelayanan Kesehatan Penderita Diabetes Melitus",
+    "Pengelolaan Pelayanan Kesehatan Orang dengan Gangguan Jiwa Berat",
+    "Pengelolaan Pelayanan Kesehatan Orang Terduga Tuberkulosis",
+    "Pengelolaan Pelayanan Kesehatan Orang dengan Risiko Terinfeksi HIV",
+    "Pengelolaan Pelayanan Kesehatan Gizi Masyarakat",
+    "Pengelolaan Pelayanan Kesehatan Kerja dan Olahraga",
+    "Pengelolaan Pelayanan Kesehatan Lingkungan",
+    "Pengelolaan Pelayanan Promosi Kesehatan",
+    "Pengelolaan Pelayanan Kesehatan Tradisonal, Akupuntur, Asuhan Mandiri dan Tradisional Lainnya",
+    "Pengelolaan Surveilans Kesehatan",
+    "Pengelolaan Pelayanan Kesehatan Penyakit Menular dan Tidak Menular",
+    "Pengelolaan pelayanan kesehatan orang dengan Tuberkulosis",
+    "Pengelolaan pelayanan kesehatan orang dengan HIV (ODHIV)",
+    "Pengelolaan pelayanan kesehatan Malaria",
+    "Pengelolaan Kawasan tanpa rokok",
+    "Pengelolaan Pelayanan Kesehatan Haji",
+    "Pemenuhan Kebutuhan Sumber Daya Manusia Kesehatan Sesuai Standar",
+    "Bimbingan Teknis dan Supervisi Pengembangan dan Pelaksanaan Upaya Kesehatan Bersumber Daya Masyarakat (UKBM)"
   ];
 
-  const optionSubKegiatan = ["Kegiatan 1", "Kegiatan 2", "Kegiatan 3"];
+  
 
   const optionKomponen = ["Makan", "Snack", "Transport", "Lainnya"];
   
   const optionIndikatorKinerja = [
-    "kinerja 1",
-    "kinerja 2",
-    "kinerja 3",
-  ]
+    "Jumlah  Alat  Kesehatan/Alat  Penunjang  Medik Fasilitas Layanan Kesehatan yang Disediakan",
+    "Jumlah  Alat  Kesehatan/Alat  Penunjang  Medik Fasilitas   Layanan   Kesehatan   yang   Terpelihara Sesuai Standar",
+    "Jumlah Sarana, Prasarana dan Alat Kesehatan yang Telah Dilakukan Rehabilitasi dan Pemeliharaan Oleh Puskesmas",
+"Jumlah Ibu Hamil yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Ibu Bersalin yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Bayi Baru Lahir yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Balita yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Anak Usia Pendidikan Dasar yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Penduduk Usia Produktif yangMendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Penduduk Usia Lanjut yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Penderita Hipertensi yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Penderita Diabetes Melitus yangMendapatkan Pelayanan Kesehatan Sesuai Standar",
+"Jumlah Orang yang Mendapatkan PelayananKesehatan Orang dengan Gangguan Jiwa Berat Sesuai Standar",
+"Jumlah Orang Terduga Menderita Tuberkulosis yang Mendapatkan Pelayanan Sesuai Standar",
+"Jumlah Orang Terduga Menderita HIV yang Mendapatkan Pelayanan Sesuai Standar",
+"Jumlah Fasilitas Kesehatan yang Terakreditasi diKabupaten/Kota",
+"Jumlah Dokumen Hasil Pengelolaan Sistem Informasi Kesehatan",
+"Jumlah Sumber Daya Manusia Kesehatan Kompetensi dan Kualifikasi Meningkat",
+"Jumlah Sumber Daya Manusia Kesehatan yang Memenuhi Standar di Fasilitas Pelayanan Kesehatan (Fasyankes)",
+"Jumlah Dokumen Hasil Pengendalian dan Pengawasan serta Tindak Lanjut Pengawasan Perizinan Apotek, Toko Obat, Toko Alat Kesehatan, dan Optikal, Usaha Mikro ObatTradisional (UMOT)",
+"Jumlah Dokumen Hasil Pengendalian dan Pengawasan serta Tindak Lanjut Pengawasan Sertifikat Produksi Pangan Industri Rumah Tangga dan Nomor P-IRT sebagai Izin Produksi, untuk Produk Makanan Minuman Tertentu yang Dapat Diproduksi oleh Industri Rumah Tangga",
+"Jumlah Dokumen Hasil Pengendalian dan Pengawasan serta Tindak Lanjut Pengawasan Penerbitan Sertifikat Laik Higiene Sanitasi Tempat Pengelolaan Makanan (TPM) antara lain Jasa Boga, Rumah Makan/Restoran dan Depot Air Minum (DAM)",
+"Jumlah Dokumen Hasil Bimbingan Teknis dan Supervisi Upaya Kesehatan Bersumber Daya Masyarakat (UKBM)",
+"Jumlah Dokumen Perencanaan Perangkat Daerah",
+"Jumlah Laporan Evaluasi Kinerja Perangkat Daerah",
+"Jumlah Laporan Keuangan Akhir Tahun SKPD dan Laporan Hasil Koordinasi Penyusunan Laporan Keuangan Akhir Tahun SKPD",
+"Jumlah Pegawai Berdasarkan Tugas dan Fungsi yang Mengikuti Pendidikan dan Pelatihan",
+"Jumlah Paket Peralatan dan Perlengkapan Kantoryang Disediakan",
+"Jumlah Paket Barang Cetakan dan Penggandaan yang Disediakan",
+"Jumlah Paket Bahan/Material yang Disediakan",
+"Jumlah Laporan Fasilitasi Kunjungan Tamu",
+"Jumlah Laporan Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+"Jumlah Laporan Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik yang Disediakan",
+"Jumlah Laporan Penyediaan Jasa Peralatan danPerlengkapan Kantor yang Disediakan",
+"Jumlah Laporan Penyediaan Jasa PelayananUmum Kantor yang Disediakan",
+"Jumlah Kendaraan Dinas Operasional atau Lapangan yang Dipelihara dan Dibayarkan Pajak dan Perizinannya",
+"Jumlah Peralatan dan Mesin Lainnya yang Dipelihara",
+"Jumlah BLUD yang Menyediakan Pelayanan dan Penunjang Pelayanan"
+]
 
   const optionSumberPembiayaan = [
     "APBD",
@@ -103,7 +180,7 @@ const AddRuk = () => {
         kebutuhanDalamTahun,
         hargaSatuan,
         total,
-        indikatorKinerja,
+        indikatorKinerja: selectedOption,
         sumberPembiayaan,
         namaPenginput,
         createdBy: user.email,
@@ -139,6 +216,21 @@ const AddRuk = () => {
       alert("Gagal menambahkan data.");
     }
   };
+
+  const filteredOptions = optionIndikatorKinerja.filter(option =>
+    option.toLowerCase().includes(indikatorKinerja.toLowerCase())
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <>
@@ -394,23 +486,62 @@ const AddRuk = () => {
                 />
               </div>
             </div>
-            <div>
-              <h1>Indikator Kinerja</h1>
-              <select
-                value={indikatorKinerja}
-                onChange={(e) => setIndikatorKinerja(e.target.value)}
-                className="border rounded p-2 w-full"
-              >
-                <option value="" disabled>
-                  Pilih Indikator Kinerja
-                </option>
-                {optionIndikatorKinerja.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+           <div className="w-full max-w-2xl" ref={dropdownRef}>
+      <h1 className="text-xl font-bold mb-2">Indikator Kinerja</h1>
+      <div className="relative">
+        <div
+          className="border rounded-lg p-2 bg-white cursor-pointer flex justify-between items-center"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <div className="truncate">
+            {selectedOption || "Pilih Indikator Kinerja"}
+          </div>
+          <div className="text-gray-400">
+            {isOpen ? '▲' : '▼'}
+          </div>
+        </div>
+
+        {isOpen && (
+          <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
+            <div className="p-2 border-b sticky top-0 bg-white">
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-full p-2 pl-8 border rounded"
+                  placeholder="Cari indikator..."
+                  value={indikatorKinerja}
+                  onChange={(e) => setIndikatorKinerja(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <span className="absolute left-3 top-2.5 text-gray-400">
+                  🔍
+                </span>
+              </div>
             </div>
+            <div className="max-h-60 overflow-y-auto">
+              {filteredOptions.map((option, index) => (
+                <div
+                  key={index}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedOption(option);
+                    setIsOpen(false);
+                    setIndikatorKinerja('');
+                  }}
+                >
+                  {option}
+                </div>
+              ))}
+              {filteredOptions.length === 0 && (
+                <div className="p-2 text-gray-500 text-center">
+                  Tidak ada hasil yang cocok
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
             <div>
               <h1>Sumber Pembiayaan</h1>
               <select
