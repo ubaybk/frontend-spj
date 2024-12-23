@@ -97,17 +97,17 @@ const Ruk = () => {
         const email = user.email;
         setUserEmail(email);
 
-        const isPengadaanAdmin = email === "pengadaancilandak@gmail.com"
-        const isVerifikatorAdmin = email === "verifikatorcilandak@gmail.com"
-        const isKapusKatuAdmin = email === "kapuskatucilandak@gmail.com"
-        const isScanAdmin = email === "scancilandak@gmail.com"
-        const isBendaharaAdmin = email === "bendaharacilandak@gmail.com"
+        const isPengadaanAdmin = email === "pengadaancilandak@gmail.com";
+        const isVerifikatorAdmin = email === "verifikatorcilandak@gmail.com";
+        const isKapusKatuAdmin = email === "kapuskatucilandak@gmail.com";
+        const isScanAdmin = email === "scancilandak@gmail.com";
+        const isBendaharaAdmin = email === "bendaharacilandak@gmail.com";
         setIsAdmin(email === "admin@gmail.com");
-        setIsPengadaanAdmin(isPengadaanAdmin)
-        setIsVerifikatorAdmin(isVerifikatorAdmin)
-        setIsKapusKatuAdmin(isKapusKatuAdmin)
-        setIsScanAdmin(isScanAdmin)
-        setIsBendaharaAdmin(isBendaharaAdmin)
+        setIsPengadaanAdmin(isPengadaanAdmin);
+        setIsVerifikatorAdmin(isVerifikatorAdmin);
+        setIsKapusKatuAdmin(isKapusKatuAdmin);
+        setIsScanAdmin(isScanAdmin);
+        setIsBendaharaAdmin(isBendaharaAdmin);
 
         // Ambil data pengguna dari Firestore
         const userDocRef = doc(db, "users", user.uid);
@@ -132,12 +132,12 @@ const Ruk = () => {
           ) {
             rukQuery = query(
               collection(db, "ruk_data"),
-            // orderBy('createdAt', 'desc') // Pastikan field 'createdAt' adalah Timestamp
-            )
+              orderBy('createdAt', 'desc') // Pastikan field 'createdAt' adalah Timestamp
+            );
           } else {
             rukQuery = query(
               collection(db, "ruk_data"),
-              // orderBy('createdAt', 'desc'),
+              orderBy('createdAt', 'desc'),
               where("userId", "==", user.uid)
             );
           }
@@ -247,10 +247,10 @@ const Ruk = () => {
   // Fungsi untuk menentukan warna background berdasarkan status
   const getBackgroundColor = (statusBendahara) => {
     if (!statusBendahara) return "bg-gray-100";
-    
+
     const hasTerima = hasStatus(statusBendahara, "Sudah Terima Dokumen");
     const hasBayar = hasStatus(statusBendahara, "Sudah DiBayar");
-    
+
     if (hasTerima && hasBayar) return "bg-blue-100";
     if (hasTerima) return "bg-yellow-100";
     if (hasBayar) return "bg-green-100";
@@ -269,18 +269,18 @@ const Ruk = () => {
       if (Array.isArray(item.statusBendahara)) {
         // Jika statusBendahara adalah array, cek apakah kedua status ada
         return (
-          item.statusBendahara.includes("Sudah DiBayar") && 
+          item.statusBendahara.includes("Sudah DiBayar") &&
           item.statusBendahara.includes("Sudah Terima Dokumen")
         );
       } else {
         // Jika statusBendahara string, cek apakah salah satu status terpenuhi
         return (
-          item.statusBendahara === "Sudah DiBayar" || 
+          item.statusBendahara === "Sudah DiBayar" ||
           item.statusBendahara === "Sudah Terima Dokumen"
         );
       }
     };
-  
+
     return (
       item.status === "Terima Pengadaan" &&
       checkBendaharaStatus() &&
@@ -289,12 +289,6 @@ const Ruk = () => {
       item.statusVerifikator === "Terima Verifikator"
     );
   };
-
-
-
-  
-
-
 
   return (
     <>
@@ -400,28 +394,30 @@ const Ruk = () => {
                         <strong>PJ:</strong> {item.pj}
                       </p>
                       <p>
-  <strong>Waktu Pelaksanaan:</strong>{" "}
-  {item.waktuPelaksanaan
-    ? new Date(item.waktuPelaksanaan.seconds * 1000).toLocaleString("id-ID", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        // hour: "2-digit",
-        // minute: "2-digit",
-        // second: "2-digit",
-        // hour12: true,
-      })
-    : "Belum ditentukan"}
-</p>
-
+                        <strong>Waktu Pelaksanaan:</strong>{" "}
+                        {item.waktuPelaksanaan
+                          ? new Date(
+                              item.waktuPelaksanaan.seconds * 1000
+                            ).toLocaleString("id-ID", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              // hour: "2-digit",
+                              // minute: "2-digit",
+                              // second: "2-digit",
+                              // hour12: true,
+                            })
+                          : "Belum ditentukan"}
+                      </p>
 
                       <p>
                         <strong>Komponen:</strong> {item.komponen}
                         <p>{item.customKomponen}</p>
                       </p>
                       <p>
-                        <strong>Anggaran:</strong> {item.total}
+                        <strong>Anggaran:</strong>
+                        {` Rp ${item.total.toLocaleString("id-ID")}`}
                       </p>
                       {isAdmin ? (
                         <div>
@@ -546,7 +542,8 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {(isAdmin || isPengadaanAdmin) && editingId === item.id ? (
+                      {(isAdmin || isPengadaanAdmin) &&
+                      editingId === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -562,7 +559,7 @@ const Ruk = () => {
                             Simpan
                           </button>
                         </div>
-                      ) : (isAdmin || isPengadaanAdmin) ? (
+                      ) : isAdmin || isPengadaanAdmin ? (
                         <button
                           onClick={() => setEditingId(item.id)}
                           className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
@@ -634,7 +631,8 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {(isAdmin || isVerifikatorAdmin) && editingVerifikator === item.id ? (
+                      {(isAdmin || isVerifikatorAdmin) &&
+                      editingVerifikator === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -725,7 +723,8 @@ const Ruk = () => {
                         </p>
                       )}
 
-                      {(isAdmin || isKapusKatuAdmin) && editingKapusKaTu === item.id ? (
+                      {(isAdmin || isKapusKatuAdmin) &&
+                      editingKapusKaTu === item.id ? (
                         <div className="mt-2">
                           <input
                             type="text"
@@ -857,118 +856,153 @@ const Ruk = () => {
 
             {/* Bendahara */}
             <div>
-      <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
-      {currentItems.length > 0 ? (
-        currentItems.map((item) => (
-          <div key={item.id}>
-            <div
-              className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
-                getBackgroundColor(item.statusBendahara)
-              }`}
-            >
-              <h1>Nama Kegiatan : {item.kegiatan}</h1>
-              <div className="mt-2">
-                {isAdmin || isBendaharaAdmin ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`dibayar-${item.id}`}
-                        checked={hasStatus(item.statusBendahara, "Sudah DiBayar")}
-                        onChange={(e) => {
-                          const currentStatus = item.statusBendahara || [];
-                          let newStatus;
-                          if (e.target.checked) {
-                            newStatus = Array.isArray(currentStatus) 
-                              ? [...currentStatus, "Sudah DiBayar"]
-                              : [currentStatus, "Sudah DiBayar"].filter(Boolean);
-                          } else {
-                            newStatus = Array.isArray(currentStatus)
-                              ? currentStatus.filter(status => status !== "Sudah DiBayar")
-                              : currentStatus === "Sudah DiBayar" ? [] : [currentStatus];
-                          }
-                          handleStatusChangeBen(item.id, newStatus);
-                        }}
-                        className="h-4 w-4"
-                      />
-                      <label htmlFor={`dibayar-${item.id}`}>Sudah DiBayar</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`terima-${item.id}`}
-                        checked={hasStatus(item.statusBendahara, "Sudah Terima Dokumen")}
-                        onChange={(e) => {
-                          const currentStatus = item.statusBendahara || [];
-                          let newStatus;
-                          if (e.target.checked) {
-                            newStatus = Array.isArray(currentStatus)
-                              ? [...currentStatus, "Sudah Terima Dokumen"]
-                              : [currentStatus, "Sudah Terima Dokumen"].filter(Boolean);
-                          } else {
-                            newStatus = Array.isArray(currentStatus)
-                              ? currentStatus.filter(status => status !== "Sudah Terima Dokumen")
-                              : currentStatus === "Sudah Terima Dokumen" ? [] : [currentStatus];
-                          }
-                          handleStatusChangeBen(item.id, newStatus);
-                        }}
-                        className="h-4 w-4"
-                      />
-                      <label htmlFor={`terima-${item.id}`}>Sudah Terima Dokumen</label>
+              <h1 className="text-2xl font-bold mt-4">Bendahara</h1>
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
+                  <div key={item.id}>
+                    <div
+                      className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${getBackgroundColor(
+                        item.statusBendahara
+                      )}`}
+                    >
+                      <h1>Nama Kegiatan : {item.kegiatan}</h1>
+                      <div className="mt-2">
+                        {isAdmin || isBendaharaAdmin ? (
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="checkbox"
+                                id={`dibayar-${item.id}`}
+                                checked={hasStatus(
+                                  item.statusBendahara,
+                                  "Sudah DiBayar"
+                                )}
+                                onChange={(e) => {
+                                  const currentStatus =
+                                    item.statusBendahara || [];
+                                  let newStatus;
+                                  if (e.target.checked) {
+                                    newStatus = Array.isArray(currentStatus)
+                                      ? [...currentStatus, "Sudah DiBayar"]
+                                      : [currentStatus, "Sudah DiBayar"].filter(
+                                          Boolean
+                                        );
+                                  } else {
+                                    newStatus = Array.isArray(currentStatus)
+                                      ? currentStatus.filter(
+                                          (status) => status !== "Sudah DiBayar"
+                                        )
+                                      : currentStatus === "Sudah DiBayar"
+                                      ? []
+                                      : [currentStatus];
+                                  }
+                                  handleStatusChangeBen(item.id, newStatus);
+                                }}
+                                className="h-4 w-4"
+                              />
+                              <label htmlFor={`dibayar-${item.id}`}>
+                                Sudah DiBayar
+                              </label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="checkbox"
+                                id={`terima-${item.id}`}
+                                checked={hasStatus(
+                                  item.statusBendahara,
+                                  "Sudah Terima Dokumen"
+                                )}
+                                onChange={(e) => {
+                                  const currentStatus =
+                                    item.statusBendahara || [];
+                                  let newStatus;
+                                  if (e.target.checked) {
+                                    newStatus = Array.isArray(currentStatus)
+                                      ? [
+                                          ...currentStatus,
+                                          "Sudah Terima Dokumen",
+                                        ]
+                                      : [
+                                          currentStatus,
+                                          "Sudah Terima Dokumen",
+                                        ].filter(Boolean);
+                                  } else {
+                                    newStatus = Array.isArray(currentStatus)
+                                      ? currentStatus.filter(
+                                          (status) =>
+                                            status !== "Sudah Terima Dokumen"
+                                        )
+                                      : currentStatus === "Sudah Terima Dokumen"
+                                      ? []
+                                      : [currentStatus];
+                                  }
+                                  handleStatusChangeBen(item.id, newStatus);
+                                }}
+                                className="h-4 w-4"
+                              />
+                              <label htmlFor={`terima-${item.id}`}>
+                                Sudah Terima Dokumen
+                              </label>
+                            </div>
+                          </div>
+                        ) : (
+                          <p>
+                            Status:{" "}
+                            {Array.isArray(item.statusBendahara)
+                              ? item.statusBendahara.join(", ")
+                              : item.statusBendahara || "Belum ada status"}
+                          </p>
+                        )}
+                      </div>
+                      <p>
+                        Keterangan : {item.keteranganBendahara || "Belum diisi"}
+                      </p>
+
+                      {item.waktuUpdateBendahara && (
+                        <p>
+                          <strong>Waktu Update Bendahara:</strong>{" "}
+                          {new Date(
+                            item.waktuUpdateBendahara.seconds * 1000
+                          ).toLocaleString()}
+                        </p>
+                      )}
+
+                      {(isAdmin || isBendaharaAdmin) &&
+                      editingBendahara === item.id ? (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            value={keteranganBendahara}
+                            onChange={(e) =>
+                              setKeteranganBendahara(e.target.value)
+                            }
+                            className="border p-2 rounded w-full"
+                            placeholder="Masukkan isian baru"
+                          />
+                          <button
+                            onClick={() => saveKeteranganBendahara(item.id)}
+                            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                          >
+                            Simpan
+                          </button>
+                        </div>
+                      ) : isAdmin || isBendaharaAdmin ? (
+                        <button
+                          onClick={() => {
+                            setEditingBendahara(item.id);
+                          }}
+                          className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+                        >
+                          Tambah/Perbarui Isian
+                        </button>
+                      ) : null}
                     </div>
                   </div>
-                ) : (
-                  <p>Status: {Array.isArray(item.statusBendahara) 
-                    ? item.statusBendahara.join(", ") 
-                    : item.statusBendahara || "Belum ada status"}</p>
-                )}
-              </div>
-              <p>
-                Keterangan : {item.keteranganBendahara || "Belum diisi"}
-              </p>
-
-              {item.waktuUpdateBendahara && (
-                <p>
-                  <strong>Waktu Update Bendahara:</strong>{" "}
-                  {new Date(
-                    item.waktuUpdateBendahara.seconds * 1000
-                  ).toLocaleString()}
-                </p>
+                ))
+              ) : (
+                <p>Tidak ada data RUK yang tersedia.</p>
               )}
-
-              {(isAdmin || isBendaharaAdmin) && editingBendahara === item.id ? (
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    value={keteranganBendahara}
-                    onChange={(e) => setKeteranganBendahara(e.target.value)}
-                    className="border p-2 rounded w-full"
-                    placeholder="Masukkan isian baru"
-                  />
-                  <button
-                    onClick={() => saveKeteranganBendahara(item.id)}
-                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
-                  >
-                    Simpan
-                  </button>
-                </div>
-              ) : isAdmin || isBendaharaAdmin ? (
-                <button
-                  onClick={() => {
-                    setEditingBendahara(item.id);
-                  }}
-                  className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
-                >
-                  Tambah/Perbarui Isian
-                </button>
-              ) : null}
             </div>
-          </div>
-        ))
-      ) : (
-        <p>Tidak ada data RUK yang tersedia.</p>
-      )}
-    </div>
 
             {/* Done */}
             <div className="">
