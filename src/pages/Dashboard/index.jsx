@@ -132,17 +132,33 @@ const Dashboard = () => {
     (ruk) => !ruk.statusBendahara || ruk.statusBendahara === "Belum DiBayar"
   ).length;
 
-  //BENDAHARA
-  const sudahSelesaiCount = rukData.filter(
-    (ruk) =>
-      ruk.statusBendahara === "Sudah DiBayar" &&
-      ruk.statusScann === "Sudah Scann" &&
-      ruk.status === "Terima Pengadaan" &&
-      ruk.statusVerifikator === "Terima Verifikator" &&
-      ruk.statusKapusKaTu === "Sudah TTD"
-  ).length;
+  
+ // Mapping status bendahara
+// const statusMapping = {
+//   0: "Sudah Dibayar",
+//   1: "Sudah Terima Dokumen",
+// };
 
-  const belumSelesaiCount = rukData.length - sudahDibayarCount;
+// Menghitung jumlah data yang memenuhi semua kondisi
+const sudahSelesaiCount = rukData.filter((ruk) => {
+  // Memastikan statusBendahara adalah array, jika tidak maka jadikan array
+  const bendaharaStatuses = Array.isArray(ruk.statusBendahara)
+    ? ruk.statusBendahara
+    : [ruk.statusBendahara]; // Menjadikan string menjadi array
+
+  return (
+    bendaharaStatuses.includes("Sudah DiBayar") &&
+    bendaharaStatuses.includes("Sudah Terima Dokumen") &&
+    ruk.statusScann === "Sudah Scann" &&
+    ruk.status === "Terima Pengadaan" &&
+    ruk.statusVerifikator === "Terima Verifikator" &&
+    ruk.statusKapusKaTu === "Sudah TTD"
+  );
+}).length;
+
+
+
+  const belumSelesaiCount = rukData.length - sudahSelesaiCount;
 
   //RPK ADMEN
   const rpkAdmen = rukData.filter((ruk) => ruk.pokja === "Admen").length;
