@@ -4,10 +4,13 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import db from "../../../firebaseConfig";
 import Header from "../../components/header";
 import { IoIosAddCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Timestamp } from "firebase/firestore";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddRuk = () => {
+  const navigate = useNavigate()
   const [tempatTugas, setTempatTugas] = useState("");
   const [pokja, setPokja] = useState("");
   const [kegiatan, setKegiatan] = useState("");
@@ -188,7 +191,14 @@ const AddRuk = () => {
         userId: user.uid,
       });
 
-      alert("Data berhasil ditambahkan!");
+      // alert("Data berhasil ditambahkan!");
+       // Use setTimeout to ensure toast appears for 5 seconds
+       toast.success("Berhasil Nambah SPJ COOY!");
+       setTimeout(() => {
+         navigate("/RUK");
+       }, 5000); // Navigate after 5 seconds
+
+
       // Reset input fields
       setTempatTugas("");
       setPokja("");
@@ -578,6 +588,7 @@ const AddRuk = () => {
           </button>
         </div>
       </div>
+      <ToastContainer/>
     </>
   );
 };
