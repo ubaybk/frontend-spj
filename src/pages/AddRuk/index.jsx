@@ -239,7 +239,7 @@ const AddRuk = () => {
   return (
     <>
       <div className="flex h-full bg-gray-50">
-        <div className=" h-screen "> 
+        <div className="h-[850px] "> 
           <Header />
         </div>
         <div className="p-4">

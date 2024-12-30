@@ -201,7 +201,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
 
   return (
     <>
-      <div className="flex w-screen ">
+      <div className="flex w-full ">
         <div>
         <Header />
 
