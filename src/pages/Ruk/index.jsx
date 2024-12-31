@@ -40,6 +40,7 @@ const Ruk = () => {
   const [isBendaharaAdmin, setIsBendaharaAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchKel, setSeacrhKel] = useState("")
   const [keteranganVerifikator, setKeteranganVerifikator] = useState("");
   const [keteranganKapusKaTu, setKeteranganKapusKaTu] = useState("");
   const [keteranganScann, setKeteranganScann] = useState("");
@@ -84,6 +85,8 @@ const Ruk = () => {
     );
   const [selectedMonth, setSelectedMonth] = useState(""); // Bulan yang dipilih
   const [selectedYear, setSelectedYear] = useState(""); // Tahun yang dipilih
+
+  const [selectedPustu, setSelectedPustu] = useState("")
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -200,7 +203,7 @@ const Ruk = () => {
   const filteredData = rukData.filter(
     (item) =>
       item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      filterByMonthAndYear(item)
+      filterByMonthAndYear(item) && item.tempatTugas.toLowerCase().includes(selectedPustu.toLocaleLowerCase())
   );
 
   // Pagination logic
@@ -334,6 +337,8 @@ const Ruk = () => {
             />
           </div>
 
+          <div className="flex gap-52">
+
           <div className="filter-form">
             <label>
               Month:
@@ -363,13 +368,36 @@ const Ruk = () => {
                 onChange={(e) => setSelectedYear(e.target.value)}
               >
                 <option value="">Select Year</option>
+                <option value="2025">2025</option>
                 <option value="2024">2024</option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>
                 {/* Tambahkan tahun yang dibutuhkan */}
               </select>
             </label>
+         
           </div>
+
+          <div>
+            <h1>UKPD :</h1>
+            <select
+              value={selectedPustu}
+              onChange={(e)=> setSelectedPustu(e.target.value)}>
+                <option value="">Select UKPD</option>
+                <option value="Puskesmas Cilandak">Puskesmas Cilandak</option>
+                <option value="PUSTU Pondok Labu">PUSTU Pondok Labu</option>
+                <option value="PUSTU Cilandak Barat">PUSTU Cilandak Barat</option>
+                <option value="PUSTU Lebak Bulus">PUSTU Lebak Bulus</option>
+                <option value="PUSTU Gandaria Selatan">PUSTU Gandaria Selatan</option>
+                <option value="PUSTU Cipete Selatan">PUSTU Cipete Selatan</option>
+
+              </select>
+
+
+          </div>
+          </div>
+
+          
 
           <div className="flex gap-3">
             <div className="">
