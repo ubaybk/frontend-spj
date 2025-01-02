@@ -333,17 +333,18 @@ const Ruk = () => {
                 // Reset halaman ke 1 saat melakukan pencarian
                 setCurrentPage(1);
               }}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-blue-300 rounded-lg"
             />
           </div>
 
           <div className="flex gap-52">
 
-          <div className="filter-form">
+          <div className=" mt-3 flex gap-3">
             <label>
-              Month:
+             
               <select
                 value={selectedMonth}
+                className=" bg-blue-300 p-1 rounded-lg"
                 onChange={(e) => setSelectedMonth(e.target.value)}
               >
                 <option value="">Select Month</option>
@@ -362,10 +363,11 @@ const Ruk = () => {
               </select>
             </label>
             <label>
-              Year:
+             
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
+                 className=" bg-blue-300 p-1 rounded-lg"
               >
                 <option value="">Select Year</option>
                 <option value="2025">2025</option>
@@ -379,10 +381,11 @@ const Ruk = () => {
           </div>
 
           <div>
-            <h1>UKPD :</h1>
+            
             <select
               value={selectedPustu}
-              onChange={(e)=> setSelectedPustu(e.target.value)}>
+              onChange={(e)=> setSelectedPustu(e.target.value)}
+              className="mt-3 bg-yellow-200 p-1 rounded-lg">
                 <option value="">Select UKPD</option>
                 <option value="Puskesmas Cilandak">Puskesmas Cilandak</option>
                 <option value="PUSTU Pondok Labu">PUSTU Pondok Labu</option>
