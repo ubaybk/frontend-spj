@@ -187,7 +187,7 @@ const Ruk = () => {
   // Fungsi untuk memfilter berdasarkan bulan dan tahun
   const filterByMonthAndYear = (item) => {
     if (selectedMonth && selectedYear) {
-      const itemDate = item.createdAt.toDate(); // Assuming createdAt is a Firestore timestamp
+      const itemDate = item.waktuPelaksanaan.toDate(); // Assuming createdAt is a Firestore timestamp
       const itemMonth = itemDate.getMonth() + 1; // Mendapatkan bulan (1-12)
       const itemYear = itemDate.getFullYear(); // Mendapatkan tahun (YYYY)
 
