@@ -207,18 +207,42 @@ const AddTahunanPoa = () => {
         </div>
         <div className="p-4 w-full">
           <h1 className="text-2xl font-bold mb-4">TAMBAH DATA TAHUNAN P O A</h1>
+          {/* Dropdown Tahun */}
+          <div className="mb-5">
+              <label
+                htmlFor="tahun"
+                className="text-lg font-bold mb-4"
+              >
+                Tahun
+              </label>
+              <select
+                id="tahun"
+                name="tahun"
+                value={formData.tahun}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              >
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Input Pilihan Belanja */}
            
             <div>
               <h1
                 onClick={() => setOpenBarjas(!openBarjas)}
-                className="text-lg font-bold mb-4"
+                className="text-lg font-bold bg-red-400 p-2 mb-4 w-fit cursor-pointer"
               >
                 BARANG DAN JASA
               </h1>
-              <h1>total barjas</h1> {formatRupiah(hitungBarangJasa())}
               {openBarjas && (
+                <div>
+                  <h1>total barjas</h1> {formatRupiah(hitungBarangJasa())}
+                
                 <div className="ml-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {[
                     {
@@ -690,6 +714,7 @@ const AddTahunanPoa = () => {
                     </div>
                   ))}
                 </div>
+                </div>
               )}
             </div>
 
@@ -697,12 +722,14 @@ const AddTahunanPoa = () => {
             <div>
             <h1
               onClick={() => setOpenModalPeralatan(!openModalPeralatan)}
-              className="text-lg font-bold mb-4"
+               className="text-lg font-bold bg-red-400 p-2 mb-4 w-fit cursor-pointer"
             >
               Modal Peralatan dan Mesin
             </h1>
-            <h1>Total</h1>{formatRupiah(hitungModal())}
+           
             {openModalPeralatan && (
+              <div>
+                 <h1>Total</h1>{formatRupiah(hitungModal())}
               <div className="ml-10">
                 <div className="flex items-center gap-5">
                   <label
@@ -953,6 +980,8 @@ const AddTahunanPoa = () => {
                   />
                 </div>
               </div>
+
+              </div>
             )}
             </div>
 
@@ -960,12 +989,14 @@ const AddTahunanPoa = () => {
               <div>
             <h1
               onClick={() => setOpenModalGedungBangunan(!openModalGedungBangunan)}
-              className="text-lg font-bold mb-4"
+               className="text-lg font-bold bg-red-400 p-2 mb-4 w-fit cursor-pointer"
             >
               Modal Gedung Dan Bangunan
             </h1>
-            <h1>Total</h1>{formatRupiah(hitungModalGedungBangunan())}
             {openModalGedungBangunan && (
+              <div>
+                <h1>Total</h1>{formatRupiah(hitungModalGedungBangunan())}
+
               <div className="ml-10">
                 <div className="flex items-center gap-5">
                   <label
@@ -1017,6 +1048,7 @@ const AddTahunanPoa = () => {
                 </div>
                 
               </div>
+              </div>
             )}
             </div>
 
@@ -1025,28 +1057,7 @@ const AddTahunanPoa = () => {
 
             
 
-            {/* Dropdown Tahun */}
-            <div>
-              <label
-                htmlFor="tahun"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Tahun
-              </label>
-              <select
-                id="tahun"
-                name="tahun"
-                value={formData.tahun}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              >
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
+            
 
             {/* Tombol Submit */}
             <div>
