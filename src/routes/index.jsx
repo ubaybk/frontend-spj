@@ -96,7 +96,7 @@ export const routes = [
   {
     path: "/dataPoa",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requiredEmail="admin@gmail.com">
         <DataPoa/>
       </ProtectedRoute>
     ),
@@ -104,9 +104,10 @@ export const routes = [
   {
     path: "/addTahunanPoa",
     element: (
-      <ProtectedRoute>
-        <AddTahunanPoa/>
+      <ProtectedRoute requiredEmail="admin@gmail.com">
+        <AddTahunanPoa />
       </ProtectedRoute>
     ),
   },
+  
 ];
