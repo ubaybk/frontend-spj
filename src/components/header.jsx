@@ -46,6 +46,8 @@ const Header = () => {
             <BsClipboardDataFill />
             <h1 className="hover:underline cursor-pointer">S P J</h1>
           </Link>
+          {email === "admin@gmail.com" && (
+
           <div className="flex flex-col text-2xl">
             <div
               className="flex items-center gap-3 cursor-pointer"
@@ -68,6 +70,7 @@ const Header = () => {
               </div>
             )}
           </div>
+          )}
           <div className="flex items-center gap-3 text-2xl">
             <RiLogoutBoxRFill />
             <h1
