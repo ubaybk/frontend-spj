@@ -16,11 +16,7 @@ import db from "../../../../firebaseConfig";
 import Header from "../../../components/header";
 import { getAuth } from "firebase/auth";
 
-const optionBelanja = [
-  "Barang dan Jasa",
-  "Modal Peralatan Dan Mesin",
-  "Modal Gedung dan Bangunan",
-];
+
 
 const formatRupiah = (number) => {
   return new Intl.NumberFormat("id-ID", {
@@ -33,6 +29,7 @@ const formatRupiah = (number) => {
 const AddTahunanPoa = () => {
   const [openBarjas, setOpenBarjas] = useState(false);
   const [openModalPeralatan, setOpenModalPeralatan] = useState(false);
+  const [openModalGedungBangunan, setOpenModalGedungBangunan] = useState(false)
 
 
   const hitungModal = () => {
@@ -45,23 +42,14 @@ const AddTahunanPoa = () => {
     return (thrNonPns || 0) + (gaji13NonPns || 0) +(tkdPPPPK ||0)+(artDanAlatKebersihan||0)+(atk||0)+(cetakan||0)+(bahanMentah||0)+(alkesPakaiHabis||0)+(alatLaboratorium||0)+(obat||0)+(pengadaanDesinfectan||0)+(pengadaanLarvasida||0)+(gajiPjlp||0)+(jasaRekamMedik||0)+(retribusiSampah||0)+(telpon||0)+(air||0)+(listrik||0)+(internet||0)+(diklat||0)+(bpjsKesehatan||0)+(bpjsKetenagakerjaan||0)+(pakaianDinas||0)+(jasaPeriksaSampleKesling||0)+(cateringPasienRb||0)+(sewaMesinFc||0)+(kerjaSamaPemeriksaanLab||0)+(jasaHygineService||0)+(bbmFogging||0)+(mutu||0)+(pemeliharaan||0)+(apdPetugasFogging||0)+(apdPetugasIpal||0)+(operasionalLainnya||0)+(ukmSituasional||0)+(honorPetugasFogging||0)+(pestControl||0)+(sewaPrinter||0)+(penyediaanMakminTamu||0)+(pelayananPiketSabtu||0)+(pelayananDukunganKesehatan||0)
   }
 
+  const hitungModalGedungBangunan = ()=> {
+    const {tanggaPasien, penambahanAkesTangga} = formData
+    return (tanggaPasien || 0) + (penambahanAkesTangga || 0 )
+  }
+
   // State untuk form
   const [formData, setFormData] = useState({
-    belanja: "",
-    anggaran: "",
-    // BARANG DAN JASA
-    
-    // MODAL PERALATAN DAN MESIN
-    komputer: 0,
-    laptop: 0,
-    ac2Pk: 0,
-    ac1Pk: 0,
-    ekg: 0,
-    dentalUnit: 0,
-    peakflowMeter: 0,
-    motor: 0,
-    mesinPendorong: 0,
-    takTerduga: 0,
+   
     tahun: new Date().getFullYear(),
   });
 
@@ -131,10 +119,12 @@ const AddTahunanPoa = () => {
     try {
       const totalModalPeralatanMesin = hitungModal();
       const totalBarangJasa = hitungBarangJasa()
+      const totalModalGedungBangunan = hitungModalGedungBangunan()
       const dataToSave = {
         ...formData,
         totalModalPeralatanMesin,
         totalBarangJasa,
+        totalModalGedungBangunan,
         createdBy: user.email,
         createdAt: serverTimestamp(),
       };
@@ -143,8 +133,6 @@ const AddTahunanPoa = () => {
       alert("Data berhasil disimpan!");
       // Reset form
       setFormData({
-        belanja: "",
-        anggaran: "",
         thrNonPns: 0,
         gaji13NonPns: 0,
         tkdPPPPK: 0,
@@ -221,30 +209,7 @@ const AddTahunanPoa = () => {
           <h1 className="text-2xl font-bold mb-4">TAMBAH DATA TAHUNAN P O A</h1>
           <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Input Pilihan Belanja */}
-            <div>
-              <label
-                htmlFor="belanja"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Belanja
-              </label>
-              <select
-                id="belanja"
-                name="belanja"
-                value={formData.belanja}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              >
-                <option value="" disabled>
-                  Pilih Belanja
-                </option>
-                {optionBelanja.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+           
             <div>
               <h1
                 onClick={() => setOpenBarjas(!openBarjas)}
@@ -729,6 +694,7 @@ const AddTahunanPoa = () => {
             </div>
 
             {/* Modal Peralatan Mesin */}
+            <div>
             <h1
               onClick={() => setOpenModalPeralatan(!openModalPeralatan)}
               className="text-lg font-bold mb-4"
@@ -988,32 +954,76 @@ const AddTahunanPoa = () => {
                 </div>
               </div>
             )}
+            </div>
 
-            {formData.belanja === "Modal Gedung dan Bangunan" && (
+              {/* Modal Gedung Bangunan */}
               <div>
-                <h1>c</h1>
+            <h1
+              onClick={() => setOpenModalGedungBangunan(!openModalGedungBangunan)}
+              className="text-lg font-bold mb-4"
+            >
+              Modal Gedung Dan Bangunan
+            </h1>
+            <h1>Total</h1>{formatRupiah(hitungModalGedungBangunan())}
+            {openModalGedungBangunan && (
+              <div className="ml-10">
+                <div className="flex items-center gap-5">
+                  <label
+                    htmlFor="tanggaPasien"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Tangga Pasien
+                  </label>
+                  <input
+                    id="tanggaPasien"
+                    name="tanggaPasien"
+                    className="p-2 border rounded-md"
+                    type="text" // Ubah menjadi tipe teks untuk menampilkan format rupiah
+                    placeholder="Pagu Belanja"
+                    value={
+                      formData.tanggaPasien ? formatRupiah(formData.tanggaPasien) : ""
+                    } // Format sebagai rupiah
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, ""); // Hapus format rupiah ke angka mentah
+                      setFormData((prev) => ({
+                        ...prev,
+                        tanggaPasien: rawValue ? parseInt(rawValue, 10) : 0, // Simpan angka asli
+                      }));
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-5">
+                  <label
+                    htmlFor="penambahanAkesTangga"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Penambahan akses tangga (maintenance lift, air, dll)
+                  </label>
+                  <input
+                    id="penambahanAkesTangga"
+                    name="penambahanAkesTangga"
+                    className="p-2 border rounded-md"
+                    type="text" // Ubah menjadi tipe teks untuk menampilkan format rupiah
+                    placeholder="Pagu Belanja"
+                    value={formData.penambahanAkesTangga ? formatRupiah(formData.penambahanAkesTangga) : ""} // Format sebagai rupiah
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, ""); // Hapus format rupiah ke angka mentah
+                      setFormData((prev) => ({
+                        ...prev,
+                        penambahanAkesTangga: rawValue ? parseInt(rawValue, 10) : 0, // Simpan angka asli
+                      }));
+                    }}
+                  />
+                </div>
+                
               </div>
             )}
-
-            {/* Input Anggaran */}
-            <div>
-              <label
-                htmlFor="anggaran"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Anggaran
-              </label>
-              <input
-                type="number"
-                id="anggaran"
-                name="anggaran"
-                value={formData.anggaran}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Masukkan jumlah anggaran"
-                required
-              />
             </div>
+
+
+           
+
+            
 
             {/* Dropdown Tahun */}
             <div>
