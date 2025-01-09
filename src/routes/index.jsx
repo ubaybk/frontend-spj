@@ -10,6 +10,10 @@ import UpdateRuk from "../pages/UpdateRuk";
 import Pengadaan from "../pages/Pengadaan";
 import Verifikator from "../pages/Verifikator";
 import RukView from "../pages/RukView";
+import Poa from "../pages/Poa";
+import DataPoa from "../pages/Poa/DataPoa";
+import AddPoa from "../pages/Poa/AddTahunanPoa";
+import AddTahunanPoa from "../pages/Poa/AddTahunanPoa";
 
 
 export const routes = [
@@ -78,6 +82,30 @@ export const routes = [
     element: (
       <ProtectedRoute>
         <RukView />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/poa",
+    element: (
+      <ProtectedRoute>
+        <Poa />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dataPoa",
+    element: (
+      <ProtectedRoute>
+        <DataPoa/>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/addTahunanPoa",
+    element: (
+      <ProtectedRoute>
+        <AddTahunanPoa/>
       </ProtectedRoute>
     ),
   },
