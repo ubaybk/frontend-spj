@@ -63,49 +63,7 @@ const AddTahunanPoa = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit data ke Firebase
-  // const handleSubmitPeralatanMesin = async (e) => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-  //   e.preventDefault();
-
-  //   if (!user) {
-  //     alert("User not logged in!");
-  //     return;
-  //   }
-
-  //   try {
-  //     const dataToSave = {
-  //       ...formData,
-  //       createdBy: user.email,
-  //       createdAt: serverTimestamp(),
-  //     };
-
-  //     await addDoc(collection(db, "poa_data"), dataToSave);
-  //     alert("Data berhasil disimpan!");
-  //     // Reset form
-  //     setFormData({
-  //       // Modal Peralatan Dan Mesin
-  //       komputer: 0,
-  //       laptop: 0,
-  //       ac2Pk: 0,
-  //       ac1Pk: 0,
-  //       ekg: 0,
-  //       dentalUnit: 0,
-  //       peakflowMeter: 0,
-  //       motor: 0,
-  //       mesinPendorong: 0,
-  //       takTerduga: 0,
-  //       // Modal Gedung dan Bangunan
-  //       // tanggaPasien: 0,
-  //       // penambahanAkesTangga: 0,
-  //       // tahun: currentYear,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error adding document: ", error);
-  //     alert("Gagal menyimpan data. Silakan coba lagi.");
-  //   }
-  // };
+  
   const handleSubmit = async (e) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -1051,14 +1009,6 @@ const AddTahunanPoa = () => {
               </div>
             )}
             </div>
-
-
-           
-
-            
-
-            
-
             {/* Tombol Submit */}
             <div>
               <button
