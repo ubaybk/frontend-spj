@@ -112,7 +112,7 @@ const DataPoa = () => {
                           {new Intl.NumberFormat("id-ID", {
                             style: "currency",
                             currency: "IDR",
-                          }).format(item.totalModalGedungBangunan)}
+                          }).format(item.totalModalPeralatanMesin)}
                         </h1>
                       </div>
                       <div className="flex-col bg-yellow-300 p-1">
@@ -121,7 +121,7 @@ const DataPoa = () => {
                           {new Intl.NumberFormat("id-ID", {
                             style: "currency",
                             currency: "IDR",
-                          }).format(item.totalModalPeralatanMesin)}
+                          }).format(item.totalModalGedungBangunan)}
                         </h1>
                       </div>
                     </div>
