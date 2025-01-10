@@ -111,7 +111,7 @@ export const routes = [
     ),
   },
   {
-    path: "/viewpoa",
+    path: "/viewpoa/:id",
     element: (
       <ProtectedRoute requiredEmail="admin@gmail.com">
         <ViewPoa />

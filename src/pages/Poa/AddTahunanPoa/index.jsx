@@ -15,6 +15,8 @@ import {
 import db from "../../../../firebaseConfig";
 import Header from "../../../components/header";
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -30,6 +32,8 @@ const AddTahunanPoa = () => {
   const [openBarjas, setOpenBarjas] = useState(false);
   const [openModalPeralatan, setOpenModalPeralatan] = useState(false);
   const [openModalGedungBangunan, setOpenModalGedungBangunan] = useState(false)
+
+  const navigate = useNavigate()
 
 
   const hitungModal = () => {
@@ -89,6 +93,7 @@ const AddTahunanPoa = () => {
 
       await addDoc(collection(db, "poa_data"), dataToSave);
       alert("Data berhasil disimpan!");
+      navigate("/dataPoa");
       // Reset form
       setFormData({
         thrNonPns: 0,
