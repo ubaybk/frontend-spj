@@ -64,7 +64,7 @@ const Header = () => {
                 <Link to={"/dataPoa"} className="hover:underline">
                   DATA TAHUNAN P O A
                 </Link>
-                <Link to={"/poa/sub3"} className="hover:underline">
+                <Link to={"/inputDataPoa"} className="hover:underline">
                   INPUT DATA P O A
                 </Link>
               </div>

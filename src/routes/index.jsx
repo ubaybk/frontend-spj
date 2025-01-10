@@ -15,6 +15,7 @@ import DataPoa from "../pages/Poa/DataPoa";
 import AddPoa from "../pages/Poa/AddTahunanPoa";
 import AddTahunanPoa from "../pages/Poa/AddTahunanPoa";
 import ViewPoa from "../pages/Poa/ViewPoa";
+import InputDataPoa from "../pages/Poa/InputDataPoa";
 
 
 export const routes = [
@@ -115,6 +116,14 @@ export const routes = [
     element: (
       <ProtectedRoute requiredEmail="admin@gmail.com">
         <ViewPoa />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/inputDataPoa",
+    element: (
+      <ProtectedRoute requiredEmail="admin@gmail.com">
+        <InputDataPoa />
       </ProtectedRoute>
     ),
   },
