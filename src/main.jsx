@@ -3,11 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
+import { PoaContextProvider } from "./context/PoaContextProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <PoaContextProvider>
+        <App />
+      </PoaContextProvider>
     </BrowserRouter>
   </StrictMode>
 );
