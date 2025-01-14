@@ -11,7 +11,7 @@ const InputDataPoa = () => {
   const [activeSection, setActiveSection] = useState(null);
 
   const handleMonthClick = (month) => {
-    setActiveMonth(activeMonth === month ? null : month);
+    setActiveMonth(activeMonth === month ? null : month); // set active month
   };
 
   const handleSectionClick = (section) => {
@@ -27,7 +27,7 @@ const InputDataPoa = () => {
 
   const renderInputFields = () => {
     if (activeSection === "barangJasa") {
-      return <FormInputBarjas/>
+      return <FormInputBarjas activeMonth={activeMonth} />; // kirim activeMonth sebagai props
     }
     return null;
   };
@@ -35,8 +35,7 @@ const InputDataPoa = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <div>
-
-      <Header />
+        <Header />
       </div>
 
       <main className="flex-1 p-8">
