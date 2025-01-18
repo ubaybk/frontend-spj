@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DataTable from "./DataTable";
+import DataTable from "./dataTable";
 import { handleSave } from "../../poaUtils";
 
 const FormThr = ({ activeMonth, dataInputBarjas, result, dataPoa }) => {
