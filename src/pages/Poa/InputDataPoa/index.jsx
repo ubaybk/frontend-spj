@@ -9,6 +9,7 @@ const InputDataPoa = () => {
   const [viewDataPoa, setViewDataPoa] = useState(false);
   const [activeMonth, setActiveMonth] = useState(null);
   const [activeSection, setActiveSection] = useState(null);
+  
 
   const handleMonthClick = (month) => {
     setActiveMonth(activeMonth === month ? null : month); // set active month
