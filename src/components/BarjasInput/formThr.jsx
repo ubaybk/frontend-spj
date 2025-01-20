@@ -58,7 +58,7 @@ const FormThr = ({ activeMonth, dataInputBarjas, result, dataPoa }) => {
 
       <div className="flex justify-end mt-6">
         <button
-          onClick={() => handleSave("THR", thr, dataPoa)}
+          onClick={() => handleSave("THR", thr, dataPoa, activeMonth)}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           Simpan
