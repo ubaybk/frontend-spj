@@ -1,17 +1,24 @@
 import React, { useState, useContext, useEffect } from "react";
 import { poaContext } from "../context/PoaContextProvider";
 import { inputBarjasContext } from "../context/InputBarjasContextProvider";
+
 import FormGaji13 from "./BarjasInput/formGaji13";
 import FormThr from "./BarjasInput/formThr";
+import FormTkdPpppk from "./BarjasInput/formTkdPpppk";
+
+
 import { fetchPoaData } from "../poaUtils";
+import { MdCalendarMonth } from "react-icons/md";
 
 const FormInputBarjas = ({ activeMonth }) => {
   const [viewThr, setViewThr] = useState(false);
   const [viewGaji13, setViewGaji13] = useState(false);
+  const [viewTkdPpppk, setViewTkdPpppk] = useState(false);
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
   const [resultThr, setResultThr] = useState(null);
   const [resultGaji13, setResultGaji13] = useState(null);
+  const [resultTkdPpppk, setResultTkdPpppk] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -22,6 +29,7 @@ const FormInputBarjas = ({ activeMonth }) => {
         if (data) {
           setResultThr(data.thrNonPns);
           setResultGaji13(data.gaji13NonPns);
+          setResultTkdPpppk(data.tkdPPPPK)
         }
       } catch (error) {
         console.error("Error fetching POA data:", error);
@@ -41,7 +49,7 @@ const FormInputBarjas = ({ activeMonth }) => {
         <h3 className="font-medium text-white text-lg">{title}</h3>
         <svg
           className={`w-6 h-6 text-white transition-transform duration-200 ${
-            isOpen ? 'transform rotate-180' : ''
+            isOpen ? "transform rotate-180" : ""
           }`}
           fill="none"
           viewBox="0 0 24 24"
@@ -57,7 +65,7 @@ const FormInputBarjas = ({ activeMonth }) => {
       </div>
       <div
         className={`transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-screen p-6' : 'max-h-0'
+          isOpen ? "max-h-screen p-6" : "max-h-0"
         } overflow-hidden bg-gradient-to-b from-white to-gray-50`}
       >
         {children}
@@ -68,7 +76,8 @@ const FormInputBarjas = ({ activeMonth }) => {
   return (
     <div className="mt-4 p-6 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-xl shadow-lg">
       <div className="mb-8">
-        <div className="flex items-center space-x-3 mb-6">
+        <div className="flex items-center justify-between" >
+          <div className="flex items-center space-x-3 mb-6">
           <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-lg">
             <svg
               className="w-6 h-6 text-white"
@@ -87,6 +96,16 @@ const FormInputBarjas = ({ activeMonth }) => {
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Input Barang dan Jasa
           </h2>
+
+          </div>
+
+          <div className="flex items-center text-[30px] gap-3 text-blue-500">
+            <div>
+              <MdCalendarMonth />
+            </div>
+
+            <h1>{activeMonth}</h1>
+          </div>
         </div>
 
         {isLoading ? (
@@ -119,6 +138,20 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultGaji13}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="TKD PPPPK"
+              isOpen={viewTkdPpppk}
+              onToggle={() => setViewTkdPpppk(!viewTkdPpppk)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormTkdPpppk
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultTkdPpppk}
                 dataPoa={dataPoa}
               />
             </FormSection>

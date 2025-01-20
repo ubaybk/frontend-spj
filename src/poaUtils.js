@@ -32,7 +32,7 @@ export const fetchPoaData = async (tahun) => {
 };
 
 export const handleSave = async (type, data, dataPoa, activeMonth) => {
-  
+  // Validasi input berdasarkan tipe
   if (type === "THR" && (!data.keteranganThr || !data.jmlThr)) {
     alert("Mohon lengkapi semua data THR.");
     return;
@@ -40,6 +40,11 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
 
   if (type === "Gaji 13" && (!data.keteranganGaji13 || !data.jmlGaji13)) {
     alert("Mohon lengkapi semua data Gaji 13.");
+    return;
+  }
+
+  if (type === "TKD PPPPK" && (!data.keteranganTkdPpppk || !data.jmlTkdPpppk)) {
+    alert("Mohon lengkapi semua data TKD PPPPK.");
     return;
   }
 
@@ -58,37 +63,66 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     const poaDoc = querySnapshot.docs[0];
     const poaData = poaDoc.data();
 
-    const jumlah = type === "THR" ? parseInt(data.jmlThr, 10) : parseInt(data.jmlGaji13, 10);
-    
+    let jumlah;
+    let keterangan;
     let updateData = {};
-    
-    if (type === "THR") {
-      const newThrNonPns = poaData.thrNonPns - jumlah;
-      if (newThrNonPns < 0) {
-        alert("Nilai THR melebihi THR Non-PNS yang tersedia.");
+
+    // Menentukan jumlah dan keterangan berdasarkan tipe
+    switch (type) {
+      case "THR":
+        jumlah = parseInt(data.jmlThr, 10);
+        keterangan = data.keteranganThr;
+        const newThrNonPns = poaData.thrNonPns - jumlah;
+        if (newThrNonPns < 0) {
+          alert("Nilai THR melebihi THR Non-PNS yang tersedia.");
+          return;
+        }
+        updateData = {
+          thrNonPns: newThrNonPns,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "Gaji 13":
+        jumlah = parseInt(data.jmlGaji13, 10);
+        keterangan = data.keteranganGaji13;
+        const newGaji13NonPns = poaData.gaji13NonPns - jumlah;
+        if (newGaji13NonPns < 0) {
+          alert("Nilai Gaji 13 melebihi Gaji 13 Non-PNS yang tersedia.");
+          return;
+        }
+        updateData = {
+          gaji13NonPns: newGaji13NonPns,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "TKD PPPPK":
+        jumlah = parseInt(data.jmlTkdPpppk, 10);
+        keterangan = data.keteranganTkdPpppk;
+        const newTkdPpppk = poaData.tkdPPPPK- jumlah;
+        if (newTkdPpppk < 0) {
+          alert("Nilai TKD PPPPK melebihi TKD PPPPK yang tersedia.");
+          return;
+        }
+        updateData = {
+          tkdPPPPK: newTkdPpppk,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      default:
+        alert("Tipe data tidak valid");
         return;
-      }
-      updateData = {
-        thrNonPns: newThrNonPns,
-        totalBarangJasa: poaData.totalBarangJasa - jumlah
-      };
-    } else {
-      const newGaji13NonPns = poaData.gaji13NonPns - jumlah;
-      if (newGaji13NonPns < 0) {
-        alert("Nilai Gaji 13 melebihi Gaji 13 Non-PNS yang tersedia.");
-        return;
-      }
-      updateData = {
-        gaji13NonPns: newGaji13NonPns,
-        totalBarangJasa: poaData.totalBarangJasa - jumlah
-      };
     }
 
+    // Update dokumen POA
     await updateDoc(doc(db, "poa_data", poaDoc.id), updateData);
 
+    // Tambah dokumen baru ke collection inputBarjas
     await addDoc(collection(db, "inputBarjas"), {
       type,
-      keterangan: type === "THR" ? data.keteranganThr : data.keteranganGaji13,
+      keterangan,
       jumlahThr: jumlah,
       tahun: dataPoa?.[0]?.tahun,
       bulan: activeMonth || "bulan kosong",
