@@ -51,6 +51,11 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     return;
   }
 
+  if (type === "ART dan Kebersihan" && (!data.keteranganArtKebersihan || !data.jmlArtKebersihan)) {
+    alert("Mohon lengkapi semua data ART dan Kebersihan.");
+    return;
+  }
+
   try {
     const q = query(
       collection(db, "poa_data"),
@@ -110,6 +115,20 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         }
         updateData = {
           tkdPPPPK: newTkdPpppk,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "ART dan Kebersihan":
+        jumlah = parseInt(data.jmlArtKebersihan, 10);
+        keterangan = data.keteranganArtKebersihan;
+        const newArtKebersihan = poaData.artDanAlatKebersihan - jumlah;
+        if (newArtKebersihan < 0) {
+          alert("Nilai ART dan Alat Kebersihan melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          artDanAlatKebersihan: newArtKebersihan,
           totalBarangJasa: poaData.totalBarangJasa - jumlah
         };
         break;
@@ -177,6 +196,12 @@ export const handleDelete = async (id, deletedData) => {
       case "TKD PPPPK":
         updateData = {
           tkdPPPPK: poaData.tkdPPPPK + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "ART dan Kebersihan":
+        updateData = {
+          artDanAlatKebersihan: poaData.artDanAlatKebersihan + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;

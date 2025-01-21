@@ -5,6 +5,7 @@ import { inputBarjasContext } from "../context/InputBarjasContextProvider";
 import FormGaji13 from "./BarjasInput/formGaji13";
 import FormThr from "./BarjasInput/formThr";
 import FormTkdPpppk from "./BarjasInput/formTkdPpppk";
+import FormArtKebersihan from "./BarjasInput/formArtKebersihan";
 
 
 import { fetchPoaData } from "../poaUtils";
@@ -14,11 +15,13 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewThr, setViewThr] = useState(false);
   const [viewGaji13, setViewGaji13] = useState(false);
   const [viewTkdPpppk, setViewTkdPpppk] = useState(false);
+  const [viewArtKebersihan, setArtKebersihan] = useState(false);
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
   const [resultThr, setResultThr] = useState(null);
   const [resultGaji13, setResultGaji13] = useState(null);
   const [resultTkdPpppk, setResultTkdPpppk] = useState(null);
+  const [resultArtKebersihan, setResultArtKebersihan] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -30,6 +33,7 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultThr(data.thrNonPns);
           setResultGaji13(data.gaji13NonPns);
           setResultTkdPpppk(data.tkdPPPPK)
+          setResultArtKebersihan(data.artDanAlatKebersihan)
         }
       } catch (error) {
         console.error("Error fetching POA data:", error);
@@ -152,6 +156,20 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultTkdPpppk}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="ART dan Alat Kebersihan"
+              isOpen={viewArtKebersihan}
+              onToggle={() => setArtKebersihan(!viewArtKebersihan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormArtKebersihan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultArtKebersihan}
                 dataPoa={dataPoa}
               />
             </FormSection>
