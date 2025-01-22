@@ -6,6 +6,12 @@ import FormGaji13 from "./BarjasInput/formGaji13";
 import FormThr from "./BarjasInput/formThr";
 import FormTkdPpppk from "./BarjasInput/formTkdPpppk";
 import FormArtKebersihan from "./BarjasInput/formArtKebersihan";
+import FormAtk from "./BarjasInput/formAtk";
+import FormCetakan from "./BarjasInput/formCetakan";
+import FormBahanMentah from "./BarjasInput/formBahanMentah";
+
+
+
 
 
 import { fetchPoaData } from "../poaUtils";
@@ -16,12 +22,19 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewGaji13, setViewGaji13] = useState(false);
   const [viewTkdPpppk, setViewTkdPpppk] = useState(false);
   const [viewArtKebersihan, setArtKebersihan] = useState(false);
+  const [viewAtk, setAtk] = useState(false);
+  const [viewCetakan, setCetakan] = useState(false);
+  const [viewBahanMentah, setBahanMentah] = useState(false);
+
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
   const [resultThr, setResultThr] = useState(null);
   const [resultGaji13, setResultGaji13] = useState(null);
   const [resultTkdPpppk, setResultTkdPpppk] = useState(null);
   const [resultArtKebersihan, setResultArtKebersihan] = useState(null);
+  const [resultAtk, setResultAtk] = useState(null);
+  const [resultCetakan, setResultCetakan] = useState(null);
+  const [resultBahanMentah, setResultBahanMentah] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -34,6 +47,9 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultGaji13(data.gaji13NonPns);
           setResultTkdPpppk(data.tkdPPPPK)
           setResultArtKebersihan(data.artDanAlatKebersihan)
+          setResultAtk(data.atk)
+          setResultCetakan(data.cetakan)
+          setResultBahanMentah(data.bahanMentah)
         }
       } catch (error) {
         console.error("Error fetching POA data:", error);
@@ -173,6 +189,50 @@ const FormInputBarjas = ({ activeMonth }) => {
                 dataPoa={dataPoa}
               />
             </FormSection>
+
+            <FormSection
+              title="ATK"
+              isOpen={viewAtk}
+              onToggle={() => setAtk(!viewAtk)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormAtk
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultAtk}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="CETAKAN"
+              isOpen={viewCetakan}
+              onToggle={() => setCetakan(!viewCetakan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormCetakan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultCetakan}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="BAHAN MENTAH"
+              isOpen={viewBahanMentah}
+              onToggle={() => setBahanMentah(!viewBahanMentah)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormBahanMentah
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultBahanMentah}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+
           </div>
         )}
       </div>

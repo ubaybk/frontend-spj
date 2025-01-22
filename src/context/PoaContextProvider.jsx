@@ -30,7 +30,7 @@ export const PoaContextProvider = ({children}) => {
     }, [])
 
     return (
-        <poaContext.Provider value={{dataPoa, loading}}>
+            <poaContext.Provider value={{dataPoa, loading}}>
             {children}
             </poaContext.Provider>
     )

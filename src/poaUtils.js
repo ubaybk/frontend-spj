@@ -56,6 +56,23 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     return;
   }
 
+  if (type === "ATK" && (!data.keteranganAtk || !data.jmlAtk)) {
+    alert("Mohon lengkapi semua data ATK.");
+    return;
+  }
+  if (type === "CETAKAN" && (!data.keteranganCetakan || !data.jmlCetakan)) {
+    alert("Mohon lengkapi semua data CETAKAN.");
+    return;
+  }
+  if (type === "BAHAN MENTAH" && (!data.keteranganBahanMentah || !data.jmlBahanMentah)) {
+    alert("Mohon lengkapi semua data Bahan Mentah.");
+    return;
+  }
+  if (type === "ALKES PAKAI HABIS" && (!data.keteranganAlkesPakaiHabis || !data.jmlBahanMentah)) {
+    alert("Mohon lengkapi semua data Bahan Mentah.");
+    return;
+  }
+
   try {
     const q = query(
       collection(db, "poa_data"),
@@ -133,6 +150,48 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "ATK":
+        jumlah = parseInt(data.jmlAtk, 10);
+        keterangan = data.keteranganAtk;
+        const newAtk = poaData.atk - jumlah;
+        if (newAtk < 0) {
+          alert("Nilai ATK melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          atk: newAtk,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "CETAKAN":
+        jumlah = parseInt(data.jmlCetakan, 10);
+        keterangan = data.keteranganCetakan;
+        const newCetakan = poaData.cetakan - jumlah;
+        if (newCetakan < 0) {
+          alert("Nilai Cetakan melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          cetakan: newCetakan,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "BAHAN MENTAH":
+        jumlah = parseInt(data.jmlBahanMentah, 10);
+        keterangan = data.keteranganBahanMentah;
+        const newBahanMentah = poaData.bahanMentah - jumlah;
+        if (newBahanMentah < 0) {
+          alert("Nilai Bahan Mentah melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          bahanMentah: newBahanMentah,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -202,6 +261,26 @@ export const handleDelete = async (id, deletedData) => {
       case "ART dan Kebersihan":
         updateData = {
           artDanAlatKebersihan: poaData.artDanAlatKebersihan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "ATK":
+        updateData = {
+          atk: poaData.atk + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "CETAKAN":
+        updateData = {
+          cetakan: poaData.cetakan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "BAHAN MENTAH":
+        updateData = {
+          bahanMentah: poaData.bahanMentah + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;
