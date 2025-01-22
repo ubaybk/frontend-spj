@@ -2,15 +2,15 @@ import { useState } from "react";
 import DataTable from "./dataTable";
 import { handleSave } from "../../poaUtils";
 
-const FormAlkesPakaiHabis = ({ activeMonth, dataInputBarjas, result, dataPoa }) => {
-  const [alkesPakaiHabis, setAlkesPakaiHabis] = useState({
-    keteranganAlkesPakaiHabis: "",
-    jmlAlkesPakaiHabis: "",
+const FormDesinfectan = ({ activeMonth, dataInputBarjas, result, dataPoa }) => {
+  const [desinfectan, setDesinfectan] = useState({
+    keteranganDesinfectan: "",
+    jmlDesinfectan: "",
   });
 
-  const handleInputAlkesPakaiHabisChange = (e) => {
+  const handleInputDesinfectanChange = (e) => {
     const { name, value } = e.target;
-    setAlkesPakaiHabis({ ...alkesPakaiHabis, [name]: value });
+    setDesinfectan({ ...desinfectan, [name]: value });
   };
 
   return (
@@ -19,9 +19,9 @@ const FormAlkesPakaiHabis = ({ activeMonth, dataInputBarjas, result, dataPoa }) 
         <div className="space-y-2">
           <input
             type="text"
-            name="keteranganAlkesPakaiHabis"
-            value={alkesPakaiHabis.keteranganAlkesPakaiHabis}
-            onChange={handleInputAlkesPakaiHabisChange}
+            name="keteranganDesinfectan"
+            value={desinfectan.keteranganDesinfectan}
+            onChange={handleInputDesinfectanChange}
             className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Keterangan"
           />
@@ -29,9 +29,9 @@ const FormAlkesPakaiHabis = ({ activeMonth, dataInputBarjas, result, dataPoa }) 
         <div className="space-y-2">
           <input
             type="number"
-            name="jmlAlkesPakaiHabis"
-            value={alkesPakaiHabis.jmlAlkesPakaiHabis}
-            onChange={handleInputAlkesPakaiHabisChange}
+            name="jmlDesinfectan"
+            value={desinfectan.jmlDesinfectan}
+            onChange={handleInputDesinfectanChange}
             className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Rp,..."
           />
@@ -41,12 +41,12 @@ const FormAlkesPakaiHabis = ({ activeMonth, dataInputBarjas, result, dataPoa }) 
       <DataTable 
         data={dataInputBarjas}
         activeMonth={activeMonth}
-        type="ALKES PAKAI HABIS"
+        type="DESINFECTAN"
       />
 
       {result !== null && (
         <div className="mt-4 p-4 bg-green-100 text-green-800 rounded-lg">
-          Sisa ALKES PAKAI HABIS:{" "}
+          Sisa DESINFECTAN:{" "}
           <strong>
             {result.toLocaleString("id-ID", {
               style: "currency",
@@ -58,7 +58,7 @@ const FormAlkesPakaiHabis = ({ activeMonth, dataInputBarjas, result, dataPoa }) 
 
       <div className="flex justify-end mt-6">
         <button
-          onClick={() => handleSave("ALKES PAKAI HABIS", alkesPakaiHabis, dataPoa, activeMonth)}
+          onClick={() => handleSave("DESINFECTAN", desinfectan, dataPoa, activeMonth)}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           Simpan
@@ -68,4 +68,4 @@ const FormAlkesPakaiHabis = ({ activeMonth, dataInputBarjas, result, dataPoa }) 
   );
 };
 
-export default FormAlkesPakaiHabis;
+export default FormDesinfectan;

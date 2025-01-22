@@ -68,8 +68,16 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     alert("Mohon lengkapi semua data Bahan Mentah.");
     return;
   }
-  if (type === "ALKES PAKAI HABIS" && (!data.keteranganAlkesPakaiHabis || !data.jmlBahanMentah)) {
-    alert("Mohon lengkapi semua data Bahan Mentah.");
+  if (type === "ALKES PAKAI HABIS" && (!data.keteranganAlkesPakaiHabis || !data.jmlAlkesPakaiHabis)) {
+    alert("Mohon lengkapi semua data Alkes Pakai Habis.");
+    return;
+  }
+  if (type === "OBAT" && (!data.keteranganObat || !data.jmlObat)) {
+    alert("Mohon lengkapi semua data Obat.");
+    return;
+  }
+  if (type === "DESINFECTAN" && (!data.keteranganDesinfectan || !data.jmlDesinfectan)) {
+    alert("Mohon lengkapi semua data Desinfectan.");
     return;
   }
 
@@ -192,6 +200,62 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "ALKES PAKAI HABIS":
+        jumlah = parseInt(data.jmlAlkesPakaiHabis, 10);
+        keterangan = data.keteranganAlkesPakaiHabis;
+        const newAlkesPakaiHabis = poaData.alkesPakaiHabis - jumlah;
+        if (newAlkesPakaiHabis < 0) {
+          alert("Nilai Alkes Pakai Habis melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          alkesPakaiHabis: newAlkesPakaiHabis,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "ALAT LABORATORIUM":
+        jumlah = parseInt(data.jmlAlatLaboratorium, 10);
+        keterangan = data.keteranganAlatLaboratorium;
+        const newAlatLaboratorium = poaData.alatLaboratorium - jumlah;
+        if (newAlatLaboratorium < 0) {
+          alert("Nilai Alat Laboratorium melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          alatLaboratorium: newAlatLaboratorium,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "OBAT":
+        jumlah = parseInt(data.jmlObat, 10);
+        keterangan = data.keteranganObat;
+        const newObat = poaData.obat - jumlah;
+        if (newObat < 0) {
+          alert("Nilai Obat melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          obat: newObat,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      
+      case "DESINFECTAN":
+        jumlah = parseInt(data.jmlDesinfectan, 10);
+        keterangan = data.keteranganDesinfectan;
+        const newDesinfectan = poaData.pengadaanDesinfectan - jumlah;
+        if (newDesinfectan < 0) {
+          alert("Nilai Pengadaan Desinfectan melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pengadaanDesinfectan: newDesinfectan,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -284,6 +348,35 @@ export const handleDelete = async (id, deletedData) => {
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;
+
+      case "ALKES PAKAI HABIS":
+        updateData = {
+          alkesPakaiHabis: poaData.alkesPakaiHabis + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "ALAT LABORATORIUM":
+        updateData = {
+          alatLaboratorium: poaData.alatLaboratorium + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      
+      case "OBAT":
+        updateData = {
+          obat: poaData.obat + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+        
+      case "DESINFECTAN":
+        updateData = {
+          pengadaanDesinfectan: poaData.pengadaanDesinfectan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return null;

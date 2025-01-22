@@ -9,7 +9,10 @@ import FormArtKebersihan from "./BarjasInput/formArtKebersihan";
 import FormAtk from "./BarjasInput/formAtk";
 import FormCetakan from "./BarjasInput/formCetakan";
 import FormBahanMentah from "./BarjasInput/formBahanMentah";
-
+import FormAlkesPakaiHabis from "./BarjasInput/formAlkesPakaiHabis";
+import FormAlatLaboratorium from "./BarjasInput/formAlatLaboratorium";
+import FormObat from "./BarjasInput/formObat";
+import FormDesinfectan from "./BarjasInput/formDesinfectan";
 
 
 
@@ -25,6 +28,10 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewAtk, setAtk] = useState(false);
   const [viewCetakan, setCetakan] = useState(false);
   const [viewBahanMentah, setBahanMentah] = useState(false);
+  const [viewAlkesPakaiHabis, setAlkesPakaiHabis] = useState(false)
+  const [viewAlatLaboratorium, setAlatLaboratorium] = useState(false)
+  const [viewObat, setObat] = useState(false)
+  const [viewDesinfectan, setDesinfectan] = useState(false)
 
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
@@ -35,6 +42,10 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [resultAtk, setResultAtk] = useState(null);
   const [resultCetakan, setResultCetakan] = useState(null);
   const [resultBahanMentah, setResultBahanMentah] = useState(null);
+  const [resultAlkesPakaiHabis, setResultAlkesPakaiHabis] = useState(null)
+  const [resultAlatLaboratorium, setResultAlatLaboratorium] = useState(null)
+  const [resultObat, setResultObat] = useState(null)
+  const [resultDesinfectan, setResultDesinfectan] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -50,6 +61,10 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultAtk(data.atk)
           setResultCetakan(data.cetakan)
           setResultBahanMentah(data.bahanMentah)
+          setResultAlkesPakaiHabis(data.alkesPakaiHabis)
+          setResultAlatLaboratorium(data.alatLaboratorium)
+          setResultObat(data.obat)
+          setResultDesinfectan(data.pengadaanDesinfectan)
         }
       } catch (error) {
         console.error("Error fetching POA data:", error);
@@ -231,6 +246,63 @@ const FormInputBarjas = ({ activeMonth }) => {
                 dataPoa={dataPoa}
               />
             </FormSection>
+
+            <FormSection
+              title="ALKES PAKAI HABIS"
+              isOpen={viewAlkesPakaiHabis}
+              onToggle={() => setAlkesPakaiHabis(!viewAlkesPakaiHabis)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormAlkesPakaiHabis
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultAlkesPakaiHabis}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="ALAT LABORATORIUM"
+              isOpen={viewAlatLaboratorium}
+              onToggle={() => setAlatLaboratorium(!viewAlatLaboratorium)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormAlatLaboratorium
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultAlatLaboratorium}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="OBAT"
+              isOpen={viewObat}
+              onToggle={() => setObat(!viewObat)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormObat
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultObat}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="DESINFECTAN"
+              isOpen={viewDesinfectan}
+              onToggle={() => setDesinfectan(!viewDesinfectan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormDesinfectan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultDesinfectan}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
 
 
           </div>
