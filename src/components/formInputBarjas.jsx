@@ -13,6 +13,12 @@ import FormAlkesPakaiHabis from "./BarjasInput/formAlkesPakaiHabis";
 import FormAlatLaboratorium from "./BarjasInput/formAlatLaboratorium";
 import FormObat from "./BarjasInput/formObat";
 import FormDesinfectan from "./BarjasInput/formDesinfectan";
+import FormLarvasida from "./BarjasInput/formLarvasida";
+import FormGajiPjlp from "./BarjasInput/formGajiPjlp";
+import FormRme from "./BarjasInput/formRme";
+import FormRetribusiSampah from "./BarjasInput/formRetribusiSampah";
+import FormTelepon from "./BarjasInput/formTelepon";
+import FormAir from "./BarjasInput/formAir";
 
 
 
@@ -32,6 +38,12 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewAlatLaboratorium, setAlatLaboratorium] = useState(false)
   const [viewObat, setObat] = useState(false)
   const [viewDesinfectan, setDesinfectan] = useState(false)
+  const [viewLarvasida, setLarvasida] = useState(false)
+  const [viewGajiPjlp, setGajiPjlp] = useState(false)
+  const [viewRme, setRme] = useState(false)
+  const [viewRetribusiSampah, setRetribusiSampah] = useState(false)
+  const [viewTelepon, setTelepon] = useState(false)
+  const [viewAir, setAir] = useState(false)
 
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
@@ -46,6 +58,12 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [resultAlatLaboratorium, setResultAlatLaboratorium] = useState(null)
   const [resultObat, setResultObat] = useState(null)
   const [resultDesinfectan, setResultDesinfectan] = useState(null)
+  const [resultLarvasida, setResultLarvasida] = useState(null)
+  const [resultGajiPjlp, setResultGajiPjlp] = useState(null)
+  const [resultRme, setResultRme] = useState(null)
+  const [resultRetribusiSampah, setResultRetribusiSampah] = useState(null)
+  const [resultTelepon, setResultTelepon] = useState(null)
+  const [resultAir, setResultAir] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -65,6 +83,13 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultAlatLaboratorium(data.alatLaboratorium)
           setResultObat(data.obat)
           setResultDesinfectan(data.pengadaanDesinfectan)
+          setResultLarvasida(data.pengadaanLarvasida)
+          setResultGajiPjlp(data.gajiPjlp)
+          setResultRme(data.jasaRekamMedik)
+          setResultRetribusiSampah(data.retribusiSampah)
+          setResultTelepon(data.telpon)
+          setResultAir(data.air)
+
         }
       } catch (error) {
         console.error("Error fetching POA data:", error);
@@ -299,6 +324,90 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultDesinfectan}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="LARVASIDA"
+              isOpen={viewLarvasida}
+              onToggle={() => setLarvasida(!viewLarvasida)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormLarvasida
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultLarvasida}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="GAJI PJLP"
+              isOpen={viewGajiPjlp}
+              onToggle={() => setGajiPjlp(!viewGajiPjlp)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormGajiPjlp
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultGajiPjlp}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="RME"
+              isOpen={viewRme}
+              onToggle={() => setRme(!viewRme)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormRme
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultRme}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="RETRIBUSI SAMPAH"
+              isOpen={viewRetribusiSampah}
+              onToggle={() => setRetribusiSampah(!viewRetribusiSampah)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormRetribusiSampah
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultRetribusiSampah}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="TELEPON"
+              isOpen={viewTelepon}
+              onToggle={() => setTelepon(!viewTelepon)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormTelepon
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultTelepon}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="AIR"
+              isOpen={viewAir}
+              onToggle={() => setAir(!viewAir)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormAir
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultAir}
                 dataPoa={dataPoa}
               />
             </FormSection>

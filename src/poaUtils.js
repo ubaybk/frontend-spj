@@ -80,6 +80,30 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     alert("Mohon lengkapi semua data Desinfectan.");
     return;
   }
+  if (type === "LARVASIDA" && (!data.keteranganLarvasida || !data.jmlLarvasida)) {
+    alert("Mohon lengkapi semua data Larvasida.");
+    return;
+  }
+  if (type === "GAJI PJLP" && (!data.keteranganGajiPjlp || !data.jmlGajiPjlp)) {
+    alert("Mohon lengkapi semua data Gaji PJLP.");
+    return;
+  }
+  if (type === "RME" && (!data.keteranganRme || !data.jmlRme)) {
+    alert("Mohon lengkapi semua data Jasa RME.");
+    return;
+  }
+  if (type === "RETRIBUSI SAMPAH" && (!data.keteranganRetribusiSampah || !data.jmlRetribusiSampah)) {
+    alert("Mohon lengkapi semua data Jasa Retribusi Sampah.");
+    return;
+  }
+  if (type === "TELEPON" && (!data.keteranganTelepon || !data.jmlTelepon)) {
+    alert("Mohon lengkapi semua data Telepon.");
+    return;
+  }
+  if (type === "AIR" && (!data.keteranganAir || !data.jmlAir)) {
+    alert("Mohon lengkapi semua data Air.");
+    return;
+  }
 
   try {
     const q = query(
@@ -256,6 +280,90 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "LARVASIDA":
+        jumlah = parseInt(data.jmlLarvasida, 10);
+        keterangan = data.keteranganLarvasida;
+        const newLarvasida = poaData.pengadaanLarvasida - jumlah;
+        if (newLarvasida < 0) {
+          alert("Nilai Pengadaan Larvasida melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pengadaanLarvasida: newLarvasida,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      
+      case "GAJI PJLP":
+        jumlah = parseInt(data.jmlGajiPjlp, 10);
+        keterangan = data.keteranganGajiPjlp;
+        const newGajiPjlp = poaData.gajiPjlp - jumlah;
+        if (newGajiPjlp < 0) {
+          alert("Nilai GAJI PJLP melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          gajiPjlp: newGajiPjlp,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "RME":
+        jumlah = parseInt(data.jmlRme, 10);
+        keterangan = data.keteranganRme;
+        const newRme = poaData.jasaRekamMedik - jumlah;
+        if (newRme < 0) {
+          alert("Nilai Jasa RME melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          jasaRekamMedik: newRme,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      
+      case "RETRIBUSI SAMPAH":
+        jumlah = parseInt(data.jmlRetribusiSampah, 10);
+        keterangan = data.keteranganRetribusiSampah;
+        const newRetribusiSampah = poaData.retribusiSampah - jumlah;
+        if (newRetribusiSampah < 0) {
+          alert("Nilai Retribusi Sampah melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          retribusiSampah: newRetribusiSampah,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "TELEPON":
+        jumlah = parseInt(data.jmlTelepon, 10);
+        keterangan = data.keteranganTelepon;
+        const newTelepon = poaData.telpon - jumlah;
+        if (newTelepon < 0) {
+          alert("Nilai Telepon melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          telpon: newTelepon,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "AIR":
+        jumlah = parseInt(data.jmlAir, 10);
+        keterangan = data.keteranganAir;
+        const newAir = poaData.air - jumlah;
+        if (newAir < 0) {
+          alert("Nilai Air melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          air: newAir,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -373,6 +481,45 @@ export const handleDelete = async (id, deletedData) => {
       case "DESINFECTAN":
         updateData = {
           pengadaanDesinfectan: poaData.pengadaanDesinfectan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "LARVASIDA":
+        updateData = {
+          pengadaanLarvasida: poaData.pengadaanLarvasida + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "GAJI PJLP":
+        updateData = {
+          gajiPjlp: poaData.gajiPjlp + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "RME":
+        updateData = {
+          jasaRekamMedik: poaData.jasaRekamMedik + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "RETRIBUSI SAMPAH":
+        updateData = {
+          retribusiSampah: poaData.retribusiSampah + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "TELEPON":
+        updateData = {
+          telpon: poaData.telpon + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      
+      case "AIR":
+        updateData = {
+          air: poaData.air + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;

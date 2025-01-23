@@ -9,6 +9,7 @@ import { Timestamp } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaBackspace } from "react-icons/fa";
+import { optionsTugas, optionPokja, optionKegiatan, optionSubKegiatan, optionKomponen, optionIndikatorKinerja,optionSumberPembiayaan } from "../../data";
 
 const AddRuk = () => {
   const navigate = useNavigate();
@@ -39,102 +40,9 @@ const AddRuk = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const dropdownRef = useRef(null);
+  const [selectedKomponen, setSelectedKomponen] = useState([]);
 
-  const optionsTugas = [
-    "Puskesmas Cilandak",
-    "PUSTU Pondok Labu",
-    "PUSTU Cilandak Barat",
-    "PUSTU Lebak Bulus",
-    "PUSTU Gandaria Selatan",
-    "PUSTU Cipete Selatan",
-  ];
-
-  const optionPokja = ["Admen", "UKP", "UKM"];
-
-  const optionKegiatan = [
-    "Peningkatan Pelayanan BLUD",
-    "Penyediaan Layanan Kesehatan untuk UKP Rujukan, UKM dan UKM Rujukan Tingkat Daerah Provinsi",
-    "Pengelolaan Pelayanan Kesehatan Dasar Melalui Pendekatan KeluargaPenyediaan Layanan Kesehatan untuk UKM dan UKP Rujukan Tingkat Daerah Kabupaten/Kota",
-    "Perencanaan Kebutuhan dan Pendayagunaan Sumber Daya Manusia Kesehatan untuk UKP dan UKM di Wilayah Kabupaten/Kota",
-    "Pengembangan dan Pelaksanaan Upaya Kesehatan Bersumber Daya Masyarakat (UKBM) Tingkat Daerah Kabupaten/Kota",
-  ];
-  const optionSubKegiatan = [
-    "Pelayanan dan Penunjang Pelayanan BLUD",
-    "Pembinaan Pelaksanaan Upaya Pelayanan Kesehatan",
-    "Pengelolaan Pelayanan Kesehatan Dasar Melalui Pendekatan Keluarga",
-    "Pengelolaan Pelayanan Kesehatan Ibu Hamil",
-    "Pengelolaan Pelayanan Kesehatan Ibu Bersalin",
-    "Pengelolaan Pelayanan Kesehatan Bayi Baru Lahir",
-    "Pengelolaan Pelayanan Kesehatan Balita",
-    "Pengelolaan Pelayanan Kesehatan pada Usia Pendidikan Dasar",
-    "Pengelolaan Pelayanan Kesehatan pada Usia Produktif",
-    "Pengelolaan Pelayanan Kesehatan pada Usia Lanjut",
-    "Pengelolaan Pelayanan Kesehatan Penderita Hipertensi",
-    "Pengelolaan Pelayanan Kesehatan Penderita Diabetes Melitus",
-    "Pengelolaan Pelayanan Kesehatan Orang dengan Gangguan Jiwa Berat",
-    "Pengelolaan Pelayanan Kesehatan Orang Terduga Tuberkulosis",
-    "Pengelolaan Pelayanan Kesehatan Orang dengan Risiko Terinfeksi HIV",
-    "Pengelolaan Pelayanan Kesehatan Gizi Masyarakat",
-    "Pengelolaan Pelayanan Kesehatan Kerja dan Olahraga",
-    "Pengelolaan Pelayanan Kesehatan Lingkungan",
-    "Pengelolaan Pelayanan Promosi Kesehatan",
-    "Pengelolaan Pelayanan Kesehatan Tradisonal, Akupuntur, Asuhan Mandiri dan Tradisional Lainnya",
-    "Pengelolaan Surveilans Kesehatan",
-    "Pengelolaan Pelayanan Kesehatan Penyakit Menular dan Tidak Menular",
-    "Pengelolaan pelayanan kesehatan orang dengan Tuberkulosis",
-    "Pengelolaan pelayanan kesehatan orang dengan HIV (ODHIV)",
-    "Pengelolaan pelayanan kesehatan Malaria",
-    "Pengelolaan Kawasan tanpa rokok",
-    "Pengelolaan Pelayanan Kesehatan Haji",
-    "Pemenuhan Kebutuhan Sumber Daya Manusia Kesehatan Sesuai Standar",
-    "Bimbingan Teknis dan Supervisi Pengembangan dan Pelaksanaan Upaya Kesehatan Bersumber Daya Masyarakat (UKBM)",
-  ];
-
-  const optionKomponen = ["Makan", "Snack", "Transport", "Lainnya"];
-
-  const optionIndikatorKinerja = [
-    "Jumlah  Alat  Kesehatan/Alat  Penunjang  Medik Fasilitas Layanan Kesehatan yang Disediakan",
-    "Jumlah  Alat  Kesehatan/Alat  Penunjang  Medik Fasilitas   Layanan   Kesehatan   yang   Terpelihara Sesuai Standar",
-    "Jumlah Sarana, Prasarana dan Alat Kesehatan yang Telah Dilakukan Rehabilitasi dan Pemeliharaan Oleh Puskesmas",
-    "Jumlah Ibu Hamil yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Ibu Bersalin yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Bayi Baru Lahir yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Balita yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Anak Usia Pendidikan Dasar yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Penduduk Usia Produktif yangMendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Penduduk Usia Lanjut yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Penderita Hipertensi yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Penderita Diabetes Melitus yangMendapatkan Pelayanan Kesehatan Sesuai Standar",
-    "Jumlah Orang yang Mendapatkan PelayananKesehatan Orang dengan Gangguan Jiwa Berat Sesuai Standar",
-    "Jumlah Orang Terduga Menderita Tuberkulosis yang Mendapatkan Pelayanan Sesuai Standar",
-    "Jumlah Orang Terduga Menderita HIV yang Mendapatkan Pelayanan Sesuai Standar",
-    "Jumlah Fasilitas Kesehatan yang Terakreditasi diKabupaten/Kota",
-    "Jumlah Dokumen Hasil Pengelolaan Sistem Informasi Kesehatan",
-    "Jumlah Sumber Daya Manusia Kesehatan Kompetensi dan Kualifikasi Meningkat",
-    "Jumlah Sumber Daya Manusia Kesehatan yang Memenuhi Standar di Fasilitas Pelayanan Kesehatan (Fasyankes)",
-    "Jumlah Dokumen Hasil Pengendalian dan Pengawasan serta Tindak Lanjut Pengawasan Perizinan Apotek, Toko Obat, Toko Alat Kesehatan, dan Optikal, Usaha Mikro ObatTradisional (UMOT)",
-    "Jumlah Dokumen Hasil Pengendalian dan Pengawasan serta Tindak Lanjut Pengawasan Sertifikat Produksi Pangan Industri Rumah Tangga dan Nomor P-IRT sebagai Izin Produksi, untuk Produk Makanan Minuman Tertentu yang Dapat Diproduksi oleh Industri Rumah Tangga",
-    "Jumlah Dokumen Hasil Pengendalian dan Pengawasan serta Tindak Lanjut Pengawasan Penerbitan Sertifikat Laik Higiene Sanitasi Tempat Pengelolaan Makanan (TPM) antara lain Jasa Boga, Rumah Makan/Restoran dan Depot Air Minum (DAM)",
-    "Jumlah Dokumen Hasil Bimbingan Teknis dan Supervisi Upaya Kesehatan Bersumber Daya Masyarakat (UKBM)",
-    "Jumlah Dokumen Perencanaan Perangkat Daerah",
-    "Jumlah Laporan Evaluasi Kinerja Perangkat Daerah",
-    "Jumlah Laporan Keuangan Akhir Tahun SKPD dan Laporan Hasil Koordinasi Penyusunan Laporan Keuangan Akhir Tahun SKPD",
-    "Jumlah Pegawai Berdasarkan Tugas dan Fungsi yang Mengikuti Pendidikan dan Pelatihan",
-    "Jumlah Paket Peralatan dan Perlengkapan Kantoryang Disediakan",
-    "Jumlah Paket Barang Cetakan dan Penggandaan yang Disediakan",
-    "Jumlah Paket Bahan/Material yang Disediakan",
-    "Jumlah Laporan Fasilitasi Kunjungan Tamu",
-    "Jumlah Laporan Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
-    "Jumlah Laporan Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik yang Disediakan",
-    "Jumlah Laporan Penyediaan Jasa Peralatan danPerlengkapan Kantor yang Disediakan",
-    "Jumlah Laporan Penyediaan Jasa PelayananUmum Kantor yang Disediakan",
-    "Jumlah Kendaraan Dinas Operasional atau Lapangan yang Dipelihara dan Dibayarkan Pajak dan Perizinannya",
-    "Jumlah Peralatan dan Mesin Lainnya yang Dipelihara",
-    "Jumlah BLUD yang Menyediakan Pelayanan dan Penunjang Pelayanan",
-  ];
-
-  const optionSumberPembiayaan = ["APBD", "BLUD"];
-
+ 
   // Hitung Total secara otomatis ketika input terkait berubah
   useEffect(() => {
     const calculateTotal = () => {
@@ -147,6 +55,17 @@ const AddRuk = () => {
     };
     calculateTotal();
   }, [kebutuhanDalamOrang, kebutuhanDalamX, kebutuhanDalamTahun, hargaSatuan]);
+
+  const handleKomponenChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      // Tambahkan komponen ke state jika dicentang
+      setSelectedKomponen((prev) => [...prev, value]);
+    } else {
+      // Hapus komponen dari state jika tidak dicentang
+      setSelectedKomponen((prev) => prev.filter((item) => item !== value));
+    }
+  };
 
   const handleSubmit = async () => {
     const auth = getAuth();
@@ -171,7 +90,7 @@ const AddRuk = () => {
         kebutuhanSumberDaya,
         mitraKerja,
         waktuPelaksanaan,
-        komponen,
+        komponen: selectedKomponen,
         customKomponen,
         kebutuhanDalamOrang,
         kebutuhanDalamX,
@@ -208,6 +127,7 @@ const AddRuk = () => {
       setWaktuPelaksanaan("");
       setKomponen("");
       setCustomKomponen("");
+      setSelectedKomponen([])
       setKebutuhanDalamOrang(0);
       setKebutuhanDalamX(0);
       setKebutuhanDalamTahun(0);
@@ -412,40 +332,20 @@ const AddRuk = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold mb-2">Komponen</h1>
-              <select
-                value={komponen}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setKomponen(value);
-                  if (value !== "Lainnya") {
-                    setCustomKomponen(""); // Reset customKomponen jika bukan "Lainnya"
-                  }
-                }}
-                className="border rounded-lg p-2 w-full"
-              >
-                <option value="" disabled>
-                  Pilih Komponen
-                </option>
+              <div className="flex flex-col gap-2">
                 {optionKomponen.map((option, index) => (
-                  <option key={index} value={option}>
+                  <label key={index} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      value={option}
+                      checked={selectedKomponen.includes(option)}
+                      onChange={handleKomponenChange}
+                      className="cursor-pointer"
+                    />
                     {option}
-                  </option>
-                ))}
-              </select>
-              {komponen === "Lainnya" && (
-                <div className="mt-4">
-                  <label htmlFor="customKomponen" className="block mb-2">
-                    Masukkan Komponen
                   </label>
-                  <input
-                    id="customKomponen"
-                    type="text"
-                    value={customKomponen}
-                    onChange={(e) => setCustomKomponen(e.target.value)}
-                    className="border rounded-lg p-2 w-full"
-                  />
-                </div>
-              )}
+                ))}
+              </div>
             </div>
             <div>
               <h1 className="flex justify-center text-xl font-bold mb-2">
