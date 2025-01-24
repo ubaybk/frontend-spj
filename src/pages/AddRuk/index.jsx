@@ -9,7 +9,16 @@ import { Timestamp } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaBackspace } from "react-icons/fa";
-import { optionsTugas, optionPokja, optionKegiatan, optionSubKegiatan, optionKomponen, optionIndikatorKinerja,optionSumberPembiayaan } from "../../data";
+import {
+  optionsTugas,
+  optionPokja,
+  optionKegiatan,
+  optionSubKegiatan,
+  optionKomponen,
+  optionIndikatorKinerja,
+  optionSumberPembiayaan,
+  optionBulanPelaksanaan,
+} from "../../data";
 
 const AddRuk = () => {
   const navigate = useNavigate();
@@ -23,7 +32,7 @@ const AddRuk = () => {
   const [targetSasaran, setTargetSasaran] = useState("");
   const [pj, setPj] = useState("");
   const [kebutuhanSumberDaya, setKebutuhanSumberDaya] = useState("");
-  const [mitraKerja, setMitraKerja] = useState("");
+  const [bulanPelaksanaan, setBulanPelaksanaan] = useState("");
   const [waktuPelaksanaan, setWaktuPelaksanaan] = useState(null);
   const [komponen, setKomponen] = useState("");
   const [customKomponen, setCustomKomponen] = useState("");
@@ -42,7 +51,6 @@ const AddRuk = () => {
   const dropdownRef = useRef(null);
   const [selectedKomponen, setSelectedKomponen] = useState([]);
 
- 
   // Hitung Total secara otomatis ketika input terkait berubah
   useEffect(() => {
     const calculateTotal = () => {
@@ -88,7 +96,7 @@ const AddRuk = () => {
         targetSasaran,
         pj,
         kebutuhanSumberDaya,
-        mitraKerja,
+        bulanPelaksanaan,
         waktuPelaksanaan,
         komponen: selectedKomponen,
         customKomponen,
@@ -123,11 +131,11 @@ const AddRuk = () => {
       setTargetSasaran("");
       setPj("");
       setKebutuhanSumberDaya("");
-      setMitraKerja("");
+      setBulanPelaksanaan("");
       setWaktuPelaksanaan("");
       setKomponen("");
       setCustomKomponen("");
-      setSelectedKomponen([])
+      setSelectedKomponen([]);
       setKebutuhanDalamOrang(0);
       setKebutuhanDalamX(0);
       setKebutuhanDalamTahun(0);
@@ -159,7 +167,7 @@ const AddRuk = () => {
   return (
     <>
       <div className="flex h-full bg-gray-50">
-        <div className="h-[850px] "> 
+        <div className="h-[850px] ">
           <Header />
         </div>
         <div className="p-4">
@@ -198,6 +206,23 @@ const AddRuk = () => {
                   Pilih Pokja
                 </option>
                 {optionPokja.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <h1 className="text-xl font-bold mb-2">Bulan Pelaksanaan</h1>
+              <select
+                type="text"
+                value={bulanPelaksanaan}
+                onChange={(e) => setBulanPelaksanaan(e.target.value)}
+                className="border rounded-lg p-2 w-full"
+                placeholder="Masukkan Bulan Pelakasanaan"
+              >
+                <option>Pilih Bulan Pelaksanaan</option>
+                {optionBulanPelaksanaan.map((option, index) => (
                   <option key={index} value={option}>
                     {option}
                   </option>
@@ -290,7 +315,7 @@ const AddRuk = () => {
                 placeholder="Masukkan Penanggung Jawab"
               />
             </div>
-            <div>
+            {/* <div>
               <h1 className="text-xl font-bold mb-2">Kebutuhan Sumber Daya</h1>
               <input
                 type="text"
@@ -300,16 +325,7 @@ const AddRuk = () => {
                 placeholder="Masukkan Kebutuhan Sumber Daya"
               />
             </div>
-            <div>
-              <h1 className="text-xl font-bold mb-2">Mitra Kerja</h1>
-              <input
-                type="text"
-                value={mitraKerja}
-                onChange={(e) => setMitraKerja(e.target.value)}
-                className="border rounded-lg p-2 w-full"
-                placeholder="Masukkan Mitra Kerja"
-              />
-            </div>
+
             <div>
               <h1 className="text-xl font-bold mb-2">Waktu Pelaksanaan</h1>
               <input
@@ -471,21 +487,20 @@ const AddRuk = () => {
                 value={namaPenginput}
                 onChange={(e) => setNamaPenginput(e.target.value)}
                 className="border rounded-lg p-2 w-full"
-                placeholder="Masukkan Mitra Kerja"
+                placeholder="Masukkan Nama Penginput"
               />
-            </div>
+            </div> */}
           </div>
-            <div className="mt-auto">
-          <button
-            onClick={handleSubmit}
-            className="mt-4 bg-blue-500 text-white p-2 rounded "
-          >
-            Simpan
-          </button>
-
-            </div>
+          <div className="mt-auto">
+            <button
+              onClick={handleSubmit}
+              className="mt-4 bg-blue-500 text-white p-2 rounded "
+            >
+              Simpan
+            </button>
+          </div>
         </div>
-      <ToastContainer />
+        <ToastContainer />
       </div>
     </>
   );

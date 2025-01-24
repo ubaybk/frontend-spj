@@ -6,6 +6,21 @@ export const optionsTugas = [
     "PUSTU Gandaria Selatan",
     "PUSTU Cipete Selatan",
   ];
+
+  export const optionBulanPelaksanaan = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ]
   
   export const optionPokja = ["Admen", "UKP", "UKM"];
   export const optionKegiatan = [
