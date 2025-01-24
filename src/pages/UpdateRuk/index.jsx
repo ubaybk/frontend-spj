@@ -115,6 +115,7 @@ const UpdateRuk = () => {
             setKomponen(navigationState.komponen);
             setKebutuhanDalamOrang(navigationState.kebutuhanDalamOrang || 0);
             setKebutuhanDalamX(navigationState.kebutuhanDalamX || 0);
+            setSelectedKomponen(navigationState.komponen)
             // setKebutuhanDalamTahun(navigationState.kebutuhanDalamTahun || 0);
             setHargaSatuan(navigationState.hargaSatuan || 0);
             setIndikatorKinerja(navigationState.indikatorKinerja);
@@ -506,48 +507,16 @@ const UpdateRuk = () => {
                   <div className="flex">
                     <input
                       type="number"
-                      value={kebutuhanDalamOrang}
-                      onChange={(e) => setKebutuhanDalamOrang(e.target.value)}
-                      className="border rounded p-2 w-full"
-                      placeholder="Masukkan Waktu Pelaksanaan"
-                      // disabled={!isAdmin} // Disable jika bukan admin
-                    />
-                    <input
-                      type="number"
-                      value={kebutuhanDalamX}
-                      onChange={(e) => setKebutuhanDalamX(e.target.value)}
-                      className="border rounded p-2 w-full"
-                      placeholder="Masukkan BERAPA x"
-                      // disabled={!isAdmin} // Disable jika bukan admin
-                    />
-                    {/* <input
-                      type="number"
-                      value={kebutuhanDalamTahun}
-                      onChange={(e) => setKebutuhanDalamTahun(e.target.value)}
-                      className="border rounded p-2 w-full"
-                      placeholder="Masukkan Kebutuhan Dalam Tahun"
-                      // disabled={!isAdmin} // Disable jika bukan admin
-                    /> */}
-                    <input
-                      type="number"
-                      value={hargaSatuan}
-                      onChange={(e) => setHargaSatuan(e.target.value)}
-                      className="border rounded p-2 w-full"
-                      placeholder="harga satuan"
-                      // disabled={!isAdmin} // Disable jika bukan admin
-                    />
-                  </div>
-                  <div>
-                    <h1>Total</h1>
-                    <input
-                      type="number"
                       value={total}
-                      readOnly
                       onChange={(e) => setTotal(e.target.value)}
                       className="border rounded p-2 w-full"
-                      placeholder="total"
+                      placeholder="Total"
+                      // disabled={!isAdmin} // Disable jika bukan admin
                     />
+                    
+                    
                   </div>
+                 
                 </div>
                 <div className="w-full max-w-2xl" ref={dropdownRef}>
                   <h1 className="text-xl font-bold mb-2">Indikator Kinerja</h1>

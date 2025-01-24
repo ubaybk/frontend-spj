@@ -23,6 +23,8 @@ import useHandleStatusBendahara from "../../Hooks/Bendahara/useHandleStatusBenda
 import { Timestamp } from "firebase/firestore";
 
 const Ruk = () => {
+  const [selectedSubKegiatan, setSelectedSubKegiatan] = useState("");
+  const [uniqueSubKegiatan, setUniqueSubKegiatan] = useState([]);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [rukData, setRukData] = useState([]);
@@ -40,7 +42,7 @@ const Ruk = () => {
   const [isBendaharaAdmin, setIsBendaharaAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchKel, setSeacrhKel] = useState("")
+  const [searchKel, setSeacrhKel] = useState("");
   const [keteranganVerifikator, setKeteranganVerifikator] = useState("");
   const [keteranganKapusKaTu, setKeteranganKapusKaTu] = useState("");
   const [keteranganScann, setKeteranganScann] = useState("");
@@ -86,7 +88,7 @@ const Ruk = () => {
   const [selectedMonth, setSelectedMonth] = useState(""); // Bulan yang dipilih
   const [selectedYear, setSelectedYear] = useState(""); // Tahun yang dipilih
 
-  const [selectedPustu, setSelectedPustu] = useState("")
+  const [selectedPustu, setSelectedPustu] = useState("");
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -135,12 +137,12 @@ const Ruk = () => {
           ) {
             rukQuery = query(
               collection(db, "ruk_data"),
-              orderBy('createdAt', 'desc') // Pastikan field 'createdAt' adalah Timestamp
+              orderBy("createdAt", "desc") // Pastikan field 'createdAt' adalah Timestamp
             );
           } else {
             rukQuery = query(
               collection(db, "ruk_data"),
-              orderBy('createdAt', 'desc'),
+              orderBy("createdAt", "desc"),
               where("userId", "==", user.uid)
             );
           }
@@ -151,7 +153,15 @@ const Ruk = () => {
             ...doc.data(),
           }));
 
+          const uniqueSubKegiatan = [
+            ...new Set(rukList.map((item) => item.subKegiatan).filter(Boolean)),
+          ];
+
+          console.log("Unique Sub Kegiatan:", uniqueSubKegiatan);
+          console.log("RUK List:", rukList);
+
           setRukData(rukList); // Simpan semua dokumen di state
+          setUniqueSubKegiatan(uniqueSubKegiatan);
         } catch (error) {
           console.error("Error fetching RUK data: ", error);
         }
@@ -203,7 +213,11 @@ const Ruk = () => {
   const filteredData = rukData.filter(
     (item) =>
       item.aktivitas.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      filterByMonthAndYear(item) && item.tempatTugas.toLowerCase().includes(selectedPustu.toLocaleLowerCase())
+      filterByMonthAndYear(item) &&
+      item.tempatTugas
+        .toLowerCase()
+        .includes(selectedPustu.toLocaleLowerCase()) &&
+      (selectedSubKegiatan === "" || item.subKegiatan === selectedSubKegiatan)
   );
 
   // Pagination logic
@@ -338,69 +352,80 @@ const Ruk = () => {
           </div>
 
           <div className="flex gap-52">
-
-          <div className=" mt-3 flex gap-3">
-            <label>
-             
+            <div className=" mt-3 flex gap-3">
+              <label>
+                <select
+                  value={selectedMonth}
+                  className=" bg-blue-300 p-1 rounded-lg"
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                >
+                  <option value="">Select Month</option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+              </label>
+              <label>
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  className=" bg-blue-300 p-1 rounded-lg"
+                >
+                  <option value="">Select Year</option>
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  {/* Tambahkan tahun yang dibutuhkan */}
+                </select>
+              </label>
+            </div>
+            <div>
               <select
-                value={selectedMonth}
-                className=" bg-blue-300 p-1 rounded-lg"
-                onChange={(e) => setSelectedMonth(e.target.value)}
+                value={selectedSubKegiatan}
+                onChange={(e) => setSelectedSubKegiatan(e.target.value)}
+                className="mt-3 bg-purple-200 p-1 rounded-lg"
               >
-                <option value="">Select Month</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
+                <option value="">Pilih Sub Kegiatan</option>
+                {uniqueSubKegiatan.map((subKegiatan) => (
+                  <option key={subKegiatan} value={subKegiatan}>
+                    {subKegiatan}
+                  </option>
+                ))}
               </select>
-            </label>
-            <label>
-             
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                 className=" bg-blue-300 p-1 rounded-lg"
-              >
-                <option value="">Select Year</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                {/* Tambahkan tahun yang dibutuhkan */}
-              </select>
-            </label>
-         
-          </div>
+            </div>
 
-          <div>
-            
-            <select
-              value={selectedPustu}
-              onChange={(e)=> setSelectedPustu(e.target.value)}
-              className="mt-3 bg-yellow-200 p-1 rounded-lg">
+            <div>
+              <select
+                value={selectedPustu}
+                onChange={(e) => setSelectedPustu(e.target.value)}
+                className="mt-3 bg-yellow-200 p-1 rounded-lg"
+              >
                 <option value="">Select UKPD</option>
                 <option value="Puskesmas Cilandak">Puskesmas Cilandak</option>
                 <option value="PUSTU Pondok Labu">PUSTU Pondok Labu</option>
-                <option value="PUSTU Cilandak Barat">PUSTU Cilandak Barat</option>
+                <option value="PUSTU Cilandak Barat">
+                  PUSTU Cilandak Barat
+                </option>
                 <option value="PUSTU Lebak Bulus">PUSTU Lebak Bulus</option>
-                <option value="PUSTU Gandaria Selatan">PUSTU Gandaria Selatan</option>
-                <option value="PUSTU Cipete Selatan">PUSTU Cipete Selatan</option>
-
+                <option value="PUSTU Gandaria Selatan">
+                  PUSTU Gandaria Selatan
+                </option>
+                <option value="PUSTU Cipete Selatan">
+                  PUSTU Cipete Selatan
+                </option>
               </select>
-
-
+            </div>
           </div>
-          </div>
-
-          
 
           <div className="flex gap-3">
             <div className="">
