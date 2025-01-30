@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { getAuth } from "firebase/auth";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import db from "../../../firebaseConfig";
@@ -18,6 +18,7 @@ import {
   optionIndikatorKinerja,
   optionSumberPembiayaan,
   optionBulanPelaksanaan,
+  optionAktivitas
 } from "../../data";
 
 const AddRuk = () => {
@@ -149,9 +150,17 @@ const AddRuk = () => {
     }
   };
 
-  const filteredOptions = optionIndikatorKinerja.filter((option) =>
-    option.toLowerCase().includes(indikatorKinerja.toLowerCase())
-  );
+  const filteredOptions = useMemo(() => {
+    if (!Array.isArray(optionAktivitas) || !searchTerm.trim()) return [];
+    return optionAktivitas.filter((option) =>
+      option?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm, optionAktivitas]);
+
+  const handleOptionClick = (option) => {
+    setAktivitas(option);
+    setSearchTerm(option);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -264,17 +273,43 @@ const AddRuk = () => {
               </select>
             </div>
             <div>
-              <h1 className="text-xl font-bold mb-2">
-                Aktivitas (Judul Sesuai DPA)
-              </h1>
-              <input
-                type="text"
-                value={aktivitas}
-                onChange={(e) => setAktivitas(e.target.value)}
-                className="border rounded-lg p-2 w-full"
-                placeholder="Masukkan aktivitas"
-              />
-            </div>
+      <h1 className="text-xl font-bold mb-2">
+        Aktivitas (Judul Sesuai DPA)
+      </h1>
+      
+      {/* Input pencarian */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Cari Aktivitas..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border rounded-lg p-2 w-full"
+        />
+
+        {/* Hasil pencarian */}
+        {searchTerm.trim() && filteredOptions.length > 0 && (
+          <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+            {filteredOptions.map((option, index) => (
+              <div
+                key={index}
+                onClick={() => handleOptionClick(option)}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Pesan tidak ada hasil */}
+        {searchTerm.trim() && filteredOptions.length === 0 && (
+          <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg p-2 text-center text-gray-500">
+            Tidak ada aktivitas yang sesuai
+          </div>
+        )}
+      </div>
+    </div>
             <div>
               <h1 className="text-xl font-bold mb-2">Tujuan</h1>
               <input
