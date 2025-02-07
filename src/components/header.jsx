@@ -8,6 +8,7 @@ import { useState } from "react";
 
 const Header = () => {
   const [showSubMenu, setShowSubMenu] = useState(false); // State untuk mengontrol visibilitas sub-menu
+  const [showSubLaporan, setShowSubLaporan] = useState(false); // State untuk mengontrol visibilitas sub-menu
   const email = localStorage.getItem("Email");
   const navigate = useNavigate();
 
@@ -26,6 +27,10 @@ const Header = () => {
 
   const toggleSubMenu = () => {
     setShowSubMenu(!showSubMenu);
+  };
+
+  const toggleSubLaporan = () => {
+    setShowSubLaporan(!showSubLaporan);
   };
 
   return (
@@ -47,29 +52,46 @@ const Header = () => {
             <h1 className="hover:underline cursor-pointer">S P J</h1>
           </Link>
           {email === "admin@gmail.com" && (
-
-          <div className="flex flex-col text-2xl">
-            <div
-              className="flex items-center gap-3 cursor-pointer"
-              onClick={toggleSubMenu}
-            >
-              <DiModernizr />
-              <h1 className="hover:underline">P O A</h1>
-            </div>
-            {showSubMenu && (
-              <div className="ml-14 mt-2 flex flex-col gap-3 text-lg">
-                <Link to={"/poa"} className="hover:underline">
-                  DASHBOARD P O A
-                </Link>
-                <Link to={"/dataPoa"} className="hover:underline">
-                  DATA TAHUNAN P O A
-                </Link>
-                <Link to={"/inputDataPoa"} className="hover:underline">
-                  INPUT DATA P O A
-                </Link>
+            <div className="flex flex-col text-2xl">
+              <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={toggleSubMenu}
+              >
+                <DiModernizr />
+                <h1 className="hover:underline">P O A</h1>
               </div>
-            )}
-          </div>
+              {showSubMenu && (
+                <div className="ml-14 mt-2 flex flex-col gap-3 text-lg">
+                  <Link to={"/poa"} className="hover:underline">
+                    DASHBOARD P O A
+                  </Link>
+                  <Link to={"/dataPoa"} className="hover:underline">
+                    DATA TAHUNAN P O A
+                  </Link>
+                  <Link to={"/inputDataPoa"} className="hover:underline">
+                    INPUT DATA P O A
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+          {email === "admin@gmail.com" && (
+            <div className="flex flex-col text-2xl">
+              <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={toggleSubLaporan}
+              >
+                <DiModernizr />
+                <h1 className="hover:underline">Laporan</h1>
+              </div>
+              {showSubLaporan && (
+                <div className="ml-14 mt-2 flex flex-col gap-3 text-lg">
+                  <Link to={"/laporanSpj"} className="hover:underline">
+                    Laporan SPJ
+                  </Link>
+                </div>
+              )}
+            </div>
           )}
           <div className="flex items-center gap-3 text-2xl">
             <RiLogoutBoxRFill />

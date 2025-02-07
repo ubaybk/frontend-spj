@@ -5,13 +5,16 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { PoaContextProvider } from "./context/PoaContextProvider.jsx";
 import { InputBarjasContextProvider } from "./context/InputBarjasContextProvider.jsx";
+import { RukDataContextProvider } from "./context/rukDataContextProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <PoaContextProvider>
         <InputBarjasContextProvider>
-          <App />
+          <RukDataContextProvider>
+            <App />
+          </RukDataContextProvider>
         </InputBarjasContextProvider>
       </PoaContextProvider>
     </BrowserRouter>

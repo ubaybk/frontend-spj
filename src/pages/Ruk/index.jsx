@@ -197,18 +197,26 @@ const Ruk = () => {
   // Fungsi untuk memfilter berdasarkan bulan dan tahun
   const filterByMonthAndYear = (item) => {
     if (selectedMonth && selectedYear) {
-      const itemDate = item.waktuPelaksanaan.toDate(); // Assuming createdAt is a Firestore timestamp
-      const itemMonth = itemDate.getMonth() + 1; // Mendapatkan bulan (1-12)
-      const itemYear = itemDate.getFullYear(); // Mendapatkan tahun (YYYY)
+        // Konversi waktuPelaksanaan ke objek Date secara manual
+        const itemDate = item.waktuPelaksanaan
+            ? new Date(item.waktuPelaksanaan.seconds * 1000)
+            : null;
 
-      return (
-        itemMonth === parseInt(selectedMonth) &&
-        itemYear === parseInt(selectedYear)
-      );
+        // Jika itemDate tidak valid, abaikan item ini
+        if (!itemDate) return false;
+
+        // Dapatkan bulan (1-12) dan tahun (YYYY) dari itemDate
+        const itemMonth = itemDate.getMonth() + 1; // Bulan dimulai dari 0, jadi tambahkan 1
+        const itemYear = itemDate.getFullYear();
+
+        // Bandingkan dengan filter bulan dan tahun
+        return (
+            itemMonth === parseInt(selectedMonth) &&
+            itemYear === parseInt(selectedYear)
+        );
     }
     return true; // Jika tidak ada filter bulan dan tahun, tampilkan semua data
-  };
-
+};
   // Filter data berdasarkan search term
   const filteredData = rukData.filter(
     (item) =>
@@ -459,10 +467,10 @@ const Ruk = () => {
                               year: "numeric",
                               month: "long",
                               day: "numeric",
-                              // hour: "2-digit",
-                              // minute: "2-digit",
-                              // second: "2-digit",
-                              // hour12: true,
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              hour12: true,
                             })
                           : "Belum ditentukan"}
                       </p>

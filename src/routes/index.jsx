@@ -16,6 +16,7 @@ import AddPoa from "../pages/Poa/AddTahunanPoa";
 import AddTahunanPoa from "../pages/Poa/AddTahunanPoa";
 import ViewPoa from "../pages/Poa/ViewPoa";
 import InputDataPoa from "../pages/Poa/InputDataPoa";
+import LaporanSpj from "../pages/LaporanSpj";
 
 
 export const routes = [
@@ -124,6 +125,14 @@ export const routes = [
     element: (
       <ProtectedRoute requiredEmail="admin@gmail.com">
         <InputDataPoa />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/laporanSpj",
+    element: (
+      <ProtectedRoute requiredEmail="admin@gmail.com">
+        <LaporanSpj />
       </ProtectedRoute>
     ),
   },

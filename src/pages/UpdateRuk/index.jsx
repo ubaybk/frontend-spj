@@ -280,7 +280,7 @@ const UpdateRuk = () => {
   return (
     <>
       <div className="flex">
-        <div className="h-screen">
+        <div className="">
           <Header />
         </div>
         <div className="p-4 w-full">
