@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import Header from "../../components/header";
-import { rukDataContext } from "../../context/rukDataContextProvider";
 import * as XLSX from "xlsx";
+import { RukDataContextProvider } from "../../context/RukDataContextProvider";
 
 const LaporanSpj = () => {
   const { dataRuk } = useContext(rukDataContext);

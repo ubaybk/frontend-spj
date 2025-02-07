@@ -5,7 +5,8 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { PoaContextProvider } from "./context/PoaContextProvider.jsx";
 import { InputBarjasContextProvider } from "./context/InputBarjasContextProvider.jsx";
-import { RukDataContextProvider } from "./context/rukDataContextProvider.jsx";
+import { RukDataContextProvider } from "./context/RukDataContextProvider.jsx";
+RukDataContextProvider
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
