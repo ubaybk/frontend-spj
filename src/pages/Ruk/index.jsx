@@ -197,26 +197,26 @@ const Ruk = () => {
   // Fungsi untuk memfilter berdasarkan bulan dan tahun
   const filterByMonthAndYear = (item) => {
     if (selectedMonth && selectedYear) {
-        // Konversi waktuPelaksanaan ke objek Date secara manual
-        const itemDate = item.waktuPelaksanaan
-            ? new Date(item.waktuPelaksanaan.seconds * 1000)
-            : null;
+      // Konversi waktuPelaksanaan ke objek Date secara manual
+      const itemDate = item.waktuPelaksanaan
+        ? new Date(item.waktuPelaksanaan.seconds * 1000)
+        : null;
 
-        // Jika itemDate tidak valid, abaikan item ini
-        if (!itemDate) return false;
+      // Jika itemDate tidak valid, abaikan item ini
+      if (!itemDate) return false;
 
-        // Dapatkan bulan (1-12) dan tahun (YYYY) dari itemDate
-        const itemMonth = itemDate.getMonth() + 1; // Bulan dimulai dari 0, jadi tambahkan 1
-        const itemYear = itemDate.getFullYear();
+      // Dapatkan bulan (1-12) dan tahun (YYYY) dari itemDate
+      const itemMonth = itemDate.getMonth() + 1; // Bulan dimulai dari 0, jadi tambahkan 1
+      const itemYear = itemDate.getFullYear();
 
-        // Bandingkan dengan filter bulan dan tahun
-        return (
-            itemMonth === parseInt(selectedMonth) &&
-            itemYear === parseInt(selectedYear)
-        );
+      // Bandingkan dengan filter bulan dan tahun
+      return (
+        itemMonth === parseInt(selectedMonth) &&
+        itemYear === parseInt(selectedYear)
+      );
     }
     return true; // Jika tidak ada filter bulan dan tahun, tampilkan semua data
-};
+  };
   // Filter data berdasarkan search term
   const filteredData = rukData.filter(
     (item) =>
@@ -481,7 +481,10 @@ const Ruk = () => {
                       </p>
                       <p>
                         <strong>Anggaran:</strong>
-                        {` Rp ${item.total.toLocaleString("id-ID")}`}
+                        {` Rp ${parseFloat(item.total).toLocaleString("id-ID", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        })}`}
                       </p>
                       {isAdmin ? (
                         <div>
