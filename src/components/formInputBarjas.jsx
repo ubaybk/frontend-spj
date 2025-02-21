@@ -26,6 +26,12 @@ import FormBpjsKesehatan from "./BarjasInput/formBpjsKesehatan";
 import FormBpjsKetenagakerjaan from "./BarjasInput/formBpjsKetenagakerjaan";
 import FormPakaianDinas from "./BarjasInput/formPakaianDinas";
 import FormJasaPeriksaSampleKesling from "./BarjasInput/formJasaPeriksaSampleKesling";
+import FormCateringPasienRb from "./BarjasInput/formCateringPasienRb";
+import FormSewaMesinFc from "./BarjasInput/formSewaMesinFc";
+import FormKerjaSamaPemeriksaanLab from "./BarjasInput/formKerjaSamaPemeriksaanLab";
+import FormJasaHygneService from "./BarjasInput/formJasaHygneService";
+import FormBbmFogging from "./BarjasInput/formBbmFogging";
+import FormMutu from "./BarjasInput/formMutu";
 
 
 
@@ -65,6 +71,12 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewBpjsKetenagakerjaan, setBpjsKetenagakerjaan] = useState(false)
   const [viewPakaianDinas, setPakaianDinas] = useState(false)
   const [viewJasaPeriksaSampleKesling, setJasaPeriksaSampleKesling] = useState(false)
+  const [viewCateringPasienRb, setCateringPasienRb] = useState(false)
+  const [viewSewaMesinFc, setSewaMesinFc] = useState(false)
+  const [viewKerjaSamaPemeriksaanLab, setKerjaSamaPemeriksaanLab] = useState(false)
+  const [viewJasaHygineService, setJasaHygineService] = useState(false)
+  const [viewBbmFogging, setBbmFogging] = useState(false)
+  const [viewMutu, setMutu] = useState(false)
 
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
@@ -92,6 +104,12 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [resultBpjsKetenagakerjaan, setResultBpjsKetenagakerjaan] = useState(null)
   const [resultPakaianDinas, setResultPakaianDinas] = useState(null)
   const [resultJasaPeriksaSampleKesling, setResultJasaPeriksaSampleKesling] = useState(null)
+  const [resultCateringPasienRb, setResultCateringPasienRb] = useState(null)
+  const [resultSewaMesinFc, setResultSewaMesinFc] = useState(null)
+  const [resultKerjaSamaPemeriksaanLab, setResultKerjaSamaPemeriksaanLab] = useState(null)
+  const [resultJasaHygineService, setResultJasaHygineService] = useState(null)
+  const [resultBbmFogging, setResultBbmFogging] = useState(null)
+  const [resultMutu, setResultMutu] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -124,6 +142,12 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultBpjsKetenagakerjaan(data.bpjsKetenagakerjaan)
           setResultPakaianDinas(data.pakaianDinas)
           setResultJasaPeriksaSampleKesling(data.jasaPeriksaSampleKesling)
+          setResultCateringPasienRb(data.cateringPasienRb)
+          setResultSewaMesinFc(data.sewaMesinFc)
+          setResultKerjaSamaPemeriksaanLab(data.kerjaSamaPemeriksaanLab)
+          setResultJasaHygineService(data.jasaHygineService)
+          setResultBbmFogging(data.bbmFogging)
+          setResultMutu(data.mutu)
 
         }
       } catch (error) {
@@ -541,6 +565,90 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultJasaPeriksaSampleKesling}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="CATERINGPASIENRB"
+              isOpen={viewCateringPasienRb}
+              onToggle={() => setCateringPasienRb(!viewCateringPasienRb)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormCateringPasienRb
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultCateringPasienRb}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+           
+            <FormSection
+              title="SEWAMESINFC"
+              isOpen={viewSewaMesinFc}
+              onToggle={() => setSewaMesinFc(!viewSewaMesinFc)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormSewaMesinFc
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultSewaMesinFc}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="KERJASAMAPEMERIKSAANLAB"
+              isOpen={viewKerjaSamaPemeriksaanLab}
+              onToggle={() => setKerjaSamaPemeriksaanLab(!viewKerjaSamaPemeriksaanLab)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormKerjaSamaPemeriksaanLab
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultKerjaSamaPemeriksaanLab}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="JASAHYGINESERVICE"
+              isOpen={viewJasaHygineService}
+              onToggle={() => setJasaHygineService(!viewJasaHygineService)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormJasaHygneService
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultJasaHygineService}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="BBMFOGGING"
+              isOpen={viewBbmFogging}
+              onToggle={() => setBbmFogging(!viewBbmFogging)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormBbmFogging
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultBbmFogging}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="MUTU"
+              isOpen={viewMutu}
+              onToggle={() => setMutu(!viewMutu)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormMutu
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultMutu}
                 dataPoa={dataPoa}
               />
             </FormSection>

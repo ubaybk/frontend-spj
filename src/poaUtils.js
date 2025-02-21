@@ -132,6 +132,30 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     alert("Mohon lengkapi semua data Pakaian Dinas.");
     return;
   }
+  if (type === "CATERINGPASIENRB" && (!data.keteranganCateringPasienRb || !data.jmlCateringPasienRb)) {
+    alert("Mohon lengkapi semua data Catering Pasien RB.");
+    return;
+  }
+  if (type === "SEWAMESINFC" && (!data.keteranganSewaMesinFc || !data.jmlSewaMesinFc)) {
+    alert("Mohon lengkapi semua data Sewa Mesin FC.");
+    return;
+  }
+  if (type === "KERJASAMAPEMERIKSAANLAB" && (!data.keteranganKerjaSamaPemeriksaanLab || !data.jmlKerjaSamaPemeriksaanLab)) {
+    alert("Mohon lengkapi semua data Kerja Sama Pemeriksaan Lab.");
+    return;
+  }
+  if (type === "JASAHYGINESERVICE" && (!data.keteranganJasaHygineService || !data.jmlJasaHygineService)) {
+    alert("Mohon lengkapi semua data Jasa Hygne Service.");
+    return;
+  }
+  if (type === "BBMFOGGING" && (!data.keteranganBbmFogging || !data.jmlBbmFogging)) {
+    alert("Mohon lengkapi semua data Jasa Hygne Service.");
+    return;
+  }
+  if (type === "MUTU" && (!data.keteranganMutu || !data.jmlMutu)) {
+    alert("Mohon lengkapi semua data Mutu.");
+    return;
+  }
 
   try {
     const q = query(
@@ -486,6 +510,87 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "CATERINGPASIENRB":
+        jumlah = parseInt(data.jmlCateringPasienRb, 10);
+        keterangan = data.keteranganCateringPasienRb;
+        const newCateringPasienRb = poaData.cateringPasienRb - jumlah;
+        if (newCateringPasienRb < 0) {
+          alert("Nilai Catering Pasien RB melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          cateringPasienRb: newCateringPasienRb,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "SEWAMESINFC":
+        jumlah = parseInt(data.jmlSewaMesinFc, 10);
+        keterangan = data.keteranganSewaMesinFc;
+        const newSewaMesinFc = poaData.sewaMesinFc - jumlah;
+        if (newSewaMesinFc < 0) {
+          alert("Nilai Sewa Mesin FC melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          sewaMesinFc: newSewaMesinFc,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "KERJASAMAPEMERIKSAANLAB":
+        jumlah = parseInt(data.jmlKerjaSamaPemeriksaanLab, 10);
+        keterangan = data.keteranganKerjaSamaPemeriksaanLab;
+        const newKerjaSamaPemeriksaanLab = poaData.kerjaSamaPemeriksaanLab - jumlah;
+        if (newKerjaSamaPemeriksaanLab < 0) {
+          alert("Nilai Kerja Sama Pemeriksaan Lab melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          kerjaSamaPemeriksaanLab: newKerjaSamaPemeriksaanLab,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "JASAHYGINESERVICE":
+        jumlah = parseInt(data.jmlJasaHygineService, 10);
+        keterangan = data.keteranganJasaHygineService;
+        const newJasaHygineService = poaData.jasaHygineService - jumlah;
+        if (newJasaHygineService < 0) {
+          alert("Nilai Kerja Sama Pemeriksaan Lab melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          jasaHygineService: newJasaHygineService,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "BBMFOGGING":
+        jumlah = parseInt(data.jmlBbmFogging, 10);
+        keterangan = data.keteranganBbmFogging;
+        const newBbmFogging = poaData.bbmFogging - jumlah;
+        if (newBbmFogging < 0) {
+          alert("Nilai BBM FOGGING melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          bbmFogging: newBbmFogging,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "MUTU":
+        jumlah = parseInt(data.jmlMutu, 10);
+        keterangan = data.keteranganMutu;
+        const newMutu = poaData.mutu - jumlah;
+        if (newMutu < 0) {
+          alert("Nilai MUTU melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          mutu: newMutu,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -685,6 +790,42 @@ export const handleDelete = async (id, deletedData) => {
       case "JASAPERIKSASAMPLEKESLING":
         updateData = {
           jasaPeriksaSampleKesling: poaData.jasaPeriksaSampleKesling + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "CATERINGPASIENRB":
+        updateData = {
+          cateringPasienRb: poaData.cateringPasienRb + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "SEWAMESINFC":
+        updateData = {
+          sewaMesinFc: poaData.sewaMesinFc + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "KERJASAMAPEMERIKSAANLAB":
+        updateData = {
+          kerjaSamaPemeriksaanLab: poaData.kerjaSamaPemeriksaanLab + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "JASAHYGINESERVICE":
+        updateData = {
+          jasaHygineService: poaData.jasaHygineService + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "BBMFOGGING":
+        updateData = {
+          bbmFogging: poaData.bbmFogging + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "MUTU":
+        updateData = {
+          mutu: poaData.mutu + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;
