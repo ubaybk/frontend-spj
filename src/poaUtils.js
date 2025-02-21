@@ -104,6 +104,34 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     alert("Mohon lengkapi semua data Air.");
     return;
   }
+  if (type === "LISTRIK" && (!data.keteranganListrik || !data.jmlListrik)) {
+    alert("Mohon lengkapi semua data Listrik.");
+    return;
+  }
+  if (type === "INTERNET" && (!data.keteranganInternet || !data.jmlInternet)) {
+    alert("Mohon lengkapi semua data Internet.");
+    return;
+  }
+  if (type === "DIKLAT" && (!data.keteranganDiklat || !data.jmlDiklat)) {
+    alert("Mohon lengkapi semua data Diklat.");
+    return;
+  }
+  if (type === "BPJSKESEHATAN" && (!data.keteranganBpjsKesehatan || !data.jmlBpjsKesehatan)) {
+    alert("Mohon lengkapi semua data Bpjs Kesehatan.");
+    return;
+  }
+  if (type === "BPJSKETENAGAKERJAAN" && (!data.keteranganBpjsKetenagakerjaan || !data.jmlBpjsKetenagakerjaan)) {
+    alert("Mohon lengkapi semua data Bpjs Ketenagakerjaan.");
+    return;
+  }
+  if (type === "PAKAIANDINAS" && (!data.keteranganPakaianDinas || !data.jmlPakaianDinas)) {
+    alert("Mohon lengkapi semua data Pakaian Dinas.");
+    return;
+  }
+  if (type === "JASAPERIKSASAMPLEKESLING" && (!data.keteranganJasaPeriksaSampleKesling || !data.jmlJasaPeriksaSampleKesling)) {
+    alert("Mohon lengkapi semua data Pakaian Dinas.");
+    return;
+  }
 
   try {
     const q = query(
@@ -364,6 +392,100 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "LISTRIK":
+        jumlah = parseInt(data.jmlListrik, 10);
+        keterangan = data.keteranganListrik;
+        const newListrik = poaData.listrik - jumlah;
+        if (newListrik < 0) {
+          alert("Nilai Listrik melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          listrik: newListrik,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "INTERNET":
+        jumlah = parseInt(data.jmlInternet, 10);
+        keterangan = data.keteranganInternet;
+        const newInternet = poaData.internet - jumlah;
+        if (newInternet < 0) {
+          alert("Nilai Internet melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          internet: newInternet,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "DIKLAT":
+        jumlah = parseInt(data.jmlDiklat, 10);
+        keterangan = data.keteranganDiklat;
+        const newDiklat = poaData.diklat - jumlah;
+        if (newDiklat < 0) {
+          alert("Nilai Diklat melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          diklat: newDiklat,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "BPJSKESEHATAN":
+        jumlah = parseInt(data.jmlBpjsKesehatan, 10);
+        keterangan = data.keteranganBpjsKesehatan;
+        const newBpjsKesehatan = poaData.bpjsKesehatan - jumlah;
+        if (newBpjsKesehatan < 0) {
+          alert("Nilai BPJS KESEHATAN melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          bpjsKesehatan: newBpjsKesehatan,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+      case "BPJSKETENAGAKERJAAN":
+        jumlah = parseInt(data.jmlBpjsKetenagakerjaan, 10);
+        keterangan = data.keteranganBpjsKetenagakerjaan;
+        const newBpjsKetenagakerjaan = poaData.bpjsKetenagakerjaan - jumlah;
+        if (newBpjsKetenagakerjaan < 0) {
+          alert("Nilai BPJS KETENAGAKERJAAN melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          bpjsKetenagakerjaan: newBpjsKetenagakerjaan,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "PAKAIANDINAS":
+        jumlah = parseInt(data.jmlPakaianDinas, 10);
+        keterangan = data.keteranganPakaianDinas;
+        const newPakaianDinas = poaData.pakaianDinas - jumlah;
+        if (newPakaianDinas < 0) {
+          alert("Nilai PAKAIAN DINAS melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pakaianDinas: newPakaianDinas,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "JASAPERIKSASAMPLEKESLING":
+        jumlah = parseInt(data.jmlJasaPeriksaSampleKesling, 10);
+        keterangan = data.keteranganJasaPeriksaSampleKesling;
+        const newJasaPeriksaSampleKesling = poaData.jasaPeriksaSampleKesling - jumlah;
+        if (newJasaPeriksaSampleKesling < 0) {
+          alert("Nilai Jasa periksa sample kesling melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          jasaPeriksaSampleKesling: newJasaPeriksaSampleKesling,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -520,6 +642,49 @@ export const handleDelete = async (id, deletedData) => {
       case "AIR":
         updateData = {
           air: poaData.air + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "LISTRIK":
+        updateData = {
+          listrik: poaData.listrik + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "INTERNET":
+        updateData = {
+          internet: poaData.internet + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "DIKLAT":
+        updateData = {
+          diklat: poaData.diklat + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "BPJSKESEHATAN":
+        updateData = {
+          bpjsKesehatan: poaData.bpjsKesehatan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "BPJSKETENAGAKERJAAN":
+        updateData = {
+          bpjsKetenagakerjaan: poaData.bpjsKetenagakerjaan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "PAKAIANDINAS":
+        updateData = {
+          pakaianDinas: poaData.pakaianDinas + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "JASAPERIKSASAMPLEKESLING":
+        updateData = {
+          jasaPeriksaSampleKesling: poaData.jasaPeriksaSampleKesling + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;

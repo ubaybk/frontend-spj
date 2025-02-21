@@ -19,12 +19,26 @@ import FormRme from "./BarjasInput/formRme";
 import FormRetribusiSampah from "./BarjasInput/formRetribusiSampah";
 import FormTelepon from "./BarjasInput/formTelepon";
 import FormAir from "./BarjasInput/formAir";
+import FormListrik from "./BarjasInput/formListrik";
+import FormInternet from "./BarjasInput/formInternet";
+import FormDiklat from "./BarjasInput/formDiklat";
+import FormBpjsKesehatan from "./BarjasInput/formBpjsKesehatan";
+import FormBpjsKetenagakerjaan from "./BarjasInput/formBpjsKetenagakerjaan";
+import FormPakaianDinas from "./BarjasInput/formPakaianDinas";
+import FormJasaPeriksaSampleKesling from "./BarjasInput/formJasaPeriksaSampleKesling";
+
+
+
+
+
+
 
 
 
 
 import { fetchPoaData } from "../poaUtils";
 import { MdCalendarMonth } from "react-icons/md";
+
 
 const FormInputBarjas = ({ activeMonth }) => {
   const [viewThr, setViewThr] = useState(false);
@@ -44,6 +58,13 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewRetribusiSampah, setRetribusiSampah] = useState(false)
   const [viewTelepon, setTelepon] = useState(false)
   const [viewAir, setAir] = useState(false)
+  const [viewListrik, setListrik] = useState(false)
+  const [viewInternet, setInternet] = useState(false)
+  const [viewDiklat, setDiklat] = useState(false)
+  const [viewBpjsKesehatan, setBpjsKesehatan] = useState(false)
+  const [viewBpjsKetenagakerjaan, setBpjsKetenagakerjaan] = useState(false)
+  const [viewPakaianDinas, setPakaianDinas] = useState(false)
+  const [viewJasaPeriksaSampleKesling, setJasaPeriksaSampleKesling] = useState(false)
 
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
@@ -64,6 +85,13 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [resultRetribusiSampah, setResultRetribusiSampah] = useState(null)
   const [resultTelepon, setResultTelepon] = useState(null)
   const [resultAir, setResultAir] = useState(null)
+  const [resultListrik, setResultListrik] = useState(null)
+  const [resultInternet, setResultInternet] = useState(null)
+  const [resultDiklat, setResultDiklat] = useState(null)
+  const [resultBpjsKesehatan, setResultBpjsKesehatan] = useState(null)
+  const [resultBpjsKetenagakerjaan, setResultBpjsKetenagakerjaan] = useState(null)
+  const [resultPakaianDinas, setResultPakaianDinas] = useState(null)
+  const [resultJasaPeriksaSampleKesling, setResultJasaPeriksaSampleKesling] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -89,6 +117,13 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultRetribusiSampah(data.retribusiSampah)
           setResultTelepon(data.telpon)
           setResultAir(data.air)
+          setResultListrik(data.listrik)
+          setResultInternet(data.internet)
+          setResultDiklat(data.diklat)
+          setResultBpjsKesehatan(data.bpjsKesehatan)
+          setResultBpjsKetenagakerjaan(data.bpjsKetenagakerjaan)
+          setResultPakaianDinas(data.pakaianDinas)
+          setResultJasaPeriksaSampleKesling(data.jasaPeriksaSampleKesling)
 
         }
       } catch (error) {
@@ -408,6 +443,104 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultAir}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="LISTRIK"
+              isOpen={viewListrik}
+              onToggle={() => setListrik(!viewListrik)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormListrik
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultListrik}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="INTERNET"
+              isOpen={viewInternet}
+              onToggle={() => setInternet(!viewInternet)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormInternet
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultInternet}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="DIKLAT"
+              isOpen={viewDiklat}
+              onToggle={() => setDiklat(!viewDiklat)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormDiklat
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultDiklat}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="BPJSKESEHATAN"
+              isOpen={viewBpjsKesehatan}
+              onToggle={() => setBpjsKesehatan(!viewBpjsKesehatan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormBpjsKesehatan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultBpjsKesehatan}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="BPJSKETENAGAKERJAAN"
+              isOpen={viewBpjsKetenagakerjaan}
+              onToggle={() => setBpjsKetenagakerjaan(!viewBpjsKetenagakerjaan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormBpjsKetenagakerjaan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultBpjsKetenagakerjaan}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="PAKAIANDINAS"
+              isOpen={viewPakaianDinas}
+              onToggle={() => setPakaianDinas(!viewPakaianDinas)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormPakaianDinas
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultPakaianDinas}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="JASAPERIKSASAMPLEKESLING"
+              isOpen={viewJasaPeriksaSampleKesling}
+              onToggle={() => setJasaPeriksaSampleKesling(!viewJasaPeriksaSampleKesling)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormJasaPeriksaSampleKesling
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultJasaPeriksaSampleKesling}
                 dataPoa={dataPoa}
               />
             </FormSection>

@@ -116,7 +116,7 @@ const AddRuk = () => {
 
       // alert("Data berhasil ditambahkan!");
       // Use setTimeout to ensure toast appears for 5 seconds
-      toast.success("Berhasil Nambah SPJ COOY!");
+      toast.success("ANDA BERHASIL MENAMBAH SPJ");
       setTimeout(() => {
         navigate("/RUK");
       }, 5000); // Navigate after 5 seconds
