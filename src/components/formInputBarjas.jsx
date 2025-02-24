@@ -32,6 +32,14 @@ import FormKerjaSamaPemeriksaanLab from "./BarjasInput/formKerjaSamaPemeriksaanL
 import FormJasaHygneService from "./BarjasInput/formJasaHygneService";
 import FormBbmFogging from "./BarjasInput/formBbmFogging";
 import FormMutu from "./BarjasInput/formMutu";
+import FormPemeliharaan from "./BarjasInput/formPemeliharaan";
+import FormApdPetugasFogging from "./BarjasInput/formApdPetugasFogging";
+import FormApdPetugasIpal from "./BarjasInput/formApdPetugasIpal";
+import FormOperasionalLainnya from "./BarjasInput/formOperasionalLainnya";
+import FormUkmSituasional from "./BarjasInput/formUkmSituasional";
+import FormHonorPetugasFogging from "./BarjasInput/formHonorPetugasFogging";
+import FormPestControl from "./BarjasInput/formPestControl";
+import FormSewaPrinter from "./BarjasInput/formSewaPrinter";
 
 
 
@@ -77,6 +85,15 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewJasaHygineService, setJasaHygineService] = useState(false)
   const [viewBbmFogging, setBbmFogging] = useState(false)
   const [viewMutu, setMutu] = useState(false)
+  const [viewPemeliharaan, setPemeliharaan] = useState(false)
+  const [viewApdPetugasFogging, setApdPetugasFogging] = useState(false)
+  const [viewApdPetugasIpal, setApdPetugasIpal] = useState(false)
+  const [viewOperasionalLainnya, setOperasionalLainnya] = useState(false)
+  const [viewUkmSituasional, setUkmSituasional] = useState(false)
+  const [viewHonorPetugasFogging, setHonorPetugasFogging] = useState(false)
+  const [viewPestControl, setPestControl] = useState(false)
+  const [viewSewaPrinter, setSewaPrinter] = useState(false)
+
 
   const { dataPoa } = useContext(poaContext);
   const { dataInputBarjas } = useContext(inputBarjasContext);
@@ -110,6 +127,14 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [resultJasaHygineService, setResultJasaHygineService] = useState(null)
   const [resultBbmFogging, setResultBbmFogging] = useState(null)
   const [resultMutu, setResultMutu] = useState(null)
+  const [resultPemeliharaan, setResultPemeliharaan] = useState(null)
+  const [resultApdPetugasFogging, setResultApdPetugasFogging] = useState(null)
+  const [resultApdPetugasIpal, setResultApdPetugasIpal] = useState(null)
+  const [resultOperasionalLainnya, setResultOperasionalLainnya] = useState(null)
+  const [resultUkmSituasional, setResultUkmSituasional] = useState(null)
+  const [resultHonorPetugasFogging, setResultHonorPetugasFogging] = useState(null)
+  const [resultPestControl, setResultPestControl] = useState(null)
+  const [resultSewaPrinter, setResultSewaPrinter] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -148,6 +173,15 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultJasaHygineService(data.jasaHygineService)
           setResultBbmFogging(data.bbmFogging)
           setResultMutu(data.mutu)
+          setResultPemeliharaan(data.pemeliharaan)
+          setResultApdPetugasFogging(data.apdPetugasFogging)
+          setResultApdPetugasIpal(data.apdPetugasIpal)
+          setResultOperasionalLainnya(data.operasionalLainnya)
+          setResultUkmSituasional(data.ukmSituasional)
+          setResultHonorPetugasFogging(data.honorPetugasFogging)
+          setResultPestControl(data.pestControl)
+          setResultSewaPrinter(data.sewaPrinter)
+
 
         }
       } catch (error) {
@@ -649,6 +683,118 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultMutu}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="PEMELIHARAAN"
+              isOpen={viewPemeliharaan}
+              onToggle={() => setPemeliharaan(!viewPemeliharaan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormPemeliharaan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultPemeliharaan}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="APDPETUGASFOGGING"
+              isOpen={viewApdPetugasFogging}
+              onToggle={() => setApdPetugasFogging(!viewApdPetugasFogging)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormApdPetugasFogging
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultApdPetugasFogging}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="APDPETUGASIPAL"
+              isOpen={viewApdPetugasIpal}
+              onToggle={() => setApdPetugasIpal(!viewApdPetugasIpal)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormApdPetugasIpal
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultApdPetugasIpal}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="OPERASIONALLAINNYA"
+              isOpen={viewOperasionalLainnya}
+              onToggle={() => setOperasionalLainnya(!viewOperasionalLainnya)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormOperasionalLainnya
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultOperasionalLainnya}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="UKMSITUASIONAL"
+              isOpen={viewUkmSituasional}
+              onToggle={() => setUkmSituasional(!viewUkmSituasional)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormUkmSituasional
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultUkmSituasional}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            
+            <FormSection
+              title="HONORPETUGASFOGGING"
+              isOpen={viewHonorPetugasFogging}
+              onToggle={() => setHonorPetugasFogging(!viewHonorPetugasFogging)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormHonorPetugasFogging
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultHonorPetugasFogging}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="PESTCONTROL"
+              isOpen={viewPestControl}
+              onToggle={() => setPestControl(!viewPestControl)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormPestControl
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultPestControl}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="SEWAPRINTER"
+              isOpen={viewSewaPrinter}
+              onToggle={() => setSewaPrinter(!viewSewaPrinter)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormSewaPrinter
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultSewaPrinter}
                 dataPoa={dataPoa}
               />
             </FormSection>

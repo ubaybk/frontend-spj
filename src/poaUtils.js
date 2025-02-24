@@ -156,6 +156,38 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     alert("Mohon lengkapi semua data Mutu.");
     return;
   }
+  if (type === "PEMELIHARAAN" && (!data.keteranganPemeliharaan || !data.jmlPemeliharaan)) {
+    alert("Mohon lengkapi semua data Pemeliharaan.");
+    return;
+  }
+  if (type === "APDPETUGASFOGGING" && (!data.keteranganApdPetugasFogging || !data.jmlApdPetugasFogging)) {
+    alert("Mohon lengkapi semua data APD Petugas Fogging.");
+    return;
+  }
+  if (type === "APDPETUGASIPAL" && (!data.keteranganApdPetugasIpal || !data.jmlApdPetugasIpal)) {
+    alert("Mohon lengkapi semua data APD Petugas Ipal.");
+    return;
+  }
+  if (type === "OPERASIONALLAINNYA" && (!data.keteranganOperasionalLainnya || !data.jmlOperasionalLainnya)) {
+    alert("Mohon lengkapi semua data Operasional Lainnya.");
+    return;
+  }
+  if (type === "UKMSITUASIONAL" && (!data.keteranganUkmSituasional || !data.jmlUkmSituasional)) {
+    alert("Mohon lengkapi semua data Operasional Lainnya.");
+    return;
+  }
+  if (type === "HONORPETUGASFOGGING" && (!data.keteranganHonorPetugasFogging || !data.jmlHonorPetugasFogging)) {
+    alert("Mohon lengkapi semua data Honor Petugas Fogging Lainnya.");
+    return;
+  }
+  if (type === "PESTCONTROL" && (!data.keteranganPestControl || !data.jmlPestControl)) {
+    alert("Mohon lengkapi semua data PEST CONTROL.");
+    return;
+  }
+  if (type === "SEWAPRINTER" && (!data.keteranganSewaPrinter || !data.jmlSewaPrinter)) {
+    alert("Mohon lengkapi semua data Sewa Printer.");
+    return;
+  }
 
   try {
     const q = query(
@@ -591,6 +623,118 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "PEMELIHARAAN":
+        jumlah = parseInt(data.jmlPemeliharaan, 10);
+        keterangan = data.keteranganPemeliharaan;
+        const newPemeliharaan = poaData.pemeliharaan - jumlah;
+        if (newPemeliharaan < 0) {
+          alert("Nilai Pemeliharaan melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pemeliharaan: newPemeliharaan,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "APDPETUGASFOGGING":
+        jumlah = parseInt(data.jmlApdPetugasFogging, 10);
+        keterangan = data.keteranganApdPetugasFogging;
+        const newApdPetugasFogging = poaData.apdPetugasFogging - jumlah;
+        if (newApdPetugasFogging < 0) {
+          alert("Nilai APD Petugas Fogging melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          apdPetugasFogging: newApdPetugasFogging,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "APDPETUGASIPAL":
+        jumlah = parseInt(data.jmlApdPetugasIpal, 10);
+        keterangan = data.keteranganApdPetugasIpal;
+        const newApdPetugasIpal = poaData.apdPetugasIpal - jumlah;
+        if (newApdPetugasIpal < 0) {
+          alert("Nilai APD Petugas Ipal melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          apdPetugasIpal: newApdPetugasIpal,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "OPERASIONALLAINNYA":
+        jumlah = parseInt(data.jmlOperasionalLainnya, 10);
+        keterangan = data.keteranganOperasionalLainnya;
+        const newOperasionalLainnya = poaData.operasionalLainnya - jumlah;
+        if (newOperasionalLainnya < 0) {
+          alert("Nilai Operasional Lainnya melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          operasionalLainnya: newOperasionalLainnya,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "UKMSITUASIONAL":
+        jumlah = parseInt(data.jmlUkmSituasional, 10);
+        keterangan = data.keteranganUkmSituasional;
+        const newUkmSituasional = poaData.ukmSituasional - jumlah;
+        if (newUkmSituasional < 0) {
+          alert("Nilai UKM Situasional melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          ukmSituasional: newUkmSituasional,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "HONORPETUGASFOGGING":
+        jumlah = parseInt(data.jmlHonorPetugasFogging, 10);
+        keterangan = data.keteranganHonorPetugasFogging;
+        const newHonorPetugasFogging = poaData.honorPetugasFogging - jumlah;
+        if (newHonorPetugasFogging < 0) {
+          alert("Nilai Honor Petugas Fogging melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          honorPetugasFogging: newHonorPetugasFogging,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "PESTCONTROL":
+        jumlah = parseInt(data.jmlPestControl, 10);
+        keterangan = data.keteranganPestControl;
+        const newPestControl = poaData.pestControl - jumlah;
+        if (newPestControl < 0) {
+          alert("Nilai Honor Petugas Fogging melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pestControl: newPestControl,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "SEWAPRINTER":
+        jumlah = parseInt(data.jmlSewaPrinter, 10);
+        keterangan = data.keteranganSewaPrinter;
+        const newSewaPrinter = poaData.sewaPrinter - jumlah;
+        if (newSewaPrinter < 0) {
+          alert("Nilai Sewa Printer melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          sewaPrinter: newSewaPrinter,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -826,6 +970,55 @@ export const handleDelete = async (id, deletedData) => {
       case "MUTU":
         updateData = {
           mutu: poaData.mutu + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "PEMELIHARAAN":
+        updateData = {
+          pemeliharaan: poaData.pemeliharaan + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+
+      case "APDPETUGASFOGGING":
+        updateData = {
+          apdPetugasFogging: poaData.apdPetugasFogging + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "APDPETUGASIPAL":
+        updateData = {
+          apdPetugasIpal: poaData.apdPetugasIpal + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "OPERASIONALLAINNYA":
+        updateData = {
+          operasionalLainnya: poaData.operasionalLainnya + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "UKMSITUASIONAL":
+        updateData = {
+          ukmSituasional: poaData.ukmSituasional + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "HONORPETUGASFOGGING":
+        updateData = {
+          honorPetugasFogging: poaData.honorPetugasFogging + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "PESTCONTROL":
+        updateData = {
+          pestControl: poaData.pestControl + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "SEWAPRINTER":
+        updateData = {
+          sewaPrinter: poaData.sewaPrinter + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;
