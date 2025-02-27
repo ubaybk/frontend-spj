@@ -40,7 +40,9 @@ import FormUkmSituasional from "./BarjasInput/formUkmSituasional";
 import FormHonorPetugasFogging from "./BarjasInput/formHonorPetugasFogging";
 import FormPestControl from "./BarjasInput/formPestControl";
 import FormSewaPrinter from "./BarjasInput/formSewaPrinter";
-
+import FormPenyediaanMakminTamu from "./BarjasInput/formPenyediaanMakminTamu";
+import FormPelayananPiketSabtu from "./BarjasInput/formPelayananPiketSabtu";
+import FormPelayananDukunganKesehatan from "./BarjasInput/formPelayananDukunganKesehatan";
 
 
 
@@ -93,6 +95,9 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [viewHonorPetugasFogging, setHonorPetugasFogging] = useState(false)
   const [viewPestControl, setPestControl] = useState(false)
   const [viewSewaPrinter, setSewaPrinter] = useState(false)
+  const [viewPenyediaanMakminTamu, setPenyediaanMakminTamu] = useState (false)
+  const [viewPelayananPiketSabtu, setPelayananPiketSabtu] = useState (false)
+  const [viewPelayananDukunganKesehatan, setPelayananDukunganKesehatan] = useState (false)
 
 
   const { dataPoa } = useContext(poaContext);
@@ -135,6 +140,9 @@ const FormInputBarjas = ({ activeMonth }) => {
   const [resultHonorPetugasFogging, setResultHonorPetugasFogging] = useState(null)
   const [resultPestControl, setResultPestControl] = useState(null)
   const [resultSewaPrinter, setResultSewaPrinter] = useState(null)
+  const [resultPenyediaanMakminTamu, setResultPenyediaanMakminTamu] = useState(null)
+  const [resultPelayananPiketSabtu, setResultPelayananPiket] = useState(null)
+  const [resultPelayananDukunganKesehatan, setResultPelayananDukunganKesehatan] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -181,6 +189,9 @@ const FormInputBarjas = ({ activeMonth }) => {
           setResultHonorPetugasFogging(data.honorPetugasFogging)
           setResultPestControl(data.pestControl)
           setResultSewaPrinter(data.sewaPrinter)
+          setResultPenyediaanMakminTamu(data.penyediaanMakminTamu)
+          setResultPelayananPiket(data.pelayananPiketSabtu)
+          setResultPelayananDukunganKesehatan(data.pelayananDukunganKesehatan)
 
 
         }
@@ -795,6 +806,48 @@ const FormInputBarjas = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputBarjas={dataInputBarjas}
                 result={resultSewaPrinter}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="PENYEDIAANMAKMINTAMU"
+              isOpen={viewPenyediaanMakminTamu}
+              onToggle={() => setPenyediaanMakminTamu(!viewPenyediaanMakminTamu)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormPenyediaanMakminTamu
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultPenyediaanMakminTamu}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="PELAYANANPIKETSABTU"
+              isOpen={viewPelayananPiketSabtu}
+              onToggle={() => setPelayananPiketSabtu(!viewPelayananPiketSabtu)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormPelayananPiketSabtu
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultPelayananPiketSabtu}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="PELAYANANDUKUNGANKESEHATAN"
+              isOpen={viewPelayananDukunganKesehatan}
+              onToggle={() => setPelayananDukunganKesehatan(!viewPelayananDukunganKesehatan)}
+              colorClass="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+            >
+              <FormPelayananDukunganKesehatan
+                activeMonth={activeMonth}
+                dataInputBarjas={dataInputBarjas}
+                result={resultPelayananDukunganKesehatan}
                 dataPoa={dataPoa}
               />
             </FormSection>

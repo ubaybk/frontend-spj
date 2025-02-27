@@ -188,6 +188,18 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
     alert("Mohon lengkapi semua data Sewa Printer.");
     return;
   }
+  if (type === "PENYEDIAANMAKMINTAMU" && (!data.keteranganPenyediaanMakminTamu || !data.jmlPenyediaanMakminTamu)) {
+    alert("Mohon lengkapi semua data Sewa Printer.");
+    return;
+  }
+  if (type === "PELAYANANPIKETSABTU" && (!data.keteranganPelayananPiketSabtu || !data.jmlPelayananPiketSabtu)) {
+    alert("Mohon lengkapi semua data Pelayanan Piket Sabtu.");
+    return;
+  }
+  if (type === "PELAYANANDUKUNGANKESEHATAN" && (!data.keteranganPelayananDukunganKesehatan || !data.jmlPelayananDukunganKesehatan)) {
+    alert("Mohon lengkapi semua data Pelayanan Dukungan Kesehatan.");
+    return;
+  }
 
   try {
     const q = query(
@@ -735,6 +747,48 @@ export const handleSave = async (type, data, dataPoa, activeMonth) => {
         };
         break;
 
+      case "PENYEDIAANMAKMINTAMU":
+        jumlah = parseInt(data.jmlPenyediaanMakminTamu, 10);
+        keterangan = data.keteranganPenyediaanMakminTamu;
+        const newPenyediaanMakminTamu = poaData.penyediaanMakminTamu - jumlah;
+        if (newPenyediaanMakminTamu < 0) {
+          alert("Nilai Penyediaan Makmin Tamu melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          penyediaanMakminTamu: newPenyediaanMakminTamu,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "PELAYANANPIKETSABTU":
+        jumlah = parseInt(data.jmlPelayananPiketSabtu, 10);
+        keterangan = data.keteranganPelayananPiketSabtu;
+        const newPelayananPiketSabtu = poaData.pelayananPiketSabtu - jumlah;
+        if (newPelayananPiketSabtu < 0) {
+          alert("Nilai Pelayanan Piket Sabtu melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pelayananPiketSabtu: newPelayananPiketSabtu,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
+      case "PELAYANANDUKUNGANKESEHATAN":
+        jumlah = parseInt(data.jmlPelayananDukunganKesehatan, 10);
+        keterangan = data.keteranganPelayananDukunganKesehatan;
+        const newPelayananDukunganKesehatan = poaData.pelayananDukunganKesehatan - jumlah;
+        if (newPelayananDukunganKesehatan < 0) {
+          alert("Nilai Pelayanan Dukungan Kesehatan melebihi nilai yang tersedia.");
+          return;
+        }
+        updateData = {
+          pelayananDukunganKesehatan: newPelayananDukunganKesehatan,
+          totalBarangJasa: poaData.totalBarangJasa - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -1019,6 +1073,24 @@ export const handleDelete = async (id, deletedData) => {
       case "SEWAPRINTER":
         updateData = {
           sewaPrinter: poaData.sewaPrinter + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "PENYEDIAANMAKMINTAMU":
+        updateData = {
+          penyediaanMakminTamu: poaData.penyediaanMakminTamu + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "PELAYANANPIKETSABTU":
+        updateData = {
+          pelayananPiketSabtu: poaData.pelayananPiketSabtu + deletedData.jumlahThr,
+          totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
+        };
+        break;
+      case "PELAYANANDUKUNGANKESEHATAN":
+        updateData = {
+          pelayananDukunganKesehatan: poaData.pelayananDukunganKesehatan + deletedData.jumlahThr,
           totalBarangJasa: poaData.totalBarangJasa + deletedData.jumlahThr,
         };
         break;
