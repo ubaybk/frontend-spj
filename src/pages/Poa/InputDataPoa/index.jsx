@@ -3,6 +3,7 @@ import Header from "../../../components/header";
 import { poaContext } from "../../../context/PoaContextProvider";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import FormInputBarjas from "../../../components/formInputBarjas";
+import FormInputPeralatanMesin from "../../../components/formPeralatanMesin";
 
 const InputDataPoa = () => {
   const { dataPoa } = useContext(poaContext);
@@ -29,6 +30,9 @@ const InputDataPoa = () => {
   const renderInputFields = () => {
     if (activeSection === "barangJasa") {
       return <FormInputBarjas activeMonth={activeMonth} />; // kirim activeMonth sebagai props
+    }
+    if (activeSection === "peralatanMesin") {
+      return <FormInputPeralatanMesin activeMonth={activeMonth} />; // kirim activeMonth sebagai props
     }
     return null;
   };
@@ -142,7 +146,13 @@ const InputDataPoa = () => {
                           >
                             Barang dan Jasa
                           </button>
-                          <button className="p-4 text-left bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl border border-amber-200 font-medium transition-colors">
+                          <button  className={`p-4 text-left rounded-xl border font-medium transition-colors ${
+                              activeSection === "peralatanMesin"
+                                ? "bg-amber-100 border-amber-300 text-amber-800"
+                                : "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100"
+                            }`}
+                            onClick={() => handleSectionClick("peralatanMesin")}
+                          >
                             Peralatan Mesin
                           </button>
                           <button className="p-4 text-left bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl border border-amber-200 font-medium transition-colors">

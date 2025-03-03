@@ -5,17 +5,20 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { PoaContextProvider } from "./context/PoaContextProvider.jsx";
 import { InputBarjasContextProvider } from "./context/InputBarjasContextProvider.jsx";
+import { InputPeralatanMesinContextProvider } from "./context/InputPeralatanMesinContextProvider.jsx";
 import { RukDataContextProvider } from "./context/RukDataContextProvider.jsx";
-RukDataContextProvider
+RukDataContextProvider;
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <PoaContextProvider>
         <InputBarjasContextProvider>
-          <RukDataContextProvider>
-            <App />
-          </RukDataContextProvider>
+          <InputPeralatanMesinContextProvider>
+            <RukDataContextProvider>
+              <App />
+            </RukDataContextProvider>
+          </InputPeralatanMesinContextProvider>
         </InputBarjasContextProvider>
       </PoaContextProvider>
     </BrowserRouter>
