@@ -7,6 +7,7 @@ import { PoaContextProvider } from "./context/PoaContextProvider.jsx";
 import { InputBarjasContextProvider } from "./context/InputBarjasContextProvider.jsx";
 import { InputPeralatanMesinContextProvider } from "./context/InputPeralatanMesinContextProvider.jsx";
 import { RukDataContextProvider } from "./context/RukDataContextProvider.jsx";
+import { InputGedungBangunanContextProvider } from "./context/InputGedungBangunanContextProvider.jsx";
 RukDataContextProvider;
 
 createRoot(document.getElementById("root")).render(
@@ -15,9 +16,11 @@ createRoot(document.getElementById("root")).render(
       <PoaContextProvider>
         <InputBarjasContextProvider>
           <InputPeralatanMesinContextProvider>
-            <RukDataContextProvider>
-              <App />
-            </RukDataContextProvider>
+            <InputGedungBangunanContextProvider>
+              <RukDataContextProvider>
+                <App />
+              </RukDataContextProvider>
+            </InputGedungBangunanContextProvider>
           </InputPeralatanMesinContextProvider>
         </InputBarjasContextProvider>
       </PoaContextProvider>

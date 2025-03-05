@@ -68,6 +68,14 @@ export const handleSavePeralatanMesin = async (type, data, dataPoa, activeMonth)
     alert("Mohon lengkapi semua data Peak flow Meter.");
     return;
   }
+  if (type === "MESINPENDORONG" && (!data.keteranganMesinPendorong || !data.jmlMesinPendorong)) {
+    alert("Mohon lengkapi semua data Peak flow Meter.");
+    return;
+  }
+  if (type === "TAKTERDUGA" && (!data.keteranganTakTerduga || !data.jmlTakTerduga)) {
+    alert("Mohon lengkapi semua data Peak flow Meter.");
+    return;
+  }
 
   try {
     const q = query(
@@ -202,6 +210,33 @@ export const handleSavePeralatanMesin = async (type, data, dataPoa, activeMonth)
         };
         break;
 
+      case "MESINPENDORONG":
+        jumlah = parseInt(data.jmlMesinPendorong, 10);
+        keterangan = data.keteranganMesinPendorong;
+        const newMesinPendorong = poaData.mesinPendorong - jumlah;
+        if (newMesinPendorong < 0) {
+          alert("Nilai Peakflow Meter melebihi yang tersedia.");
+          return;
+        }
+        updateData = {
+          mesinPendorong: newMesinPendorong,
+          totalModalPeralatanMesin: poaData.totalModalPeralatanMesin - jumlah
+        };
+        break;
+      case "TAKTERDUGA":
+        jumlah = parseInt(data.jmlTakTerduga, 10);
+        keterangan = data.keteranganTakTerduga;
+        const newTakTerduga = poaData.takTerduga - jumlah;
+        if (newTakTerduga < 0) {
+          alert("Nilai Peakflow Meter melebihi yang tersedia.");
+          return;
+        }
+        updateData = {
+          takTerduga: newTakTerduga,
+          totalModalPeralatanMesin: poaData.totalModalPeralatanMesin - jumlah
+        };
+        break;
+
       default:
         alert("Tipe data tidak valid");
         return;
@@ -298,6 +333,18 @@ export const handleDeletePeralatanMesin = async (id, deletedData) => {
           totalModalPeralatanMesin: poaData.totalModalPeralatanMesin + deletedData.jumlah,
         };
         break;
+      case "MESINPENDORONG":
+        updateData = {
+          mesinPendorong: poaData.mesinPendorong + deletedData.jumlah,
+          totalModalPeralatanMesin: poaData.totalModalPeralatanMesin + deletedData.jumlah,
+        };
+        break;
+      case "TAKTERDUGA":
+        updateData = {
+          takTerduga: poaData.takTerduga + deletedData.jumlah,
+          totalModalPeralatanMesin: poaData.totalModalPeralatanMesin + deletedData.jumlah,
+        };
+        break;
     //   case "Gaji 13":
     //     updateData = {
     //       gaji13NonPns: poaData.gaji13NonPns + deletedData.jumlah,
@@ -322,5 +369,3 @@ export const handleDeletePeralatanMesin = async (id, deletedData) => {
     return null;
   }
 };
-
-

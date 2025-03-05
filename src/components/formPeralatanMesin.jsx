@@ -12,6 +12,8 @@ import FormEkg from "./PeralatanMesin/formEkg";
 import FormDentalUnit from "./PeralatanMesin/formDentalUnit";
 import FormPeakflowMeter from "./PeralatanMesin/formPeakflowMeter";
 import FormMotor from "./PeralatanMesin/formMotor";
+import FormMesinPendorong from "./PeralatanMesin/formMesinPendorong";
+import FormTakTerduga from "./PeralatanMesin/formTakTerduga";
 
 
 
@@ -34,6 +36,8 @@ const FormPeralatanMesin = ({ activeMonth }) => {
   const [viewDentalUnit, setDentalUnit] = useState(false);
   const [viewPeakflowMeter, setPeakflowMeter] = useState(false);
   const [viewMotor, setMotor] = useState(false);
+  const [viewMesinPendorong, setMesinPendorong] = useState(false)
+  const [viewTakTerduga, setTakTerduga] = useState(false)
   
 
 
@@ -47,6 +51,8 @@ const FormPeralatanMesin = ({ activeMonth }) => {
   const [resultDentalUnit, setResultDentalUnit] = useState(null);
   const [resultPeakflowMeter, setResultPeakflowMeter] = useState(null);
   const [resultMotor, setResultMotor] = useState(null);
+  const [resultMesinPendorong, setResultMesinPendorong] = useState(null)
+  const [resultTakTerduga, setResultTakTerduga] = useState(null)
   
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,6 +70,8 @@ const FormPeralatanMesin = ({ activeMonth }) => {
           setResultDentalUnit(data.dentalUnit);
           setResultPeakflowMeter(data.peakflowMeter);
           setResultMotor(data.motor);
+          setResultMesinPendorong(data.mesinPendorong);
+          setResultTakTerduga(data.takTerduga);
           
 
 
@@ -259,6 +267,33 @@ const FormPeralatanMesin = ({ activeMonth }) => {
                 activeMonth={activeMonth}
                 dataInputPeralatanMesin={dataInputPeralatanMesin}
                 result={resultMotor}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+
+            <FormSection
+              title="MESINPENDORONG"
+              isOpen={viewMesinPendorong}
+              onToggle={() => setMesinPendorong(!viewMesinPendorong)}
+              colorClass="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+            >
+              <FormMesinPendorong
+                activeMonth={activeMonth}
+                dataInputPeralatanMesin={dataInputPeralatanMesin}
+                result={resultMesinPendorong}
+                dataPoa={dataPoa}
+              />
+            </FormSection>
+            <FormSection
+              title="TAKTERDUGA"
+              isOpen={viewTakTerduga}
+              onToggle={() => setTakTerduga(!viewTakTerduga)}
+              colorClass="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+            >
+              <FormTakTerduga
+                activeMonth={activeMonth}
+                dataInputPeralatanMesin={dataInputPeralatanMesin}
+                result={resultTakTerduga}
                 dataPoa={dataPoa}
               />
             </FormSection>
