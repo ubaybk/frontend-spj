@@ -45,7 +45,6 @@ export const handleSaveGedungBangunan = async (type, data, dataPoa, activeMonth)
     return;
   }
  
-
   try {
     const q = query(
       collection(db, "poa_data"),

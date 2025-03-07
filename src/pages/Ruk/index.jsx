@@ -442,7 +442,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-100 p-4 h-[450px]  rounded shadow mb-4 "
+                    className="bg-gray-100 p-4 h-[500px]  rounded shadow mb-4 "
                   >
                     <div className="flex flex-col h-[300px] gap-2 mb-4">
                       <p>
@@ -473,6 +473,9 @@ const Ruk = () => {
                               hour12: true,
                             })
                           : "Belum ditentukan"}
+                      </p>
+                      <p>
+                        <strong>Bulan Pelaksanaan :</strong> {item.bulanPelaksanaan}
                       </p>
 
                       <p>
@@ -563,7 +566,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[500px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.status === "Tolak Pengadaan"
                           ? "bg-red-100"
                           : item.status === "Terima Pengadaan"
@@ -649,7 +652,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[500px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusVerifikator === "Tolak Verifikator"
                           ? "bg-red-100"
                           : item.statusVerifikator === "Terima Verifikator"
@@ -745,7 +748,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[500px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusKapusKaTu === "Belum TTD"
                           ? "bg-red-100"
                           : item.statusKapusKaTu === "Sudah TTD"
@@ -838,7 +841,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
+                      className={`p-4 border h-[500px] w-[300px] flex flex-col gap-2 rounded mb-3 ${
                         item.statusScann === "Belum Scann"
                           ? "bg-red-100"
                           : item.statusScann === "Sudah Scann"
@@ -928,7 +931,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div key={item.id}>
                     <div
-                      className={`p-4 border h-[450px] w-[300px] flex flex-col gap-2 rounded mb-3 ${getBackgroundColor(
+                      className={`p-4 border h-[500px] w-[300px] flex flex-col gap-2 rounded mb-3 ${getBackgroundColor(
                         item.statusBendahara
                       )}`}
                     >
@@ -1078,7 +1081,7 @@ const Ruk = () => {
                 currentItems.map((item) => (
                   <div
                     key={item.id}
-                    className={`p-4 rounded-lg h-[450px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
+                    className={`p-4 rounded-lg h-[500px] w-[300px] flex flex-col gap-2 shadow-md mb-3 ${
                       isStatusComplete(item)
                         ? "bg-green-200 border-green-500"
                         : "bg-red-200 border-red-500"
