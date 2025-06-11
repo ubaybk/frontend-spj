@@ -77,7 +77,7 @@ const LaporanSpj = () => {
       Komponen: Array.isArray(item.komponen)
         ? item.komponen.join(", ")
         : "-",
-      Anggaran: item.anggaran || "-",
+      Anggaran: item.total || "-",
       Indikator_Kinerja: item.indikatorKinerja || "-",
       Sumber_Pembiayaan: item.sumberPembiayaan || "-",
     }));
