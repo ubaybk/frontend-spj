@@ -203,7 +203,7 @@ const LaporanSpj = () => {
                         ? item.komponen.join(", ")
                         : "-"}
                     </td>
-                    <td className="border border-gray-300 p-2">{item.anggaran || "-"}</td>
+                    <td className="border border-gray-300 p-2">{item.total || "-"}</td>
                     <td className="border border-gray-300 p-2">{item.indikatorKinerja || "-"}</td>
                     <td className="border border-gray-300 p-2">{item.sumberPembiayaan || "-"}</td>
                   </tr>
