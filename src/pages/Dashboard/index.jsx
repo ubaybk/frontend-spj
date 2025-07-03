@@ -207,7 +207,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
 
         </div>
         <div className="p-4 w-full">
-          <h1 className="text-2xl font-bold mb-4">Dashboard RUK</h1>
+          <h1 className="text-2xl font-bold mb-4">Dashboard RPK</h1>
 
           <div className="flex flex-col  border  bg-slate-100 p-3 mb-10">
             {/* Tampilkan jumlah total data RUK */}
@@ -216,7 +216,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
                 <IoIosFolder />
               </div>
               <p className="font-semibold text-slate-700 text-[25px]">
-                {totalRukCount} RUK
+                {totalRukCount} RPK
               </p>
               <p className="">Total Data</p>
             </div>
@@ -226,7 +226,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
                   <TbDeviceImacCancel />
                 </div>
                 <p className="font-semibold text-[25px] text-white">
-                  {belumSelesaiCount} RUK
+                  {belumSelesaiCount} RPK
                 </p>
                 <p className="text-white">Belum Selesai</p>
               </div>
@@ -236,7 +236,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
                   <IoCloudDone />
                 </div>
                 <p className="font-semibold text-slate-700 text-[25px]">
-                  {sudahSelesaiCount} RUK
+                  {sudahSelesaiCount} RPK
                 </p>
                 <p className="">Sudah Selesai</p>
               </div>
@@ -253,7 +253,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
                 <IoIosFolder />
               </div>
               <p className="font-semibold text-slate-700 text-[25px]">
-                {rpkAdmen} RUK
+                {rpkAdmen} RPK
               </p>
               <p className="">ADMEN</p>
             </div>
@@ -262,7 +262,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
                   <TbDeviceImacCancel />
                 </div>
                 <p className="font-semibold text-[25px] ">
-                  {rpkUkp} RUK
+                  {rpkUkp} RPK
                 </p>
                 <p className="">UKP</p>
               </div>
@@ -272,7 +272,7 @@ const sudahSelesaiCount = rukData.filter((ruk) => {
                   <IoCloudDone />
                 </div>
                 <p className="font-semibold text-slate-700 text-[25px]">
-                  {rpkUkm} RUK
+                  {rpkUkm} RPK
                 </p>
                 <p className="">UKM</p>
               </div>
